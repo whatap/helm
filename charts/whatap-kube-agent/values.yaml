@@ -1,0 +1,76 @@
+namespace:
+  name: whatap-monitoring
+
+serviceAccount:
+  name: whatap
+
+clusterRole:
+  name: whatap
+
+clusterRoleBinding:
+  name: whatap
+  roleName: whatap
+
+containerRuntime: "docker" # Options: "docker", "containerd", "crio"
+
+daemonSet:
+  name: whatap-node-agent
+  label: whatap-node-agent
+  initContainers:
+    nodeDebugger:
+      enabled: true  # Set to false to disable the whatap-node-debug initContainer
+      name: whatap-node-debug
+      image: "whatap/kube_mon"
+  containers:
+    nodeHelper:
+      name: whatap-node-helper
+      image: "whatap/kube_mon"
+      requests:
+        memory: "100Mi"
+        cpu: "100m"
+      limits:
+        memory: "350Mi"
+        cpu: "200m"
+    nodeAgent:
+      name: whatap-node-agent
+      image: "whatap/kube_mon"
+      requests:
+        memory: "300Mi"
+        cpu: "100m"
+      limits:
+        memory: "350Mi"
+        cpu: "200m"
+
+deployment:
+  name: whatap-master-agent
+  label: whatap-master-agent
+  replicas: 1
+  containers:
+    controlPlaneHelper:
+      enabled: true  # Set to false to disable the whatap-control-plane-helper container
+      name: whatap-control-plane-helper
+      image: whatap/kube_mon
+      port: 9496
+      resources:
+        requests:
+          memory: "300Mi"
+          cpu: "100m"
+        limits:
+          memory: "350Mi"
+          cpu: "200m"
+    masterAgent:
+      name: whatap-master-agent
+      image: whatap/kube_mon
+      port: 6600
+      resources:
+        requests:
+          memory: "300Mi"
+          cpu: "100m"
+        limits:
+          memory: "350Mi"
+          cpu: "200m"
+
+whatap:
+  license: "x423h2197u810-x1jh0prkj2ofme-z2v3cc6u6r6fjk"
+  host: "15.165.146.117"
+  port: "6600"

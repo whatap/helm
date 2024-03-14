@@ -1,0 +1,145 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ .Values.daemonSet.name }}
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    name: {{ .Values.daemonSet.label }}
+spec:
+  selector:
+    matchLabels:
+      name: {{ .Values.daemonSet.label }}
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.daemonSet.label }}
+    spec:
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        - key: node-role.kubernetes.io/control-plane
+          effect: NoSchedule
+      {{- if .Values.daemonSet.initContainers.nodeDebugger.enabled }}
+      initContainers:
+        - name:  {{ .Values.daemonSet.initContainers.nodeDebugger.name }}
+          image: {{ .Values.daemonSet.initContainers.nodeDebugger.image }}
+          command: ['/data/agent/tools/whatap_debugger', 'run']
+          volumeMounts:
+            - name: rootfs
+              mountPath: /rootfs
+              readOnly: true
+      {{- end}}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      containers:
+        - name: {{ .Values.daemonSet.containers.nodeHelper.name }}
+          image: {{ .Values.daemonSet.containers.nodeHelper.image }}
+          resources:
+            requests:
+              memory: {{ .Values.daemonSet.containers.nodeHelper.requests.memory}}
+              cpu: {{ .Values.daemonSet.containers.nodeHelper.requests.cpu}}
+            limits:
+              memory: {{ .Values.daemonSet.containers.nodeHelper.limits.memory}}
+              cpu: {{ .Values.daemonSet.containers.nodeHelper.limits.cpu}}
+          ports:
+            - name: helperport
+              containerPort: 6801
+          command: ['/data/agent/node/cadvisor_helper', '-port','6801']
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          volumeMounts:
+            {{- if eq .Values.containerRuntime "containerd" }}
+            - name: containerddomainsocket
+              mountPath: /run/containerd/containerd.sock
+            {{- else if eq .Values.containerRuntime "docker" }}
+            - name: dockerdomainsocket
+              mountPath: /var/run/docker.sock
+            {{- else if eq .Values.containerRuntime "crio" }}
+            - name: criodomainsocket
+              mountPath: /var/run/crio/crio.sock
+            {{- end }}
+            - name: rootfs
+              mountPath: /rootfs
+              readOnly: true
+            - name: hostsys
+              mountPath: /sys
+              readOnly: true
+            - name: hostdiskdevice
+              mountPath: /dev/disk
+              readOnly: true
+        - name: {{ .Values.daemonSet.containers.nodeAgent.name }}
+          image: {{ .Values.daemonSet.containers.nodeAgent.image }}
+          resources:
+            requests:
+              memory: {{ .Values.daemonSet.containers.nodeAgent.requests.memory}}
+              cpu: {{ .Values.daemonSet.containers.nodeAgent.requests.cpu}}
+            limits:
+              memory: {{ .Values.daemonSet.containers.nodeAgent.limits.memory}}
+              cpu: {{ .Values.daemonSet.containers.nodeAgent.limits.cpu}}
+          ports:
+            - name: nodeport
+              containerPort: 6600
+          command: ['/bin/entrypoint.sh']
+          env:
+            - name: NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: WHATAP_LICENSE
+              value: {{ .Values.whatap.license | quote }}
+            - name: WHATAP_HOST
+              value: {{ .Values.whatap.host | quote }}
+            - name: WHATAP_PORT
+              value: {{ .Values.whatap.port | quote }}
+            - name: HOST_PREFIX
+              value: "/rootfs"
+            - name: WHATP_MEM_LIMIT
+              valueFrom:
+                resourceFieldRef:
+                  containerName: whatap-node-agent
+                  resource: limits.memory
+          volumeMounts:
+            - name: rootfs
+              mountPath: /rootfs
+              readOnly: true
+            - name: start-script-volume
+              mountPath: /bin/entrypoint.sh
+              readOnly: true
+              subPath: entrypoint.sh
+            - mountPath: /whatap_conf
+              name: whatap-config-volume
+      volumes:
+        {{- if eq .Values.containerRuntime "containerd" }}
+        - hostPath:
+            path: /run/containerd/containerd.sock
+          name: containerddomainsocket
+                {{- else if eq .Values.containerRuntime "docker" }}
+        - hostPath:
+            path: /var/run/docker.sock
+          name: dockerdomainsocket
+                {{- else if eq .Values.containerRuntime "crio" }}
+        - hostPath:
+            path: /var/run/crio/crio.sock
+          name: criodomainsocket
+                {{- end }}
+        - hostPath:
+            path: /
+          name: rootfs
+        - hostPath:
+            path: /sys
+          name: hostsys
+        - hostPath:
+            path: /dev/disk
+          name: hostdiskdevice
+        - name: start-script-volume
+          configMap:
+            defaultMode: 0700
+            name: node-start-script
+        - name: whatap-config-volume
+          emptyDir: {}
