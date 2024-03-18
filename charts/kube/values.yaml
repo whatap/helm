@@ -1,15 +1,7 @@
-namespace:
-  name: whatap-monitoring
-
-serviceAccount:
-  name: whatap
-
-clusterRole:
-  name: whatap
-
-clusterRoleBinding:
-  name: whatap
-  roleName: whatap
+whatap:
+  license: # <license-key>
+  host: # <whatap-server-host>
+  port: # <whatap-server-port>
 
 containerRuntime: "docker" # Options: "docker", "containerd", "crio"
 
@@ -69,8 +61,15 @@ deployment:
         limits:
           memory: "350Mi"
           cpu: "200m"
+namespace:
+  name: whatap-monitoring
 
-whatap:
-  license: "x423h2197u810-x1jh0prkj2ofme-z2v3cc6u6r6fjk"
-  host: "15.165.146.117"
-  port: "6600"
+serviceAccount:
+  name: whatap
+
+clusterRole:
+  name: whatap
+
+clusterRoleBinding:
+  name: whatap
+  roleName: whatap

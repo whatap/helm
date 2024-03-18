@@ -1,0 +1,5 @@
+containerRuntime: "docker" #docker, containerd, crio 중 선택 kubectl get nodes -o wide 명령어 CONTAINER-RUNTIME 의 값 참고
+whatap:
+  license: "x423h2197u810-x1jh0prkj2ofme-z2v3cc6u6r6fjk"
+  host: "15.165.146.117"
+  port: "6600"

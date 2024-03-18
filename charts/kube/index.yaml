@@ -1,14 +1,14 @@
 apiVersion: v1
 entries:
-  whatap-kube-agent:
+  whatap:
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2024-03-14T18:27:38.736644+09:00"
-    description: A Helm chart for deploying Whatap monitoring components on Kubernetes
-    digest: 87eccc4d2c6b8fa59beeb6080fa0667aecca55484b88ea7dd0d85fd79c045648
-    name: whatap-kube-agent
+    created: "2024-03-18T15:01:20.295775+09:00"
+    description: Whatap monitoring components on Kubernetes
+    digest: 4706c1ab5b174c43eb5998c7a4f4dbdb39b9e3ba14cfc759f1e2acd754ee9042
+    name: whatap
     type: application
     urls:
-    - whatap-kube-agent-1.5.7.tgz
-    version: 1.5.7
-generated: "2024-03-14T18:27:38.735282+09:00"
+    - whatap-0.0.3.tgz
+    version: 0.0.3
+generated: "2024-03-18T15:01:20.294327+09:00"
