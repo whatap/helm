@@ -24,7 +24,8 @@ whatap:
 
 3. 에이전트 어플리케이션 설치
 ```shell
-helm install whatap/kube -f custom-values.yaml --namespace whatap-monitoring --create-namespace whatap-agent
+helm install <release-name> whatap/kube -f custom-values.yaml --namespace whatap-monitoring --create-namespace
+(ex: helm install whatap-kube-agent whatap/kube -f custom-values.yaml --namespace whatap-monitoring --create-namespace)
 ```
 
 --- 
