@@ -13,7 +13,6 @@ whatap.license= # WHATAP-LICNESE-KEY
 whatap.host= # WHATAP-SERVER-HOST
 whatap.port= # WHATAP-PORT
 ```
-
 ```yaml
 ## 예제 custom-value.yaml
 containerRuntime: "docker" #docker, containerd, crio 중 선택 kubectl get nodes -o wide 명령어 CONTAINER-RUNTIME 의 값 참고
@@ -23,6 +22,7 @@ whatap:
   port: "6600"
 ```
 
+3. 에이전트 어플리케이션 설치
 ```shell
 helm install whatap/kube -f custom-values.yaml --namespace whatap-monitoring --create-namespace whatap-agent
 ```
