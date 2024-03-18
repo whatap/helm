@@ -3,7 +3,7 @@ entries:
   whatap:
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2024-03-18T15:01:20.295775+09:00"
+    created: "2024-03-18T15:08:07.808922+09:00"
     description: Whatap monitoring components on Kubernetes
     digest: 4706c1ab5b174c43eb5998c7a4f4dbdb39b9e3ba14cfc759f1e2acd754ee9042
     name: whatap
@@ -11,4 +11,4 @@ entries:
     urls:
     - whatap-0.0.3.tgz
     version: 0.0.3
-generated: "2024-03-18T15:01:20.294327+09:00"
+generated: "2024-03-18T15:08:07.807934+09:00"
