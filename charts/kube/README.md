@@ -22,7 +22,7 @@
 ## chart 설치
 
 1. 와탭 Helm 레포지터리 추가
-helm repo add whatap https://repo.whatap.io/helm
+helm repo add whatap https://whatap.github.io/helm/charts/kube
 helm repo update
 
 2. values.yaml 파일 생성, 와탭 설치에 필요한 기본 설정
