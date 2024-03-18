@@ -60,7 +60,7 @@ deployment:
           cpu: "200m"
     masterAgent:
       name: whatap-master-agent
-      image: whatap/kube_mon
+      image: "whatap/kube_mon"
       port: 6600
       resources:
         requests:
