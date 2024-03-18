@@ -33,10 +33,7 @@ whatap.host= # WHATAP-SERVER-HOST
 whatap.port= # WHATAP-PORT
 ```
 
-helm install whatap-agent \
--f charts/kube/values.yaml \
---namespace whatap-monitoring --create-namespace \
---set whatap.port=$whatap_port \
+helm install whatap-agent -f charts/kube/values.yaml --namespace whatap-monitoring --create-namespace
 
 
 
