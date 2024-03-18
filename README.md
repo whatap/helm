@@ -14,7 +14,7 @@ whatap.host= # WHATAP-SERVER-HOST
 whatap.port= # WHATAP-PORT
 ```
 
-helm install whatap/kube-agent -f custom-values.yaml --namespace whatap-monitoring --create-namespace whatap-agent
+helm install whatap/kube -f custom-values.yaml --namespace whatap-monitoring --create-namespace whatap-agent
 
 
 
