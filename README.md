@@ -74,6 +74,6 @@ helm repo index --url https://whatap.github.io/helm/ .
     │   ├── service.yaml
     │   └── serviceaccount.yaml
     ├── values.yaml
-    └── whatap-kube-agent-*.tgz
+    └── kube-*.tgz
 ```
 
