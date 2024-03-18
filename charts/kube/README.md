@@ -1,28 +1,9 @@
 # kube-agent Helm Chart 배포 및 설치 가이드
 
-## 차트 구조
-```
-└── kube
-    ├── Chart.yaml
-    ├── README.md
-    ├── index.yaml
-    ├── templates
-    │   ├── clusterrole.yaml
-    │   ├── clusterrolebinding.yaml
-    │   ├── configmap-master.yaml
-    │   ├── configmap-node.yaml
-    │   ├── daemonset.yaml
-    │   ├── deployment.yaml
-    │   ├── namespace.yaml
-    │   ├── service.yaml
-    │   └── serviceaccount.yaml
-    ├── values.yaml
-    └── whatap-kube-agent-*.tgz
-```
 ## chart 설치
 
 1. 와탭 Helm 레포지터리 추가
-helm repo add whatap https://whatap.github.io/helm/charts/kube
+helm repo add whatap https://whatap.github.io/helm/charts/kube/
 helm repo update
 
 2. values.yaml 파일 생성, 와탭 설치에 필요한 기본 설정
@@ -70,5 +51,23 @@ tsh aws s3 cp ./index.yaml s3://repo.whatap.io/helm/index.yaml --acl public-read
 tsh aws s3 cp ./whatap-kube-agent-0.0.2.tgz s3://repo.whatap.io/helm/whatap-kube-agent-0.0.2.tgz
 ```
 
-
+## 차트 구조
+```
+└── kube
+    ├── Chart.yaml
+    ├── README.md
+    ├── index.yaml
+    ├── templates
+    │   ├── clusterrole.yaml
+    │   ├── clusterrolebinding.yaml
+    │   ├── configmap-master.yaml
+    │   ├── configmap-node.yaml
+    │   ├── daemonset.yaml
+    │   ├── deployment.yaml
+    │   ├── namespace.yaml
+    │   ├── service.yaml
+    │   └── serviceaccount.yaml
+    ├── values.yaml
+    └── whatap-kube-agent-*.tgz
+```
 
