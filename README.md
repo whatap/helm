@@ -6,7 +6,7 @@
 helm repo add whatap https://whatap.github.io/helm/
 helm repo update
 
-2. values.yaml 파일 생성, 와탭 설치에 필요한 기본 설정
+2. custom-values.yaml 파일 생성, 와탭 설치에 필요한 기본 설정
 ```yaml
 containerRuntime= #docker, containerd, crio 중 선택 kubectl get nodes -o wide 명령어 CONTAINER-RUNTIME 의 값 참고
 whatap.license= # WHATAP-LICNESE-KEY
@@ -14,8 +14,9 @@ whatap.host= # WHATAP-SERVER-HOST
 whatap.port= # WHATAP-PORT
 ```
 
+```shell
 helm install whatap/kube -f custom-values.yaml --namespace whatap-monitoring --create-namespace whatap-agent
-
+```
 
 
 ## 배포
