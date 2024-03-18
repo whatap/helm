@@ -42,14 +42,9 @@ helm package .
 
 ### 3.현재 디렉토리에 있는 Helm 차트로부터 인덱스 파일 생성
 ```shell
-helm repo index .
+helm repo index --url https://whatap.github.io/helm/charts/kube/ .
 ```
 
-### 4. 인덱스 파일 repo 업데이트
-```shell
-tsh aws s3 cp ./index.yaml s3://repo.whatap.io/helm/index.yaml --acl public-read
-tsh aws s3 cp ./whatap-kube-agent-0.0.2.tgz s3://repo.whatap.io/helm/whatap-kube-agent-0.0.2.tgz
-```
 
 ## 차트 구조
 ```
