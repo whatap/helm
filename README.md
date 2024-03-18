@@ -43,7 +43,7 @@ helm lint charts/kube
 ```shell
 helm install <release-name> charts/kube --dry-run --debug
 ```
-(ex: helm install whatap-kube-agent . --dry-run --debug)
+(ex: helm install whatap-kube-agent charts/kube --dry-run --debug)
 
 ### 3. 차트 패키징
 ```shell
