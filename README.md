@@ -3,7 +3,7 @@
 ## chart 설치
 
 1. 와탭 Helm 레포지터리 추가
-helm repo add whatap https://whatap.github.io/helm/charts/kube/
+helm repo add whatap https://whatap.github.io/helm/
 helm repo update
 
 2. values.yaml 파일 생성, 와탭 설치에 필요한 기본 설정
@@ -14,7 +14,7 @@ whatap.host= # WHATAP-SERVER-HOST
 whatap.port= # WHATAP-PORT
 ```
 
-helm install whatap-agent -f charts/kube/values.yaml --namespace whatap-monitoring --create-namespace
+helm install whatap/kube-agent -f custom-values.yaml --namespace whatap-monitoring --create-namespace whatap-agent
 
 
 

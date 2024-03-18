@@ -9,6 +9,6 @@ entries:
     name: whatap
     type: application
     urls:
-    - https://whatap.github.io/helm/charts/kube/whatap-0.0.3.tgz
+    - https://whatap.github.io/helm/charts/kube/agent-0.0.3.tgz
     version: 0.0.3
 generated: "2024-03-18T15:36:54.017279+09:00"
