@@ -84,6 +84,15 @@ Whatap, 컨테이너 런타임 선택, 에이전트 배포를 위한 `daemonSet`
 | `daemonSet.containers.nodeAgent.requests.cpu` | String | `100m` | nodeAgent CPU 요청량. |
 | `daemonSet.containers.nodeAgent.limits.memory` | String | `350Mi` | nodeAgent 메모리 제한량. |
 | `daemonSet.containers.nodeAgent.limits.cpu` | String | `200m` | nodeAgent CPU 제한량. |
+| `deployment.name` | String | `whatap-master-agent` | Deployment의 이름입니다. |
+| `deployment.label` | String | `whatap-master-agent` | Deployment에 지정할 라벨입니다. |
+| `deployment.replicas` | Int | `1` | Deployment의 복제본 수입니다. |
+| `deployment.containers.controlPlaneHelper.enabled` | Boolean | `true` | whatap-control-plane-helper 컨테이너를 활성화/비활성화합니다. |
+| `deployment.containers.controlPlaneHelper.port` | Int | `9496` | controlPlaneHelper 컨테이너의 포트 번호입니다. |
+| `deployment.containers.controlPlaneHelper.resources.requests.memory` | String | `"300Mi"` | controlPlaneHelper 컨테이너의 메모리 요청량입니다. |
+| `deployment.containers.controlPlaneHelper.resources.requests.cpu` | String | `"100m"` | controlPlaneHelper 컨테이너의 CPU 요청량입니다. |
+| `deployment.containers.controlPlaneHelper.resources.limits.memory` | String | `"350Mi"` | controlPlaneHelper 컨테이너의 메모리 제한량입니다. |
+| `deployment.containers.controlPlaneHelper.resources.limits.cpu` | String | `"200m"` | controlPlaneHelper 컨테이너의 CPU 제한량입니다. |
 | `namespace.name` | String | `whatap-monitoring` | Whatap 모니터링을 위한 네임스페이스 이름. |
 | `serviceAccount.name` | String | `whatap` | Whatap 모니터링을 위한 서비스 계정 이름. |
 
