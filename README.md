@@ -38,6 +38,7 @@ containerRuntime: #CONTAINER-RUNTIME
 3. 에이전트 어플리케이션 설치 및 업데이트
 ```shell
 #clean
+kubectl delete ns whatap-monitoring
 kubectl delete clusterrole whatap
 kubectl delete clusterrolebinding whatap
 
@@ -70,9 +71,9 @@ kubectl delete namespace whatap-monitoring
 kubectl delete clusterrolebinding whatap
 kubectl delete clusterrole whatap
 ```
-> kubectl delete namespace whatap-monitoring
-> kubectl delete clusterrolebinding whatap
-> kubectl delete clusterrole whatap
+> kubectl delete namespace whatap-monitoring\n
+> kubectl delete clusterrolebinding whatap\n
+> kubectl delete clusterrole whatap\n
 
 ### 문제: "Error: INSTALLATION FAILED: Unable to continue with install: ClusterRole "whatap" in namespace "" exists and cannot be imported into the current release"
 #### 원인:
@@ -160,7 +161,6 @@ helm lint charts/kube
 ```shell
 helm install whatap-kube-agent charts/kube --dry-run --debug
 ```
-()
 
 ### 3. 차트 패키징
 ```shell
