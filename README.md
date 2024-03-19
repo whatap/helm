@@ -18,7 +18,6 @@ curl http://repo.whatap.io/helm/ping
 helm repo add whatap https://whatap.github.io/helm/
 helm repo update
 ```
-
 2. values.yaml(설치에 필요한 기본 설정파일) 생성
 - 사용자 CONTAINER-RUNTIME 확인
 ```shell
@@ -36,26 +35,20 @@ containerRuntime: #CONTAINER-RUNTIME
 3. 에이전트 어플리케이션 설치 및 업데이트
 - 설치
 ```shell
-#clean
 kubectl delete ns whatap-monitoring
 kubectl delete clusterrole whatap
 kubectl delete clusterrolebinding whatap
-
 helm install whatap-kube-agent whatap/kube -f values.yaml
 ```
-
 - release 업그레이드(와탭 쿠버네티스 에이전트 어플리케이션 업데이트)
 ```shell
 helm upgrade whatap-kube-agent whatap/kube -f values.yaml
 ```
-
 - release 삭제(와탭 쿠버네티스 에이전트 어플리케이션 삭제)
 ```shell
-#삭제
 helm uninstall whatap-kube-agent
 ```
-
---- 
+---
 ## 트러블 슈팅
 ### 문제: "whatap" already exists with the same configuration, skipping
 #### 원인
