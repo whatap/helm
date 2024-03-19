@@ -33,8 +33,6 @@ containerRuntime: #CONTAINER-RUNTIME
     host: "13.124.11.223/13.209.172.35"
     port: "6600"
 ```
-
-
 3. 에이전트 어플리케이션 설치 및 업데이트
 - 설치
 ```shell
@@ -45,6 +43,7 @@ kubectl delete clusterrolebinding whatap
 
 helm install whatap-kube-agent whatap/kube -f values.yaml
 ```
+
 - release 업그레이드(와탭 쿠버네티스 에이전트 어플리케이션 업데이트)
 ```shell
 helm upgrade whatap-kube-agent whatap/kube -f values.yaml
@@ -55,6 +54,7 @@ helm upgrade whatap-kube-agent whatap/kube -f values.yaml
 #삭제
 helm uninstall whatap-kube-agent
 ```
+
 --- 
 ## 트러블 슈팅
 ### 문제: "whatap" already exists with the same configuration, skipping
