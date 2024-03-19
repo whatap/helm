@@ -22,17 +22,24 @@ whatap:
   port: "6600"
 ```
 
-3. 에이전트 어플리케이션 설치
+3. 에이전트 어플리케이션 설치, 업데이트 , 삭제
 ```shell
+## 어플리케이션 release
 helm install <release-name> whatap/kube -f custom-values.yaml
 (ex: helm install whatap-kube-agent whatap/kube -f custom-values.yaml)
-```
----
 
+## release 업그레이드
+helm upgrade whatap-kube-agent whatap/kube -f custom-values.yaml
+
+## release 삭제
+helm uninstall whatap-kube-agent
+```
+
+---
 ## 추가 옵션 설정
 와탭 쿠버네티스 에이전트를 설정하기 위한 `values.yaml` 파일 설정 항목입니다.
 
-### 주요 설정 항목
+### 설정 항목
 `values.yaml` 파일에서 사용자가 수정할 수 있는 주요 설정 항목 
 Whatap, 컨테이너 런타임 선택, 에이전트 배포를 위한 `daemonSet`,`deployment`에 대한 옵션 설명
 
