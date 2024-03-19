@@ -64,14 +64,27 @@ helm repo remove whatap
 - 이미 클러스터에 `whatap-monitoring` 이라는 네임스페이스가 존재, 사용자가 yaml 로 와탭 쿠버 에이전트를 이미 설치한 경우 발생
 #### 해결방법 
 - 기존에 존재하는 `whatap-monitoring` 및 관련 리소스 삭제
+
 ```shell
 kubectl delete namespace whatap-monitoring
 kubectl delete clusterrolebinding whatap
 kubectl delete clusterrole whatap
 ```
->kubectl delete namespace whatap-monitoring
+> kubectl delete namespace whatap-monitoring
+> kubectl delete clusterrolebinding whatap
+> kubectl delete clusterrole whatap
+
+### 문제: "Error: INSTALLATION FAILED: Unable to continue with install: ClusterRole "whatap" in namespace "" exists and cannot be imported into the current release"
+#### 원인:
+- 클러스터에 `clusterrole`,`clusterrolebinding` 리소스가 이미 존재
+#### 해결방법
+- 기존에 존재하는 관련 리소스 삭제
+```shell
 kubectl delete clusterrolebinding whatap
 kubectl delete clusterrole whatap
+``` 
+> kubectl delete clusterrolebinding whatap
+> kubectl delete clusterrole whatap
 ---
 
 ## 추가 옵션 설정
