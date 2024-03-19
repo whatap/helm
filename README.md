@@ -34,7 +34,6 @@ containerRuntime: #CONTAINER-RUNTIME
 ```
 
 3. 에이전트 어플리케이션 설치
-- 설치
 ```shell
 kubectl delete ns whatap-monitoring
 kubectl delete clusterrole whatap
