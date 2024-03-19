@@ -5,11 +5,12 @@
 ```shell
 helm version
 ```
-
+> version.BuildInfo{Version:"v3.x", GitCommit:"3547a4b5bf5edb5478ce352e18858d8a552a4110", GitTreeState:"clean", GoVersion:"go1.20.8"}
 - whatap helm repo 에 대한 네트워크 연결 테스트
 ```shell
-curl 
+curl http://repo.whatap.io/helm/ping
 ```
+> pong
 
 ## chart 설치
 1. 와탭 Helm 레포지터리 추가
