@@ -19,28 +19,59 @@ helm repo add whatap https://whatap.github.io/helm/
 helm repo update
 ```
 
-2. custom-values.yaml 파일 생성, 와탭 설치에 필요한 기본 설정 ##하이퍼 링크 넣기
-```yaml
-containerRuntime: #docker, containerd, crio 중 선택 kubectl get nodes -o wide 명령어 CONTAINER-RUNTIME 의 값 참고
-  whatap:
-    license: # WHATAP-LICENESE-KEY
-    host: # WHATAP-SERVER-HOST
-    port: # WHATAP-PORT
+2. values.yaml(설치에 필요한 기본 설정파일) 생성
+- 사용자 CONTAINER-RUNTIME 확인
+```shell
+kubectl get nodes -o wide
 ```
+> ![containerRuntime.png](src/img/containerRuntime.png)
+- values.yaml 
 ```yaml
-## 예제 custom-value.yaml
-containerRuntime: "docker" #docker, containerd, crio 중 선택 kubectl get nodes -o wide 명령어 CONTAINER-RUNTIME 의 값 참고
-whatap:
-  license: "x423h2197u810-x1jh0prkj2ofme-z2v3cc6u6r6fjk"
-  host: "15.165.146.117" ## 서비스 ip 로 수정
-  port: "6600"
+containerRuntime: #CONTAINER-RUNTIME
+  whatap:
+    license: #WHATAP-LICENESE-KEY
+    host: "13.124.11.223/13.209.172.35"
+    port: "6600"
 ```
 
-3. 에이전트 어플리케이션 설치
+
+3. 에이전트 어플리케이션 설치 및 업데이트
 ```shell
+#clean
+kubectl delete clusterrole whatap
+kubectl delete clusterrolebinding whatap
+
+#설치
 helm install whatap-kube-agent whatap/kube -f custom-values.yaml
-(* )
 ```
+```shell
+#삭제
+helm uninstall whatap-kube-agent whatap/kube -f custom-values.yaml
+```
+--- 
+## 트러블 슈팅
+### 문제: "whatap" already exists with the same configuration, skipping
+#### 원인
+- 이미 `whatap` 이라는 이름으로 다른 Helm 레포지터리가 추가되어 있는 경우.
+#### 해결방법
+- 기존에 존재하는 `whatap` 레포지터리를 삭제하고 설치 진행
+```shell
+helm repo remove whatap
+```
+
+### 문제: "Error: INSTALLATION FAILED: Unable to continue with install: Namespace "whatap-monitoring" in namespace "" exists and cannot be imported into the current release"
+#### 원인:
+- 이미 클러스터에 `whatap-monitoring` 이라는 네임스페이스가 존재, 사용자가 yaml 로 와탭 쿠버 에이전트를 이미 설치한 경우 발생
+#### 해결방법 
+- 기존에 존재하는 `whatap-monitoring` 및 관련 리소스 삭제
+```shell
+kubectl delete namespace whatap-monitoring
+kubectl delete clusterrolebinding whatap
+kubectl delete clusterrole whatap
+```
+>kubectl delete namespace whatap-monitoring
+kubectl delete clusterrolebinding whatap
+kubectl delete clusterrole whatap
 ---
 
 ## 추가 옵션 설정
@@ -99,8 +130,6 @@ whatap:
   host: "와탭 수집서버 호스트 입력"
   port: "와탭 수집서버 포트 입력"
 ```
---- 
-## 트러블 슈팅
 
 ---
 
@@ -116,9 +145,9 @@ helm lint charts/kube
 
 ### 2. 차트 디버깅- 실제 어플리케이션 배포시 문제 발생 여부 체크
 ```shell
-helm install <release-name> charts/kube --dry-run --debug
+helm install whatap-kube-agent charts/kube --dry-run --debug
 ```
-(ex: helm install whatap-kube-agent charts/kube --dry-run --debug)
+()
 
 ### 3. 차트 패키징
 ```shell
