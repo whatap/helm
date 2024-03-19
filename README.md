@@ -71,11 +71,6 @@ kubectl delete namespace whatap-monitoring
 kubectl delete clusterrolebinding whatap
 kubectl delete clusterrole whatap
 ```
-> kubectl delete namespace whatap-monitoring
-
-> kubectl delete clusterrolebinding whatap
-
-> kubectl delete clusterrole whatap
 
 ### 문제: "Error: INSTALLATION FAILED: Unable to continue with install: ClusterRole "whatap" in namespace "" exists and cannot be imported into the current release"
 #### 원인:
@@ -85,9 +80,8 @@ kubectl delete clusterrole whatap
 ```shell
 kubectl delete clusterrolebinding whatap
 kubectl delete clusterrole whatap
-``` 
-> kubectl delete clusterrolebinding whatap
-> kubectl delete clusterrole whatap
+```
+
 ---
 
 ## 추가 옵션 설정
