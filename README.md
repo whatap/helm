@@ -1,32 +1,44 @@
 # kube-agent Helm Chart 배포 및 설치 가이드
 
+## 사전 환경 테스트
+- 아래 명령어로 helm 버전 조회, 3.x 이상 지원
+```shell
+helm version
+```
+
+- whatap helm repo 에 대한 네트워크 연결 테스트
+```shell
+curl 
+```
+
 ## chart 설치
-
 1. 와탭 Helm 레포지터리 추가
-
+```shell
 helm repo add whatap https://whatap.github.io/helm/
 helm repo update
+```
 
-2. custom-values.yaml 파일 생성, 와탭 설치에 필요한 기본 설정
+2. custom-values.yaml 파일 생성, 와탭 설치에 필요한 기본 설정 ##하이퍼 링크 넣기
 ```yaml
-containerRuntime= #docker, containerd, crio 중 선택 kubectl get nodes -o wide 명령어 CONTAINER-RUNTIME 의 값 참고
-whatap.license= # WHATAP-LICENESE-KEY
-whatap.host= # WHATAP-SERVER-HOST
-whatap.port= # WHATAP-PORT
+containerRuntime: #docker, containerd, crio 중 선택 kubectl get nodes -o wide 명령어 CONTAINER-RUNTIME 의 값 참고
+  whatap:
+    license: # WHATAP-LICENESE-KEY
+    host: # WHATAP-SERVER-HOST
+    port: # WHATAP-PORT
 ```
 ```yaml
 ## 예제 custom-value.yaml
 containerRuntime: "docker" #docker, containerd, crio 중 선택 kubectl get nodes -o wide 명령어 CONTAINER-RUNTIME 의 값 참고
 whatap:
   license: "x423h2197u810-x1jh0prkj2ofme-z2v3cc6u6r6fjk"
-  host: "15.165.146.117"
+  host: "15.165.146.117" ## 서비스 ip 로 수정
   port: "6600"
 ```
 
 3. 에이전트 어플리케이션 설치
 ```shell
-helm install <release-name> whatap/kube -f custom-values.yaml
-(ex: helm install whatap-kube-agent whatap/kube -f custom-values.yaml)
+helm install whatap-kube-agent whatap/kube -f custom-values.yaml
+(* )
 ```
 ---
 
@@ -87,6 +99,9 @@ whatap:
   port: "와탭 수집서버 포트 입력"
 ```
 --- 
+## 트러블 슈팅
+
+---
 
 ## 배포
 
