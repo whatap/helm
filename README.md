@@ -3,6 +3,7 @@
 ## chart 설치
 
 1. 와탭 Helm 레포지터리 추가
+
 helm repo add whatap https://whatap.github.io/helm/
 helm repo update
 
