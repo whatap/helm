@@ -57,8 +57,6 @@ helm repo index --url https://whatap.github.io/helm/ .
 ```
 ---
 ## 추가 옵션 설정
-# Whatap 모니터링 구성 가이드
-
 와탭 쿠버네티스 에이전트를 설정하기 위한 `values.yaml` 파일 설정 항목입니다.
 
 ### 주요 설정 항목
@@ -102,17 +100,17 @@ Whatap, 컨테이너 런타임 선택, 에이전트 배포를 위한 `daemonSet`
 | `deployment.containers.masterAgent.resources.limits.memory` | String | `"350Mi"` | masterAgent 컨테이너의 MEMORY limit                           |
 | `deployment.containers.masterAgent.resources.limits.cpu` | String | `"200m"` | masterAgent 컨테이너의 CPU request                            |
 
-## 구성 예시
+### 구성 예시
 
-여기서는 `values.yaml` 파일 내에서 몇 가지 핵심 구성을 수정하는 방법을 보여줍니다.
+`values.yaml` 을 이용한 주요 구성 수정 방법
 
 ### Whatap 기본 설정
 
 ```yaml
 whatap:
-  license: "여기에 라이선스 키를 입력하세요"
-  host: "whatap-server.example.com"
-  port: "6600"
+  license: "라이선스 키 입력"
+  host: "와탭 수집서버 호스트 입력"
+  port: "와탭 수집서버 포트 입력"
 ```
 
 --- 
