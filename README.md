@@ -27,35 +27,8 @@ whatap:
 helm install <release-name> whatap/kube -f custom-values.yaml
 (ex: helm install whatap-kube-agent whatap/kube -f custom-values.yaml)
 ```
-
---- 
-
-## 배포
-
-### 1. 차트 검사- 차트 형식, 문법 사전테스트
-```shell
-helm lint charts/kube
-```
-
-> ==> Linting .
-1 chart(s) linted, 0 chart(s) failed
-
-### 2. 차트 디버깅- 실제 어플리케이션 배포시 문제 발생 여부 체크
-```shell
-helm install <release-name> charts/kube --dry-run --debug
-```
-(ex: helm install whatap-kube-agent charts/kube --dry-run --debug)
-
-### 3. 차트 패키징
-```shell
-helm package charts/kube/
-```
-
-### 3.현재 디렉토리에 있는 Helm 차트로부터 인덱스 파일 생성
-```shell
-helm repo index --url https://whatap.github.io/helm/ .
-```
 ---
+
 ## 추가 옵션 설정
 와탭 쿠버네티스 에이전트를 설정하기 위한 `values.yaml` 파일 설정 항목입니다.
 
@@ -112,8 +85,34 @@ whatap:
   host: "와탭 수집서버 호스트 입력"
   port: "와탭 수집서버 포트 입력"
 ```
-
 --- 
+
+## 배포
+
+### 1. 차트 검사- 차트 형식, 문법 사전테스트
+```shell
+helm lint charts/kube
+```
+
+> ==> Linting .
+1 chart(s) linted, 0 chart(s) failed
+
+### 2. 차트 디버깅- 실제 어플리케이션 배포시 문제 발생 여부 체크
+```shell
+helm install <release-name> charts/kube --dry-run --debug
+```
+(ex: helm install whatap-kube-agent charts/kube --dry-run --debug)
+
+### 3. 차트 패키징
+```shell
+helm package charts/kube/
+```
+
+### 3.현재 디렉토리에 있는 Helm 차트로부터 인덱스 파일 생성
+```shell
+helm repo index --url https://whatap.github.io/helm/ .
+```
+---
 ## 차트 구조
 ```shell
 └── kube
