@@ -59,11 +59,11 @@ helm repo index --url https://whatap.github.io/helm/ .
 ## 추가 옵션 설정
 # Whatap 모니터링 구성 가이드
 
-이 문서는 Kubernetes 환경에서 Whatap 모니터링 시스템을 설정하기 위한 `values.yaml` 파일 구성에 대한 가이드입니다.
+와탭 쿠버네티스 에이전트를 설정하기 위한 `values.yaml` 파일 설정 항목입니다.
 
-## 주요 설정 항목
-
-`values.yaml` 파일에서 사용자가 수정할 수 있는 주요 설정 항목들을 아래 표에서 확인할 수 있습니다. 이 표는 Whatap 구성, 컨테이너 런타임 선택, `daemonSet` 구성, 네임스페이스, 서비스 계정 설정 등을 포함합니다.
+### 주요 설정 항목
+`values.yaml` 파일에서 사용자가 수정할 수 있는 주요 설정 항목 
+Whatap, 컨테이너 런타임 선택, 에이전트 배포를 위한 `daemonSet`,`deployment`에 대한 옵션 설명
 
 | Key | Type | Default Value | Description |
 |-----|------|---------------|-------------|
