@@ -36,18 +36,24 @@ containerRuntime: #CONTAINER-RUNTIME
 
 
 3. 에이전트 어플리케이션 설치 및 업데이트
+- 설치
 ```shell
 #clean
 kubectl delete ns whatap-monitoring
 kubectl delete clusterrole whatap
 kubectl delete clusterrolebinding whatap
 
-#설치
-helm install whatap-kube-agent whatap/kube -f custom-values.yaml
+helm install whatap-kube-agent whatap/kube -f values.yaml
 ```
+- release 업그레이드(와탭 쿠버네티스 에이전트 어플리케이션 업데이트)
+```shell
+helm upgrade whatap-kube-agent whatap/kube -f values.yaml
+```
+
+- release 삭제(와탭 쿠버네티스 에이전트 어플리케이션 삭제)
 ```shell
 #삭제
-helm uninstall whatap-kube-agent whatap/kube -f custom-values.yaml
+helm uninstall whatap-kube-agent
 ```
 --- 
 ## 트러블 슈팅
@@ -55,7 +61,7 @@ helm uninstall whatap-kube-agent whatap/kube -f custom-values.yaml
 #### 원인
 - 이미 `whatap` 이라는 이름으로 다른 Helm 레포지터리가 추가되어 있는 경우.
 #### 해결방법
-- 기존에 존재하는 `whatap` 레포지터리를 삭제하고 설치 진행
+- 기존에 존재하는 `whatap` 레포지터리 삭제후 설치 진행
 ```shell
 helm repo remove whatap
 ```
