@@ -149,8 +149,7 @@ whatap:
 helm lint charts/kube
 ```
 
-> ==> Linting .
-1 chart(s) linted, 0 chart(s) failed
+> ==> Linting . 1 chart(s) linted, 0 chart(s) failed
 
 ### 2. 차트 디버깅- 실제 어플리케이션 배포시 문제 발생 여부 체크
 ```shell
