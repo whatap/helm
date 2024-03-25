@@ -8,7 +8,7 @@ helm version
 > version.BuildInfo{Version:"v3.x", GitCommit:"xxx", GitTreeState:"clean", GoVersion:"go1.20.8"}
 - whatap helm repo 에 대한 네트워크 연결 테스트
 ```shell
-curl http://repo.whatap.io/helm/ping
+curl https://whatap.github.io/helm/ping
 ```
 > pong
 
