@@ -3,12 +3,12 @@ entries:
   kube:
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2024-03-26T14:46:47.592847+09:00"
+    created: "2024-03-26T15:46:51.167459+09:00"
     description: Whatap monitoring components on Kubernetes
-    digest: 886b5d06cb84b1de1c4ff70122838bdee02cb7e975ab754c9e11c424a308db85
+    digest: 6340cddc1da91207d8958ad58fb25de4ff276bd514e4aed1fe8bca0d9c3002a6
     name: kube
     type: application
     urls:
     - https://whatap.github.io/helm/kube-1.5.8.tgz
     version: 1.5.8
-generated: "2024-03-26T14:46:47.59198+09:00"
+generated: "2024-03-26T15:46:51.165246+09:00"

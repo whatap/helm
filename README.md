@@ -166,7 +166,7 @@ helm package charts/kube/
 
 ### 3.현재 디렉토리에 있는 Helm 차트로부터 인덱스 파일 생성
 ```shell
-helm repo index --url https://whatap.github.io/helm/ .
+helm repo index --url https://whatap.github.io/helm/ --merge index.yaml .
 ```
 ---
 ## 차트 구조
