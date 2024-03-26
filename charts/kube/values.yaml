@@ -29,7 +29,7 @@ daemonSet:
         memory: "300Mi"
         cpu: "100m"
       limits:
-        memory: "350rMi"
+        memory: "350Mi"
         cpu: "200m"
 
 deployment:
