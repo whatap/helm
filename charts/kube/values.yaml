@@ -38,7 +38,7 @@ deployment:
   replicas: 1
   containers:
     controlPlaneHelper:
-      enabled: true  # Set to false to disable the whatap-control-plane-helper container
+      enabled: false  # Set to false to disable the whatap-control-plane-helper container
       name: whatap-control-plane-helper
       image: whatap/kube_mon
       port: 9496
