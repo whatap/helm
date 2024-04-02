@@ -3,3 +3,7 @@ whatap:
   license: "x423h2197u810-x1jh0prkj2ofme-z2v3cc6u6r6fjk"
   host: "15.165.146.117"
   port: "6600"
+deployment:
+  containers:
+    controlPlaneHelper:
+      enabled: true
