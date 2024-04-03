@@ -34,12 +34,10 @@ containerRuntime: #CONTAINER-RUNTIME
 ```
 
 3. 에이전트 어플리케이션 설치
-
 ```shell
 helm install whatap-kube-agent whatap/kube -f values.yaml
 ```
-
-기존 와탭 쿠버네티스 에이전트 사용자인 경우 clean install
+기존 와탭 쿠버네티스 에이전트 사용자인 경우 clean install 을 위해 아래 명령어 입력 
 ```shell
 kubectl delete ns whatap-monitoring
 kubectl delete clusterrole whatap
