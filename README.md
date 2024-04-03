@@ -34,6 +34,12 @@ containerRuntime: #CONTAINER-RUNTIME
 ```
 
 3. 에이전트 어플리케이션 설치
+
+```shell
+helm install whatap-kube-agent whatap/kube -f values.yaml
+```
+
+기존 와탭 쿠버네티스 에이전트 사용자인 경우 clean install
 ```shell
 kubectl delete ns whatap-monitoring
 kubectl delete clusterrole whatap
@@ -167,6 +173,14 @@ helm package charts/kube/
 ### 3.현재 디렉토리에 있는 Helm 차트로부터 인덱스 파일 생성
 ```shell
 helm repo index --url https://whatap.github.io/helm/ --merge index.yaml .
+```
+
+### 기타 도움말
+
+```shell
+## revision 에서 사용하는 values.yaml 확인
+helm get values whatap-kube-agent --revision=<조회할 revision>
+
 ```
 ---
 ## 차트 구조
