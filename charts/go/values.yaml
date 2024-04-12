@@ -3,15 +3,6 @@ whatap:
   host: # <whatap-server-host>
   port: # <whatap-server-port>
 
-# istioEnabled default
-#istioEnabled: false
-
-# k8sOldVersion default
-#k8sOldVersion: true
-
-# gpuEnabled default
-#gpuEnabled: false
-
 containerRuntime: "docker" # Options: "docker", "containerd", "crio"
 daemonSet:
   name: whatap-node-agent
@@ -47,7 +38,7 @@ deployment:
   replicas: 1
   containers:
     controlPlaneHelper:
-      enabled: false  # Set to false to disable the whatap-control-plane-helper container
+      enabled: true  # Set to false to disable the whatap-control-plane-helper container
       name: whatap-control-plane-helper
       image: whatap/kube_mon
       port: 9496
@@ -69,3 +60,15 @@ deployment:
         limits:
           memory: "350Mi"
           cpu: "200m"
+namespace:
+  name: whatap-monitoring
+
+serviceAccount:
+  name: whatap
+
+clusterRole:
+  name: whatap
+
+clusterRoleBinding:
+  name: whatap
+  roleName: whatap

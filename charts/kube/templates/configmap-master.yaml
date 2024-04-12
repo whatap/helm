@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: master-start-script
-  namespace: {{ .Values.namespace.name }}
+  namespace: whatap-monitoring
 data:
   entrypoint.sh: |-
     #!/usr/bin/env bash

@@ -1,19 +1,32 @@
+{{- if .Values.k8sOldVersion }}
+apiVersion: extensions/v1beta1
+{{- else }}
 apiVersion: apps/v1
+{{end}}
 kind: Deployment
 metadata:
   name: {{ .Values.deployment.name }}
-  namespace: {{ .Values.namespace.name }}
+  namespace: whatap-monitoring
 spec:
   replicas: {{ .Values.deployment.replicas }}
+  {{- if not .Values.k8sOldVersion }}
   selector:
     matchLabels:
       name: {{ .Values.deployment.label }}
+  {{end}}
   template:
     metadata:
       labels:
         name: {{ .Values.deployment.label }}
     spec:
-      serviceAccountName: {{ .Values.serviceAccount.name }}
+      serviceAccountName: whatap
+      volumes:
+        - name: start-script-volume
+          configMap:
+            defaultMode: 0700
+            name: master-start-script
+        - name: whatap-config-volume
+          emptyDir: {}
       containers:
         {{- if .Values.deployment.containers.controlPlaneHelper.enabled }}
         - name: {{ .Values.deployment.containers.controlPlaneHelper.name }}
@@ -62,10 +75,3 @@ spec:
               subPath: entrypoint.sh
             - name: whatap-config-volume
               mountPath: /whatap_conf
-      volumes:
-        - name: start-script-volume
-          configMap:
-            defaultMode: 0700
-            name: master-start-script
-        - name: whatap-config-volume
-          emptyDir: {}

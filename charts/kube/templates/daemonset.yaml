@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ .Values.daemonSet.name }}
-  namespace: {{ .Values.namespace.name }}
+  namespace: whatap-monitoring
   labels:
     name: {{ .Values.daemonSet.label }}
 spec:
@@ -29,8 +29,36 @@ spec:
               mountPath: /rootfs
               readOnly: true
       {{- end}}
-      serviceAccountName: {{ .Values.serviceAccount.name }}
+      serviceAccountName: whatap
       containers:
+      {{- if .Values.gpuEnabled }}
+        - name: "dcgm-exporter"
+          image: "nvcr.io/nvidia/k8s/dcgm-exporter:2.1.8-2.4.0-rc.3-ubuntu18.04"
+          env:
+            - name: "DCGM_EXPORTER_LISTEN"
+              value: ":9400"
+            - name: "DCGM_EXPORTER_KUBERNETES"
+              value: "true"
+            - name: "DCGM_EXPORTER_COLLECTORS"
+              value: "/etc/dcgm-exporter/whatap-dcgm-exporter.csv"
+          ports:
+            - name: "metrics"
+              containerPort: 9400
+          securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
+            capabilities:
+              add:
+                - SYS_ADMIN
+          volumeMounts:
+            - name: "pod-gpu-resources"
+              readOnly: true
+              mountPath: "/var/lib/kubelet/pod-resources"
+            - name: "whatap-dcgm-exporter-csv"
+              readOnly: true
+              mountPath: "/etc/dcgm-exporter/whatap-dcgm-exporter.csv"
+              subPath: whatap-gpu.csv
+        {{ end }}
         - name: {{ .Values.daemonSet.containers.nodeHelper.name }}
           image: {{ .Values.daemonSet.containers.nodeHelper.image }}
           resources:
@@ -99,6 +127,10 @@ spec:
               value: {{ .Values.whatap.port | quote }}
             - name: HOST_PREFIX
               value: "/rootfs"
+            {{- if .Values.gpuEnabled}}
+            - name: gpu_enabled
+              value: "true"
+            {{ end }}
             - name: WHATP_MEM_LIMIT
               valueFrom:
                 resourceFieldRef:
