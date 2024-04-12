@@ -135,6 +135,9 @@ Whatap, 컨테이너 런타임 선택, 에이전트 배포를 위한 `daemonSet`
 | `deployment.containers.masterAgent.resources.requests.cpu` | String | `"100m"` | masterAgent 컨테이너 CPU request                              |
 | `deployment.containers.masterAgent.resources.limits.memory` | String | `"350Mi"` | masterAgent 컨테이너 MEMORY limit                             |
 | `deployment.containers.masterAgent.resources.limits.cpu` | String | `"200m"` | masterAgent 컨테이너 CPU request                              |
+| `gpuEnabled`       | Boolean | `false`             | Enables GPU if set to `true`. This is used to enable hardware acceleration for applications that support it. |
+| `istioEnabled`     | Boolean | `false`             | Enables Istio automatic injection if set to `true`. This is useful for deploying applications that benefit from Istio's service mesh capabilities. |
+| `k8sOldVersion`    | Boolean | `false`             | Set to `true` if using an older version of Kubernetes. This helps in managing compatibility issues with deprecated features. |
 
 ### 구성 예시
 
