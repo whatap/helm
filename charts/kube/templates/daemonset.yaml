@@ -14,6 +14,10 @@ spec:
       labels:
         name: {{ .Values.daemonSet.label }}
     spec:
+      {{- if .Values.imagePullSecret.name }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret.name }}
+      {{- end }}
       tolerations:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule

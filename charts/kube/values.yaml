@@ -12,6 +12,10 @@ whatap:
 # gpuEnabled default
 #gpuEnabled: false
 namespace: whatap-monitoring
+qwer:
+  test: "test"
+imagePullSecret:
+  name: #registryKey
 containerRuntime: "docker" # Options: "docker", "containerd", "crio"
 daemonSet:
   name: whatap-node-agent

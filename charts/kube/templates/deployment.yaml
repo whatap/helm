@@ -19,6 +19,10 @@ spec:
       labels:
         name: {{ .Values.deployment.label }}
     spec:
+      {{- if .Values.imagePullSecret.name }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret.name }}
+      {{- end }}
       serviceAccountName: whatap
       volumes:
         - name: start-script-volume
