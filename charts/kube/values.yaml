@@ -11,7 +11,7 @@ whatap:
 
 # gpuEnabled default
 #gpuEnabled: false
-
+namespace: whatap-monitoring
 containerRuntime: "docker" # Options: "docker", "containerd", "crio"
 daemonSet:
   name: whatap-node-agent

@@ -6,7 +6,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.deployment.name }}
-  namespace: whatap-monitoring
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.deployment.replicas }}
   {{- if not .Values.k8sOldVersion }}
