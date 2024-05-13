@@ -1,9 +1,8 @@
+containerRuntime: "docker" #docker, containerd, crio 중 선택 kubectl get nodes -o wide 명령어 CONTAINER-RUNTIME 의 값 참고
 whatap:
-  license: # <license-key>
-  host: # <whatap-server-host>
-  port: # <whatap-server-port>
-
-containerRuntime: "docker" # Options: "docker", "containerd", "crio"
+  license: "x423h2197u810-x1jh0prkj2ofme-z2v3cc6u6r6fjk"
+  host: "15.165.146.117"
+  port: "6600"
 daemonSet:
   name: whatap-node-agent
   label: whatap-node-agent
@@ -11,11 +10,11 @@ daemonSet:
     nodeDebugger:
       enabled: true  # Set to false to disable the whatap-node-debug initContainer
       name: whatap-node-debug
-      image: "whatap/kube_mon"
+      image: "whatap/kube_mon:1.7.0"
   containers:
     nodeHelper:
       name: whatap-node-helper
-      image: "whatap/kube_mon"
+      image: "whatap/kube_mon:1.7.0"
       requests:
         memory: "100Mi"
         cpu: "100m"
@@ -24,51 +23,15 @@ daemonSet:
         cpu: "200m"
     nodeAgent:
       name: whatap-node-agent
-      image: "whatap/kube_mon"
+      image: "whatap/kube_mon:1.7.0"
       requests:
         memory: "300Mi"
         cpu: "100m"
       limits:
         memory: "350Mi"
         cpu: "200m"
-
 deployment:
-  name: whatap-master-agent
-  label: whatap-master-agent
-  replicas: 1
   containers:
-    controlPlaneHelper:
-      enabled: true  # Set to false to disable the whatap-control-plane-helper container
-      name: whatap-control-plane-helper
-      image: whatap/kube_mon
-      port: 9496
-      resources:
-        requests:
-          memory: "300Mi"
-          cpu: "100m"
-        limits:
-          memory: "350Mi"
-          cpu: "200m"
     masterAgent:
       name: whatap-master-agent
-      image: "whatap/kube_mon"
-      port: 6600
-      resources:
-        requests:
-          memory: "300Mi"
-          cpu: "100m"
-        limits:
-          memory: "350Mi"
-          cpu: "200m"
-namespace:
-  name: whatap-monitoring
-
-serviceAccount:
-  name: whatap
-
-clusterRole:
-  name: whatap
-
-clusterRoleBinding:
-  name: whatap
-  roleName: whatap
+      image: "whatap/kube_mon:1.7.0"
