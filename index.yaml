@@ -3,7 +3,17 @@ entries:
   kube:
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2024-05-13T18:19:47.878635+09:00"
+    created: "2024-05-17T08:28:54.395118305Z"
+    description: Whatap monitoring components on Kubernetes
+    digest: df782cf3376995b17a14440731f66bf87a5d9d5a80a8c39ee0f8b7cc529385ac
+    name: kube
+    type: application
+    urls:
+    - https://whatap.github.io/helm/kube-1.7.1.tgz
+    version: 1.7.1
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2024-05-17T08:28:54.394783364Z"
     description: Whatap monitoring components on Kubernetes
     digest: fc2133a9f4772c767c4068cb21716b0bc896c6e2fc2bbb1585f4367c33313a0a
     name: kube
@@ -13,7 +23,7 @@ entries:
     version: 1.7.0
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2024-05-13T18:19:47.878346+09:00"
+    created: "2024-05-17T08:28:54.394448975Z"
     description: Whatap monitoring components on Kubernetes
     digest: e18ee356905a397ae47b0603ccaf871b749ea7d8bd481d725d584218397b280a
     name: kube
@@ -23,7 +33,7 @@ entries:
     version: 1.6.1
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2024-05-13T18:19:47.877871+09:00"
+    created: "2024-05-17T08:28:54.394118489Z"
     description: Whatap monitoring components on Kubernetes
     digest: 7fbebb274913a7eba3602210fa2985eaef8a8d413f79f7c7c6036d0f434c7aa2
     name: kube
@@ -33,7 +43,7 @@ entries:
     version: 1.6.0
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2024-05-13T18:19:47.877393+09:00"
+    created: "2024-05-17T08:28:54.393755563Z"
     description: Whatap monitoring components on Kubernetes
     digest: f99f9ce522bb38dadf33abba9a4042ce1a553a8b40f3510405ee0c349bc7fdb9
     name: kube
@@ -43,7 +53,7 @@ entries:
     version: 1.5.9
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2024-05-13T18:19:47.876679+09:00"
+    created: "2024-05-17T08:28:54.393399785Z"
     description: Whatap monitoring components on Kubernetes
     digest: 85799c0566ed883cabbdca188659c8844f8d5354f0395c2c8f3262b86d7f65a7
     name: kube
@@ -51,4 +61,4 @@ entries:
     urls:
     - https://whatap.github.io/helm/kube-1.5.8.tgz
     version: 1.5.8
-generated: "2024-05-13T18:19:47.87532+09:00"
+generated: "2024-05-17T08:28:54.392657148Z"
