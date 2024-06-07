@@ -63,7 +63,7 @@ spec:
           env:
             {{- if .Values.deployment.containers.controlPlaneHelper.enabled }}
             - name: collect_control_plane_monitoring_enabled
-              value: true
+              value: "true"
             {{- end }}
             - name: WHATAP_LICENSE
               value: {{ .Values.whatap.license | quote}}
