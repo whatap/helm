@@ -61,10 +61,10 @@ spec:
             - containerPort: {{ .Values.deployment.containers.masterAgent.port }}
           command: ["/bin/entrypoint.sh"]
           env:
-            {{ if .Values.deployment.containers.controlPlaneHelper.enabled }}
+            {{- if .Values.deployment.containers.controlPlaneHelper.enabled }}
             - name: collect_control_plane_monitoring_enabled
               value: true
-            {{ end }}
+            {{- end }}
             - name: WHATAP_LICENSE
               value: {{ .Values.whatap.license | quote}}
             - name: WHATAP_HOST
