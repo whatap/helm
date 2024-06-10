@@ -1,0 +1,16 @@
+{{ if .Values.istioEnabled }}
+apiVersion: "networking.istio.io/v1alpha3"
+kind: "ServiceEntry"
+metadata:
+  name: "whatap-external"
+spec:
+  addresses:
+    - "15.165.146.117"
+  hosts:
+    - "whatap-proxy1"
+  ports:
+    name: "proxy"
+    number: 6600
+    protocol: "tcp"
+  location: "MESH_EXTERNAL"
+{{ end }}
