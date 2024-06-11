@@ -79,7 +79,7 @@ spec:
           env:
             {{- if .Values.daemonSet.containers.nodeHelper.envs.collect_nfs_disk_enabled }}
             - name: collect_nfs_disk_enabled
-              value: "true"
+              value: {{.Values.daemonSet.containers.nodeHelper.envs.collect_nfs_disk_enabled | quote}}
             {{- end }}
             - name: NODE_NAME
               valueFrom:

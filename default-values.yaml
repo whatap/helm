@@ -10,20 +10,22 @@ daemonSet:
     nodeDebugger:
       enabled: true  # Set to false to disable the whatap-node-debug initContainer
       name: whatap-node-debug
-      image: "whatap/kube_mon:1.7.0"
+      image: "whatap/kube_mon:1.7.5"
   containers:
     nodeHelper:
       name: whatap-node-helper
-      image: "whatap/kube_mon:1.7.0"
+      image: "whatap/kube_mon:1.7.5"
       requests:
         memory: "100Mi"
         cpu: "100m"
       limits:
         memory: "350Mi"
         cpu: "200m"
+      envs:
+        collect_nfs_disk_enabled: true
     nodeAgent:
       name: whatap-node-agent
-      image: "whatap/kube_mon:1.7.0"
+      image: "whatap/kube_mon:1.7.5"
       requests:
         memory: "300Mi"
         cpu: "100m"
@@ -34,4 +36,4 @@ deployment:
   containers:
     masterAgent:
       name: whatap-master-agent
-      image: "whatap/kube_mon:1.7.0"
+      image: "whatap/kube_mon:1.7.5"
