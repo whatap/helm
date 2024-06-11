@@ -33,6 +33,8 @@ daemonSet:
       limits:
         memory: "350Mi"
         cpu: "200m"
+      envs:
+        collect_nfs_disk_enabled: true
     nodeAgent:
       name: whatap-node-agent
       image: "whatap/kube_mon"

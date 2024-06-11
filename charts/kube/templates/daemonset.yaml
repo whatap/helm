@@ -77,6 +77,10 @@ spec:
               containerPort: 6801
           command: ['/data/agent/node/cadvisor_helper', '-port','6801']
           env:
+            {{- if .Values.daemonSet.containers.nodeHelper.envs.collect_nfs_disk_enabled }}
+            - name: collect_nfs_disk_enabled
+              value: "true"
+            {{- end }}
             - name: NODE_NAME
               valueFrom:
                 fieldRef:
