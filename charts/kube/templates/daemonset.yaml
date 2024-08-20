@@ -183,3 +183,11 @@ spec:
             name: node-start-script
         - name: whatap-config-volume
           emptyDir: {}
+        {{- if .Values.gpuEnabled}}
+        - hostPath:
+            path: "/var/lib/kubelet/pod-resources"
+          name: "pod-gpu-resources"
+        - configMap:
+            name: "dcgm-exporter-csv"
+          name: "whatap-dcgm-exporter-csv"
+        {{ end }}

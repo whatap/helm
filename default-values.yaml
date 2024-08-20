@@ -10,11 +10,11 @@ daemonSet:
     nodeDebugger:
       enabled: true  # Set to false to disable the whatap-node-debug initContainer
       name: whatap-node-debug
-      image: "whatap/kube_mon:1.7.5"
+      image: "whatap/kube_mon:1.7.9"
   containers:
     nodeHelper:
       name: whatap-node-helper
-      image: "whatap/kube_mon:1.7.5"
+      image: "whatap/kube_mon:1.7.9"
       requests:
         memory: "100Mi"
         cpu: "100m"
@@ -25,7 +25,7 @@ daemonSet:
         collect_nfs_disk_enabled: true
     nodeAgent:
       name: whatap-node-agent
-      image: "whatap/kube_mon:1.7.5"
+      image: "whatap/kube_mon:1.7.9"
       requests:
         memory: "300Mi"
         cpu: "100m"
@@ -33,7 +33,30 @@ daemonSet:
         memory: "350Mi"
         cpu: "200m"
 deployment:
+  name: whatap-master-agent
+  label: whatap-master-agent
+  replicas: 1
   containers:
+    controlPlaneHelper:
+      enabled: false  # Set to false to disable the whatap-control-plane-helper container
+      name: whatap-control-plane-helper
+      image: "whatap/kube_mon:1.7.9"
+      port: 9496
+      resources:
+        requests:
+          memory: "300Mi"
+          cpu: "100m"
+        limits:
+          memory: "350Mi"
+          cpu: "300m"
     masterAgent:
       name: whatap-master-agent
-      image: "whatap/kube_mon:1.7.5"
+      image: "whatap/kube_mon:1.7.9"
+      port: 6600
+      resources:
+        requests:
+          memory: "300Mi"
+          cpu: "300m"
+        limits:
+          memory: "350Mi"
+          cpu: "300m"
