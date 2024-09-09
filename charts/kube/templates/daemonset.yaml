@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ .Values.daemonSet.name }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ include "whatap-kube-agent.namespace" . }}
   labels:
     name: {{ .Values.daemonSet.label }}
 spec:

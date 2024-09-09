@@ -9,4 +9,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: whatap
-    namespace: {{ .Values.namespace }}
+    namespace: {{ include "whatap-kube-agent.namespace" . }}

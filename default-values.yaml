@@ -1,4 +1,5 @@
 containerRuntime: "docker" #docker, containerd, crio 중 선택 kubectl get nodes -o wide 명령어 CONTAINER-RUNTIME 의 값 참고
+namespaceOverride: ""
 whatap:
   license: "x423h2197u810-x1jh0prkj2ofme-z2v3cc6u6r6fjk"
   host: "15.165.146.117"
@@ -10,11 +11,11 @@ daemonSet:
     nodeDebugger:
       enabled: true  # Set to false to disable the whatap-node-debug initContainer
       name: whatap-node-debug
-      image: "whatap/kube_mon:1.7.9"
+      image: "whatap/kube_mon:1.7.10"
   containers:
     nodeHelper:
       name: whatap-node-helper
-      image: "whatap/kube_mon:1.7.9"
+      image: "whatap/kube_mon:1.7.10"
       requests:
         memory: "100Mi"
         cpu: "100m"
@@ -25,7 +26,7 @@ daemonSet:
         collect_nfs_disk_enabled: true
     nodeAgent:
       name: whatap-node-agent
-      image: "whatap/kube_mon:1.7.9"
+      image: "whatap/kube_mon:1.7.10"
       requests:
         memory: "300Mi"
         cpu: "100m"
@@ -40,7 +41,7 @@ deployment:
     controlPlaneHelper:
       enabled: false  # Set to false to disable the whatap-control-plane-helper container
       name: whatap-control-plane-helper
-      image: "whatap/kube_mon:1.7.9"
+      image: "whatap/kube_mon:1.7.10"
       port: 9496
       resources:
         requests:
@@ -51,7 +52,7 @@ deployment:
           cpu: "300m"
     masterAgent:
       name: whatap-master-agent
-      image: "whatap/kube_mon:1.7.9"
+      image: "whatap/kube_mon:1.7.10"
       port: 6600
       resources:
         requests:

@@ -11,7 +11,11 @@ whatap:
 
 # gpuEnabled default
 #gpuEnabled: false
-namespace: whatap-monitoring
+
+#If this value is left empty, the Whatap Kubernetes Agent will be installed in the whatap-monitoring namespace.
+#To install the agent in a different namespace, you can set the namespaceOverride value
+namespaceOverride: ""
+
 imagePullSecret:
   name: #registryKey
 containerRuntime: "docker" # Options: "docker", "containerd", "crio"
