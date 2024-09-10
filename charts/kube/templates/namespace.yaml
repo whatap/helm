@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ include "whatap-kube-agent.namespace" . }}
-  {{- if eq (default false .Values.istioEnabled) true }}
-  labels:
-    istio-injection: enabled
-  {{end}}

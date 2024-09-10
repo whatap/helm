@@ -107,7 +107,6 @@ Whatap, 컨테이너 런타임 선택, 에이전트 배포를 위한 `daemonSet`
 | `whatap.port`                                                        | Int | `# <whatap-server-port>` | Whatap 포트 번호                                                                                                                                       |
 | `containerRuntime`                                                   | String | `"docker"`               | 사용 중인 컨테이너 런타임. `"docker"`, `"containerd"`, `"crio"` 중 선택                                                                                          |
 | `imagePullSecret.name`                                               | String | `null`                   | imagePullSecret                                                                                                                                    |
-| `namespaceOverride`                                                  | String | `""`    | 와탭 모니터링 에이전트 설치할 네임스페이스 커스텀                                                                                                                        |
 | `daemonSet.name`                                                     | String | `whatap-node-agent`      | DaemonSet의 이름                                                                                                                                      |
 | `daemonSet.label`                                                    | String | `whatap-node-agent`      | DaemonSet에 지정할 라벨                                                                                                                                  |
 | `daemonSet.initContainers.nodeDebugger.enabled`                      | Bool | `true`                   | Whatap 노드 디버거 컨테이너 활성화 여부                                                                                                                          |
@@ -146,8 +145,7 @@ Whatap, 컨테이너 런타임 선택, 에이전트 배포를 위한 `daemonSet`
 
 `values.yaml` 을 이용한 주요 구성 수정 방법
 
-### Whatap 기본 설정
-
+#### Whatap 기본 설정
 ```yaml
 whatap:
   license: "라이선스 키 입력"
@@ -155,13 +153,13 @@ whatap:
   port: "와탭 수집서버 포트 입력"
 ```
 
-### Namespace 를 변경할 경우
+#### 에이전트가 설치될 namespace 를 지정할 경우 whatap.namespace 필드추가 
 ```yaml
 whatap:
   license: "라이선스 키 입력"
   host: "와탭 수집서버 호스트 입력"
   port: "와탭 수집서버 포트 입력"
-namespaceOverride: "사용할 네임스페이스"
+  namespace: "와탭 에이전트 설치될 namespace"
 ```
 
 ---
@@ -211,7 +209,6 @@ helm get values whatap-kube-agent --revision=<조회할 revision>
     │   ├── configmap-node.yaml
     │   ├── daemonset.yaml
     │   ├── deployment.yaml
-    │   ├── namespace.yaml
     │   ├── service.yaml
     │   └── serviceaccount.yaml
     ├── values.yaml
