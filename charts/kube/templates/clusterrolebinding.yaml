@@ -9,4 +9,8 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: whatap
+    {{ if not .Values.namespaceOverrideEnabled }}
+    namespace: "whatap-monitoring"
+    {{ else}}
     namespace: {{ .Release.Namespace }}
+    {{ end }}

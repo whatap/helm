@@ -2,7 +2,11 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: node-start-script
+  {{ if not .Values.namespaceOverrideEnabled }}
+  namespace: "whatap-monitoring"
+  {{ else}}
   namespace: {{ .Release.Namespace }}
+  {{ end }}
 data:
   entrypoint.sh: |-
     #!/usr/bin/env bash

@@ -99,48 +99,48 @@ kubectl delete clusterrole whatap
 `values.yaml` 파일에서 사용자가 수정할 수 있는 주요 설정 항목 
 Whatap, 컨테이너 런타임 선택, 에이전트 배포를 위한 `daemonSet`,`deployment`에 대한 옵션 설명
 
-| Key                                                                  | Type | Default Value            | Description                                                                                                                                        |
-|----------------------------------------------------------------------|------|--------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| `whatap.license`                                                     | String | `# <license-key>`        | Whatap 라이센스 키                                                                                                                                      |
-| `whatap.host`                                                        | String | `# <whatap-server-host>` | Whatap 서버의 호스트 주소                                                                                                                                  |
-| `whatap.port`                                                        | Int | `# <whatap-server-port>` | Whatap 포트 번호                                                                                                                                       |
-| `whatap.port`                                                        | Int | `# <whatap-server-port>` | Whatap 포트 번호                                                                                                                                       |
-| `containerRuntime`                                                   | String | `"docker"`               | 사용 중인 컨테이너 런타임. `"docker"`, `"containerd"`, `"crio"` 중 선택                                                                                          |
-| `imagePullSecret.name`                                               | String | `null`                   | imagePullSecret                                                                                                                                    |
-| `daemonSet.name`                                                     | String | `whatap-node-agent`      | DaemonSet의 이름                                                                                                                                      |
-| `daemonSet.label`                                                    | String | `whatap-node-agent`      | DaemonSet에 지정할 라벨                                                                                                                                  |
-| `daemonSet.initContainers.nodeDebugger.enabled`                      | Bool | `true`                   | Whatap 노드 디버거 컨테이너 활성화 여부                                                                                                                          |
-| `daemonSet.containers.nodeHelper.image`                              | String | `whatap/kube_mon`        | nodeHelper 컨테이너의 이미지.                                                                                                                              |
-| `daemonSet.containers.nodeHelper.requests.memory`                    | String | `100Mi`                  | nodeHelper MEMORY request                                                                                                                          |
-| `daemonSet.containers.nodeHelper.requests.cpu`                       | String | `100m`                   | nodeHelper CPU request                                                                                                                             |
-| `daemonSet.containers.nodeHelper.limits.memory`                      | String | `350Mi`                  | nodeHelper MEMORY limit                                                                                                                            |
-| `daemonSet.containers.nodeHelper.limits.cpu`                         | String | `200m`                   | nodeHelper CPU limit                                                                                                                               |
-| `daemonSet.containers.nodeAgent.image`                               | String | `whatap/kube_mon`        | nodeAgent 컨테이너의 이미지                                                                                                                                |
-| `daemonSet.containers.nodeAgent.requests.memory`                     | String | `300Mi`                  | nodeAgent MEMORY request                                                                                                                           |
-| `daemonSet.containers.nodeAgent.requests.cpu`                        | String | `100m`                   | nodeAgent CPU request                                                                                                                              |
-| `daemonSet.containers.nodeAgent.limits.memory`                       | String | `350Mi`                  | nodeAgent MEMORY limit                                                                                                                             |
-| `daemonSet.containers.nodeAgent.limits.cpu`                          | String | `200m`                   | nodeAgent CPU limit                                                                                                                                |
-| `deployment.name`                                                    | String | `whatap-master-agent`    | Deployment의 이름                                                                                                                                     |
-| `deployment.label`                                                   | String | `whatap-master-agent`    | Deployment에 지정할 라벨                                                                                                                                 |
-| `deployment.replicas`                                                | Int | `1`                      | Deployment의 replica 수                                                                                                                              |
-| `deployment.containers.controlPlaneHelper.enabled`                   | Boolean | `true`                   | whatap-control-plane-helper 컨테이너를 활성화 여부                                                                                                           |
-| `deployment.containers.controlPlaneHelper.image`                     | String | `"whatap/kube_mon"`      | controlPlaneHelper 컨테이너의 이미지                                                                                                                       |
-| `deployment.containers.controlPlaneHelper.port`                      | String | `9496`                   | controlPlaneHelper 컨테이너의 포트 번호입니다                                                                                                                  |
-| `deployment.containers.controlPlaneHelper.resources.requests.memory` | String | `"300Mi"`                | controlPlaneHelper 컨테이너 MEMORY request                                                                                                             |
-| `deployment.containers.controlPlaneHelper.resources.requests.cpu`    | String | `"100m"`                 | controlPlaneHelper 컨테이너 CPU request                                                                                                                |
-| `deployment.containers.controlPlaneHelper.resources.limits.memory`   | String | `"350Mi"`                | controlPlaneHelper 컨테이너 MEMORY limit                                                                                                               |
-| `deployment.containers.controlPlaneHelper.resources.limits.cpu`      | String | `"200m"`                 | controlPlaneHelper 컨테이너 CPU limit                                                                                                                  |
-| `deployment.containers.masterAgent.name`                             | String | `whatap-master-agent`    | masterAgent 컨테이너 이름                                                                                                                                |
-| `deployment.containers.masterAgent.image`                            | String | `"whatap/kube_mon"`      | masterAgent 컨테이너 이미지                                                                                                                               |
-| `deployment.containers.masterAgent.port`                             | Int | `6600`                   | masterAgent 컨테이너 포트 번호                                                                                                                             |
-| `deployment.containers.masterAgent.resources.requests.memory`        | String | `"300Mi"`                | masterAgent 컨테이너 MEMORY request                                                                                                                    |
-| `deployment.containers.masterAgent.resources.requests.cpu`           | String | `"100m"`                 | masterAgent 컨테이너 CPU request                                                                                                                       |
-| `deployment.containers.masterAgent.resources.limits.memory`          | String | `"350Mi"`                | masterAgent 컨테이너 MEMORY limit                                                                                                                      |
-| `deployment.containers.masterAgent.resources.limits.cpu`             | String | `"200m"`                 | masterAgent 컨테이너 CPU request                                                                                                                       |
-| `gpuEnabled`                                                         | Boolean | `false`                  | Enables GPU if set to `true`. This is used to enable hardware acceleration for applications that support it.                                       |
+| Key                                                                  | Type | Default Value            | Description                                                                                                                                      |
+|----------------------------------------------------------------------|------|--------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| `whatap.license`                                                     | String | `# <license-key>`        | Whatap 라이센스 키                                                                                                                                    |
+| `whatap.host`                                                        | String | `# <whatap-server-host>` | Whatap 서버의 호스트 주소                                                                                                                                |
+| `whatap.port`                                                        | Int | `# <whatap-server-port>` | Whatap 포트 번호                                                                                                                                     |
+| `whatap.port`                                                        | Int | `# <whatap-server-port>` | Whatap 포트 번호                                                                                                                                     |
+| `containerRuntime`                                                   | String | `"docker"`               | 사용 중인 컨테이너 런타임. `"docker"`, `"containerd"`, `"crio"` 중 선택                                                                                        |
+| `imagePullSecret.name`                                               | String | `null`                   | imagePullSecret                                                                                                                                  |
+| `daemonSet.name`                                                     | String | `whatap-node-agent`      | DaemonSet의 이름                                                                                                                                    |
+| `daemonSet.label`                                                    | String | `whatap-node-agent`      | DaemonSet에 지정할 라벨                                                                                                                                |
+| `daemonSet.initContainers.nodeDebugger.enabled`                      | Bool | `true`                   | Whatap 노드 디버거 컨테이너 활성화 여부                                                                                                                        |
+| `daemonSet.containers.nodeHelper.image`                              | String | `whatap/kube_mon`        | nodeHelper 컨테이너의 이미지.                                                                                                                            |
+| `daemonSet.containers.nodeHelper.requests.memory`                    | String | `100Mi`                  | nodeHelper MEMORY request                                                                                                                        |
+| `daemonSet.containers.nodeHelper.requests.cpu`                       | String | `100m`                   | nodeHelper CPU request                                                                                                                           |
+| `daemonSet.containers.nodeHelper.limits.memory`                      | String | `350Mi`                  | nodeHelper MEMORY limit                                                                                                                          |
+| `daemonSet.containers.nodeHelper.limits.cpu`                         | String | `200m`                   | nodeHelper CPU limit                                                                                                                             |
+| `daemonSet.containers.nodeAgent.image`                               | String | `whatap/kube_mon`        | nodeAgent 컨테이너의 이미지                                                                                                                              |
+| `daemonSet.containers.nodeAgent.requests.memory`                     | String | `300Mi`                  | nodeAgent MEMORY request                                                                                                                         |
+| `daemonSet.containers.nodeAgent.requests.cpu`                        | String | `100m`                   | nodeAgent CPU request                                                                                                                            |
+| `daemonSet.containers.nodeAgent.limits.memory`                       | String | `350Mi`                  | nodeAgent MEMORY limit                                                                                                                           |
+| `daemonSet.containers.nodeAgent.limits.cpu`                          | String | `200m`                   | nodeAgent CPU limit                                                                                                                              |
+| `deployment.name`                                                    | String | `whatap-master-agent`    | Deployment의 이름                                                                                                                                   |
+| `deployment.label`                                                   | String | `whatap-master-agent`    | Deployment에 지정할 라벨                                                                                                                               |
+| `deployment.replicas`                                                | Int | `1`                      | Deployment의 replica 수                                                                                                                            |
+| `deployment.containers.controlPlaneHelper.enabled`                   | Boolean | `true`                   | whatap-control-plane-helper 컨테이너를 활성화 여부                                                                                                         |
+| `deployment.containers.controlPlaneHelper.image`                     | String | `"whatap/kube_mon"`      | controlPlaneHelper 컨테이너의 이미지                                                                                                                     |
+| `deployment.containers.controlPlaneHelper.port`                      | String | `9496`                   | controlPlaneHelper 컨테이너의 포트 번호입니다                                                                                                                |
+| `deployment.containers.controlPlaneHelper.resources.requests.memory` | String | `"300Mi"`                | controlPlaneHelper 컨테이너 MEMORY request                                                                                                           |
+| `deployment.containers.controlPlaneHelper.resources.requests.cpu`    | String | `"100m"`                 | controlPlaneHelper 컨테이너 CPU request                                                                                                              |
+| `deployment.containers.controlPlaneHelper.resources.limits.memory`   | String | `"350Mi"`                | controlPlaneHelper 컨테이너 MEMORY limit                                                                                                             |
+| `deployment.containers.controlPlaneHelper.resources.limits.cpu`      | String | `"200m"`                 | controlPlaneHelper 컨테이너 CPU limit                                                                                                                |
+| `deployment.containers.masterAgent.name`                             | String | `whatap-master-agent`    | masterAgent 컨테이너 이름                                                                                                                              |
+| `deployment.containers.masterAgent.image`                            | String | `"whatap/kube_mon"`      | masterAgent 컨테이너 이미지                                                                                                                             |
+| `deployment.containers.masterAgent.port`                             | Int | `6600`                   | masterAgent 컨테이너 포트 번호                                                                                                                           |
+| `deployment.containers.masterAgent.resources.requests.memory`        | String | `"300Mi"`                | masterAgent 컨테이너 MEMORY request                                                                                                                  |
+| `deployment.containers.masterAgent.resources.requests.cpu`           | String | `"100m"`                 | masterAgent 컨테이너 CPU request                                                                                                                     |
+| `deployment.containers.masterAgent.resources.limits.memory`          | String | `"350Mi"`                | masterAgent 컨테이너 MEMORY limit                                                                                                                    |
+| `deployment.containers.masterAgent.resources.limits.cpu`             | String | `"200m"`                 | masterAgent 컨테이너 CPU request                                                                                                                     |
+| `gpuEnabled`                                                         | Boolean | `false`                  | Enables GPU if set to `true`. This is used to enable hardware acceleration for applications that support it.                                     |
 | `istioEnabled`                                                       | Boolean | `false`                  | Enables Istio automatic injection if set to `true`. This is useful for deploying applications that benefit from Istio's service mesh capabilities. |
-| `k8sOldVersion`                                                      | Boolean | `false`                  | Set to `true` if using an older version of Kubernetes. This helps in managing compatibility issues with deprecated features.                       |
-
+| `k8sOldVersion`                                                      | Boolean | `false`                  | Set to `true` if using an older version of Kubernetes. This helps in managing compatibility issues with deprecated features.                     |
+| `namespaceOverrideEnabled`                                           | Boolean | `false`                  | Set to `true` if using an custom namspace of Kubernetes.                                                                                        |
 ### 구성 예시
 
 `values.yaml` 을 이용한 주요 구성 수정 방법
@@ -153,14 +153,29 @@ whatap:
   port: "와탭 수집서버 포트 입력"
 ```
 
-#### 에이전트가 설치될 namespace 를 지정할 경우 whatap.namespace 필드추가 
-```yaml
-whatap:
-  license: "라이선스 키 입력"
-  host: "와탭 수집서버 호스트 입력"
-  port: "와탭 수집서버 포트 입력"
-  namespace: "와탭 에이전트 설치될 namespace"
+#### 에이전트가 설치될 namespace 를 지정할 경우 아래의 방법으로 설치할 수 있습니다.
+
+#### pre-requirement : whatap/kube 차트 1.7.11 이상 버전
+```shell
+helm search repo whatap --version '>=1.7.11'
 ```
+
+결과확인
+```shell
+# 1.7.11 이상인 경우 다음과 같이 출력됨
+NAME            CHART VERSION   APP VERSION     DESCRIPTION                               
+whatap/kube     1.7.11          1.0             Whatap monitoring components on Kubernetes
+
+# 1.7.11 미만인 경우 다음과 같이 출력됨(helm repo update 로 차드 업데이트) 
+No results found
+```
+
+1.7.11 이상 버전인 경우 아래 명령어를 통해 에이전트가 설치될 namespace 를 지정할 수 있습니다.
+```shell
+helm install whatap-kube-agent whatap/kube --create-namespace --namespace <namespace> --set namespaceOverrideEnabled=true --wait
+```
+
+### 
 
 ---
 
