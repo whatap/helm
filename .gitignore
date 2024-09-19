@@ -1,4 +1,5 @@
 .idea
 custom-value.yaml
+dev-values.yaml
 charts/go/.helmignore
 charts/go/Chart.yaml

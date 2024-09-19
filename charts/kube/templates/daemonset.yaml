@@ -85,6 +85,14 @@ spec:
             - name: collect_nfs_disk_enabled
               value: {{.Values.daemonSet.containers.nodeHelper.envs.collect_nfs_disk_enabled | quote}}
             {{- end }}
+            {{- if .Values.daemonSet.containers.nodeHelper.envs.collect_kube_node_process_metric_enabled }}
+            - name: collect_kube_node_process_metric_enabled
+              value: {{.Values.daemonSet.containers.nodeHelper.envs.collect_kube_node_process_metric_enabled | quote}}
+            {{- end }}
+            {{- if .Values.daemonSet.containers.nodeHelper.envs.debug }}
+            - name: debug
+              value: {{.Values.daemonSet.containers.nodeHelper.envs.debug | quote}}
+            {{- end }}
             - name: NODE_NAME
               valueFrom:
                 fieldRef:
@@ -148,6 +156,14 @@ spec:
                 resourceFieldRef:
                   containerName: whatap-node-agent
                   resource: limits.memory
+            {{- if .Values.daemonSet.containers.nodeAgent.envs.collect_kube_node_process_metric_enabled }}
+            - name: collect_kube_node_process_metric_enabled
+              value: {{.Values.daemonSet.containers.nodeAgent.envs.collect_kube_node_process_metric_enabled | quote}}
+            {{- end }}
+            {{- if .Values.daemonSet.containers.nodeAgent.envs.debug }}
+            - name: collect_kube_node_process_metric_enabled
+              value: {{.Values.daemonSet.containers.nodeAgent.envs.debug | quote}}
+            {{- end }}
           volumeMounts:
             - name: rootfs
               mountPath: /rootfs

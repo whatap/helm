@@ -36,6 +36,8 @@ daemonSet:
         cpu: "200m"
       envs:
         collect_nfs_disk_enabled: true
+        collect_kube_node_process_metric_enabled: false
+        debug: false
     nodeAgent:
       name: whatap-node-agent
       image: "whatap/kube_mon"
@@ -45,7 +47,9 @@ daemonSet:
       limits:
         memory: "350Mi"
         cpu: "200m"
-
+      envs:
+        collect_kube_node_process_metric_enabled: false
+        debug: false
 deployment:
   name: whatap-master-agent
   label: whatap-master-agent
