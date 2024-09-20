@@ -29,6 +29,15 @@ spec:
       {{- end }}
       serviceAccountName: whatap
       volumes:
+        - name: etcd_ca_cert_path
+          hostPath:
+            path: {{ default "/etc/kubernetes/pki/etcd/ca.crt" .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_ca_cert_path }}
+        - name: etcd_client_cert_path
+          hostPath:
+            path: {{ default "/etc/kubernetes/pki/etcd/server.crt" .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_client_cert_path }}
+        - name: etcd_client_key_path
+          hostPath:
+            path: {{ default "/etc/kubernetes/pki/etcd/server.key" .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_client_key_path }}
         - name: start-script-volume
           configMap:
             defaultMode: 0700
@@ -51,6 +60,16 @@ spec:
             - containerPort: {{ .Values.deployment.containers.controlPlaneHelper.port }}
           command: [ "/data/agent/master/whatap_control_plane_helper" ]
           args: [ "-collect_control_plane_monitoring_enabled=true" ]
+          volumeMounts:
+            - name: etcd_ca_cert_path
+              mountPath: {{ default "/etc/kubernetes/pki/etcd/ca.crt" .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_ca_cert_path }}
+              readOnly: true
+            - name: etcd_client_cert_path
+              mountPath: {{ default "/etc/kubernetes/pki/etcd/server.crt" .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_client_cert_path }}
+              readOnly: true
+            - name: etcd_client_key_path
+              mountPath: {{ default "/etc/kubernetes/pki/etcd/server.key" .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_client_key_path }}
+              readOnly: true
           env:
             - name: kube_apiserver_monitoring_enabled
             {{- if eq .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.enabled false }}
