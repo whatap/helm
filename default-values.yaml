@@ -60,7 +60,7 @@ deployment:
   replicas: 1
   containers:
     controlPlaneHelper:
-      enabled: false  # Set to false to disable the whatap-control-plane-helper container
+      enabled: true  # Set to false to disable the whatap-control-plane-helper container
       debug: false
       name: whatap-control-plane-helper
       image: whatap/kube_mon

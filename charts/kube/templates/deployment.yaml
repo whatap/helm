@@ -50,7 +50,11 @@ spec:
           ports:
             - containerPort: {{ .Values.deployment.containers.controlPlaneHelper.port }}
           command: [ "/data/agent/master/whatap_control_plane_helper" ]
+          {{- if eq (default true .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.enabled) false }}
+          args: [ "-collect_control_plane_monitoring_enabled=false" ]
+          {{ else }}
           args: [ "-collect_control_plane_monitoring_enabled=true" ]
+          {{- end }}
           env:
             {{- if eq (default true .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.enabled) false }}
             - name: kube_apiserver_monitoring_enabled
