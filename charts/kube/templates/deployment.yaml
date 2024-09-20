@@ -51,6 +51,35 @@ spec:
             - containerPort: {{ .Values.deployment.containers.controlPlaneHelper.port }}
           command: [ "/data/agent/master/whatap_control_plane_helper" ]
           args: [ "-collect_control_plane_monitoring_enabled=true" ]
+          env:
+            {{- if eq (default true .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.enabled) false }}
+            - name: kube_apiserver_monitoring_enabled
+              value: "false"
+            {{- end }}
+            {{- if eq (default true .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.client_tls_verify) false }}
+            - name: kube_client_tls_verify
+              value: "false"
+            {{- end }}
+            {{- if .Values.deployment.containers.controlPlaneHelper.debug }}
+            - name: debug
+              value: "true"
+            {{- end }}
+            {{- if .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.enabled }}
+            - name: etcd_monitoring_enabled
+              value: "true"
+            {{- end }}
+            {{- if .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_ca_cert_path }}
+            - name: etcd_ca_cert_path
+              value: .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_ca_cert_path
+            {{- end }}
+            {{- if .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_client_cert_path }}
+            - name: etcd_client_cert_path
+              value: {{ .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_client_cert_path }}
+            {{- end }}
+            {{- if .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_client_key_path }}
+            - name: etcd_client_key_path
+              value: {{ .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_client_key_path }}
+            {{- end }}
         {{- end }}
         - name: {{ .Values.deployment.containers.masterAgent.name }}
           image: {{ .Values.deployment.containers.masterAgent.image }}
@@ -67,6 +96,14 @@ spec:
           env:
             {{- if .Values.deployment.containers.controlPlaneHelper.enabled }}
             - name: collect_control_plane_monitoring_enabled
+              value: "true"
+            {{- end }}
+            {{- if .Values.deployment.containers.masterAgent.envs.debug }}
+            - name: debug
+              value: "true"
+            {{- end }}
+            {{- if eq .Values.collect_apiserver_metric_by_leader true }}
+            - name: collect_apiserver_metric_by_leader
               value: "true"
             {{- end }}
             - name: WHATAP_LICENSE

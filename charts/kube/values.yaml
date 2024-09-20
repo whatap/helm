@@ -4,6 +4,7 @@ whatap:
   port: # <whatap-server-port>
 
 namespaceOverrideEnabled: false
+
 # istioEnabled default
 #istioEnabled: false
 
@@ -12,6 +13,9 @@ namespaceOverrideEnabled: false
 
 # gpuEnabled default
 #gpuEnabled: false
+
+# collect_apiserver_metric_by_leader default
+collect_apiserver_metric_by_leader: false
 
 imagePullSecret:
   name: #registryKey
@@ -57,6 +61,7 @@ deployment:
   containers:
     controlPlaneHelper:
       enabled: false  # Set to false to disable the whatap-control-plane-helper container
+      debug: false
       name: whatap-control-plane-helper
       image: whatap/kube_mon
       port: 9496
@@ -67,6 +72,18 @@ deployment:
         limits:
           memory: "350Mi"
           cpu: "200m"
+      addon:
+        apiserver_monitoring:
+          enabled: false # Set to true to use apiserver_monitoring_dashboard(default false)
+          client_tls_verify: true # Set to false to skip insecure-tls-verify(default true)
+        etcd_monitoring:
+          enabled: false # Set to true to use apiserver_monitoring_dashboard(default false)
+          etcd_hosts: []
+
+          #Set path to use customized path
+          etcd_ca_cert_path: /etc/kubernetes/pki/etcd/ca.crt
+          etcd_client_cert_path: /etc/kubernetes/pki/etcd/server.crt
+          etcd_client_key_path: /etc/kubernetes/pki/etcd/server.key
     masterAgent:
       name: whatap-master-agent
       image: "whatap/kube_mon"
@@ -78,3 +95,5 @@ deployment:
         limits:
           memory: "350Mi"
           cpu: "200m"
+      envs:
+        debug: false

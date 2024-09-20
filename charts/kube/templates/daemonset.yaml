@@ -164,6 +164,10 @@ spec:
             - name: collect_kube_node_process_metric_enabled
               value: {{.Values.daemonSet.containers.nodeAgent.envs.debug | quote}}
             {{- end }}
+            {{- if eq .Values.collect_apiserver_metric_by_leader true }}
+            - name: collect_apiserver_metric_by_leader
+              value: "true"
+            {{- end }}
           volumeMounts:
             - name: rootfs
               mountPath: /rootfs

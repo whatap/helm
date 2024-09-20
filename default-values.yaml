@@ -1,8 +1,25 @@
-containerRuntime: "docker" #docker, containerd, crio 중 선택 kubectl get nodes -o wide 명령어 CONTAINER-RUNTIME 의 값 참고
 whatap:
   license: "x423h2197u810-x1jh0prkj2ofme-z2v3cc6u6r6fjk"
   host: "15.165.146.117"
   port: "6600"
+
+namespaceOverrideEnabled: false
+
+# istioEnabled default
+#istioEnabled: false
+
+# k8sOldVersion default
+#k8sOldVersion: false
+
+# gpuEnabled default
+#gpuEnabled: false
+
+# collect_apiserver_metric_by_leader default
+#collect_apiserver_metric_by_leader: false
+
+imagePullSecret:
+  name: #registryKey
+containerRuntime: "docker" # Options: "docker", "containerd", "crio"
 daemonSet:
   name: whatap-node-agent
   label: whatap-node-agent
@@ -10,11 +27,11 @@ daemonSet:
     nodeDebugger:
       enabled: true  # Set to false to disable the whatap-node-debug initContainer
       name: whatap-node-debug
-      image: "whatap/kube_mon:1.7.10"
+      image: "whatap/kube_mon"
   containers:
     nodeHelper:
       name: whatap-node-helper
-      image: "whatap/kube_mon:1.7.10"
+      image: "whatap/kube_mon"
       requests:
         memory: "100Mi"
         cpu: "100m"
@@ -23,15 +40,20 @@ daemonSet:
         cpu: "200m"
       envs:
         collect_nfs_disk_enabled: true
+        collect_kube_node_process_metric_enabled: false
+        debug: false
     nodeAgent:
       name: whatap-node-agent
-      image: "whatap/kube_mon:1.7.10"
+      image: "whatap/kube_mon"
       requests:
         memory: "300Mi"
         cpu: "100m"
       limits:
         memory: "350Mi"
         cpu: "200m"
+      envs:
+        collect_kube_node_process_metric_enabled: false
+        debug: false
 deployment:
   name: whatap-master-agent
   label: whatap-master-agent
@@ -39,8 +61,9 @@ deployment:
   containers:
     controlPlaneHelper:
       enabled: false  # Set to false to disable the whatap-control-plane-helper container
+      debug: false
       name: whatap-control-plane-helper
-      image: "whatap/kube_mon:1.7.10"
+      image: whatap/kube_mon
       port: 9496
       resources:
         requests:
@@ -48,15 +71,29 @@ deployment:
           cpu: "100m"
         limits:
           memory: "350Mi"
-          cpu: "300m"
+          cpu: "200m"
+      addon:
+        apiserver_monitoring:
+          enabled: false # Set to true to use apiserver_monitoring_dashboard(default false)
+          client_tls_verify: true # Set to false to skip insecure-tls-verify(default true)
+        etcd_monitoring:
+          enabled: false # Set to true to use apiserver_monitoring_dashboard(default false)
+          etcd_hosts: []
+
+          #Set path to use customized path
+          etcd_ca_cert_path: /etc/kubernetes/pki/etcd/ca.crt
+          etcd_client_cert_path: /etc/kubernetes/pki/etcd/server.crt
+          etcd_client_key_path: /etc/kubernetes/pki/etcd/server.key
     masterAgent:
       name: whatap-master-agent
-      image: "whatap/kube_mon:1.7.10"
+      image: "whatap/kube_mon"
       port: 6600
       resources:
         requests:
           memory: "300Mi"
-          cpu: "300m"
+          cpu: "100m"
         limits:
           memory: "350Mi"
-          cpu: "300m"
+          cpu: "200m"
+      envs:
+        debug: false
