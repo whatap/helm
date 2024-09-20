@@ -64,12 +64,15 @@ spec:
             - name: etcd-ca-cert-path
               mountPath: {{ default "/etc/kubernetes/pki/etcd/ca.crt" .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_ca_cert_path }}
               readOnly: true
+              subPath: ca.crt
             - name: etcd-client-cert-path
               mountPath: {{ default "/etc/kubernetes/pki/etcd/server.crt" .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_client_cert_path }}
               readOnly: true
+              subPath: server.crt
             - name: etcd-client-key-path
               mountPath: {{ default "/etc/kubernetes/pki/etcd/server.key" .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_client_key_path }}
               readOnly: true
+              subPath: server.key
           env:
             - name: kube_apiserver_monitoring_enabled
             {{- if eq .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.enabled false }}
@@ -154,9 +157,12 @@ spec:
             - name: etcd-ca-cert-path
               mountPath: {{ default "/etc/kubernetes/pki/etcd/ca.crt" .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_ca_cert_path }}
               readOnly: true
+              subPath: ca.crt
             - name: etcd-client-cert-path
               mountPath: {{ default "/etc/kubernetes/pki/etcd/server.crt" .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_client_cert_path }}
               readOnly: true
+              subPath: server.crt
             - name: etcd-client-key-path
               mountPath: {{ default "/etc/kubernetes/pki/etcd/server.key" .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_client_key_path }}
               readOnly: true
+              subPath: server.key
