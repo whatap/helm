@@ -36,7 +36,7 @@ spec:
         - name: whatap-config-volume
           emptyDir: {}
       containers:
-        {{- if .Values.deployment.containers.controlPlaneHelper.enabled }}
+        {{- if eq .Values.deployment.containers.controlPlaneHelper.enabled true}}
         - name: {{ .Values.deployment.containers.controlPlaneHelper.name }}
           image: {{ .Values.deployment.containers.controlPlaneHelper.image }}
           resources:
@@ -50,17 +50,17 @@ spec:
           ports:
             - containerPort: {{ .Values.deployment.containers.controlPlaneHelper.port }}
           command: [ "/data/agent/master/whatap_control_plane_helper" ]
-          {{- if eq (default true .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.enabled) false }}
+          {{- if eq .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.enabled false }}
           args: [ "-collect_control_plane_monitoring_enabled=false" ]
-          {{ else }}
+          {{- else }}
           args: [ "-collect_control_plane_monitoring_enabled=true" ]
           {{- end }}
           env:
-            {{- if eq (default true .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.enabled) false }}
+            {{- if eq .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.enabled false }}
             - name: kube_apiserver_monitoring_enabled
               value: "false"
             {{- end }}
-            {{- if eq (default true .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.client_tls_verify) false }}
+            {{- if eq .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.client_tls_verify false }}
             - name: kube_client_tls_verify
               value: "false"
             {{- end }}
