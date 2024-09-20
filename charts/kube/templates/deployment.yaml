@@ -50,31 +50,35 @@ spec:
           ports:
             - containerPort: {{ .Values.deployment.containers.controlPlaneHelper.port }}
           command: [ "/data/agent/master/whatap_control_plane_helper" ]
-          {{- if eq .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.enabled false }}
-          args: [ "-collect_control_plane_monitoring_enabled=false" ]
-          {{- else }}
           args: [ "-collect_control_plane_monitoring_enabled=true" ]
-          {{- end }}
           env:
-            {{- if eq .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.enabled false }}
             - name: kube_apiserver_monitoring_enabled
+            {{- if eq .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.enabled false }}
               value: "false"
+            {{- else }}
+              value: "true"
             {{- end }}
-            {{- if eq .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.client_tls_verify false }}
             - name: kube_client_tls_verify
+            {{- if eq .Values.deployment.containers.controlPlaneHelper.addon.apiserver_monitoring.client_tls_verify false }}
+              value: "false"
+            {{- else }}
+              value: "true"
+            {{- end }}
+            - name: debug
+            {{- if .Values.deployment.containers.controlPlaneHelper.debug }}
+              value: "true"
+            {{- else }}
               value: "false"
             {{- end }}
-            {{- if .Values.deployment.containers.controlPlaneHelper.debug }}
-            - name: debug
-              value: "true"
-            {{- end }}
-            {{- if .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.enabled }}
             - name: etcd_monitoring_enabled
+            {{- if .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.enabled }}
               value: "true"
+            {{- else }}
+              value: "false"
             {{- end }}
             {{- if .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_ca_cert_path }}
             - name: etcd_ca_cert_path
-              value: .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_ca_cert_path
+              value: {{ .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_ca_cert_path }}
             {{- end }}
             {{- if .Values.deployment.containers.controlPlaneHelper.addon.etcd_monitoring.etcd_client_cert_path }}
             - name: etcd_client_cert_path

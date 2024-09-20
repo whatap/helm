@@ -60,7 +60,7 @@ deployment:
   replicas: 1
   containers:
     controlPlaneHelper:
-      enabled: true  # Set to false to disable the whatap-control-plane-helper container
+      enabled: false  # Set to false to disable the whatap-control-plane-helper container
       debug: false
       name: whatap-control-plane-helper
       image: whatap/kube_mon
@@ -78,8 +78,6 @@ deployment:
           client_tls_verify: true # Set to false to skip insecure-tls-verify(default true)
         etcd_monitoring:
           enabled: false # Set to true to use apiserver_monitoring_dashboard(default false)
-          etcd_hosts: []
-
           #Set path to use customized path
           etcd_ca_cert_path: /etc/kubernetes/pki/etcd/ca.crt
           etcd_client_cert_path: /etc/kubernetes/pki/etcd/server.crt
