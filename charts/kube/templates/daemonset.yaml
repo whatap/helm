@@ -89,6 +89,10 @@ spec:
             - name: collect_kube_node_process_metric_enabled
               value: {{.Values.daemonSet.containers.nodeHelper.envs.collect_kube_node_process_metric_enabled | quote}}
             {{- end }}
+            {{- if .Values.daemonSet.containers.nodeHelper.envs.collect_kube_node_process_metric_target_list }}
+            - name: collect_kube_node_process_metric_target_list
+              value: {{.Values.daemonSet.containers.nodeHelper.envs.collect_kube_node_process_metric_target_list | quote}}
+            {{- end }}
             {{- if .Values.daemonSet.containers.nodeHelper.envs.debug }}
             - name: debug
               value: {{.Values.daemonSet.containers.nodeHelper.envs.debug | quote}}

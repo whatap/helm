@@ -41,6 +41,7 @@ daemonSet:
       envs:
         collect_nfs_disk_enabled: true
         collect_kube_node_process_metric_enabled: false
+        collect_kube_node_process_metric_target_list: "kubelet,containerd,dockerd,crio,coredns,kube-proxy,aws-k8s-agent,kube-apiserver,etcd,kube-controller,kube-scheduler"
         debug: false
     nodeAgent:
       name: whatap-node-agent

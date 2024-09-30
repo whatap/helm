@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: "whatap-monitoring"
-  {{- if eq (default false .Values.istioEnabled) true }}
+  {{- if eq .Values.istioEnabled true }}
   labels:
     istio-injection: enabled
   {{end}}
