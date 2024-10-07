@@ -53,7 +53,7 @@ spec:
               readOnly: true
               subPath: entrypoint.sh
             - name: rootfs
-              mountPath: /rootfs/proc
+              mountPath: /rootfs
               readOnly: true
           securityContext:
             privileged: true
@@ -243,7 +243,4 @@ spec:
           configMap:
             defaultMode: 0700
             name: whatap-npm-configmap
-        - hostPath:
-            path: /proc
-          name: rootfs
         {{ end }}
