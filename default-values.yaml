@@ -17,6 +17,22 @@ namespaceOverrideEnabled: false
 # collect_apiserver_metric_by_leader default
 #collect_apiserver_metric_by_leader: false
 
+addon:
+  npm:
+    enabled: true
+  gpu:
+    enabled: false
+  apiserver_monitoring:
+    enabled: true # Set to false to use apiserver_monitoring_dashboard(default true)
+    client_tls_verify: true # Set to false to skip insecure-tls-verify(default true)
+  etcd_monitoring:
+    enabled: false # Set to true to use apiserver_monitoring_dashboard(default false)
+    # Set path to use customized path
+    # minikube: /var/lib/minikube/certs/etcd
+    etcd_ca_cert_path: /etc/kubernetes/pki/etcd/ca.crt
+    etcd_client_cert_path: /etc/kubernetes/pki/etcd/server.crt
+    etcd_client_key_path: /etc/kubernetes/pki/etcd/server.key
+
 imagePullSecret:
   name: #registryKey
 containerRuntime: "docker" # Options: "docker", "containerd", "crio"
@@ -72,18 +88,6 @@ deployment:
         limits:
           memory: "350Mi"
           cpu: "200m"
-      addon:
-        apiserver_monitoring:
-          enabled: true # Set to false to use apiserver_monitoring_dashboard(default true)
-          client_tls_verify: true # Set to false to skip insecure-tls-verify(default true)
-        etcd_monitoring:
-          enabled: false # Set to true to use apiserver_monitoring_dashboard(default false)
-          etcd_hosts: []
-
-          #Set path to use customized path
-          etcd_ca_cert_path: /etc/kubernetes/pki/etcd/ca.crt
-          etcd_client_cert_path: /etc/kubernetes/pki/etcd/server.crt
-          etcd_client_key_path: /etc/kubernetes/pki/etcd/server.key
     masterAgent:
       name: whatap-master-agent
       image: "whatap/kube_mon"

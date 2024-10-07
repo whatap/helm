@@ -22,6 +22,9 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.imagePullSecret.name }}
       {{- end }}
+      {{- if .Values.addon.npm.enabled }}
+      hostNetwork: true
+      {{- end }}
       tolerations:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule
@@ -39,7 +42,23 @@ spec:
       {{- end}}
       serviceAccountName: whatap
       containers:
-      {{- if .Values.gpuEnabled }}
+      {{- if .Values.addon.npm.enabled }}
+        - name: whatap-npm-ds
+          image: whatap/k8s_npm:latest
+          command:
+            - /bin/entrypoint.sh
+          volumeMounts:
+            - name: configmap-volume
+              mountPath: /bin/entrypoint.sh
+              readOnly: true
+              subPath: entrypoint.sh
+            - name: rootfs
+              mountPath: /rootfs/proc
+              readOnly: true
+          securityContext:
+            privileged: true
+        {{ end }}
+      {{- if .Values.addon.gpu.enabled }}
         - name: "dcgm-exporter"
           image: "nvcr.io/nvidia/k8s/dcgm-exporter:2.1.8-2.4.0-rc.3-ubuntu18.04"
           env:
@@ -151,7 +170,7 @@ spec:
               value: {{ .Values.whatap.port | quote }}
             - name: HOST_PREFIX
               value: "/rootfs"
-            {{- if .Values.gpuEnabled}}
+            {{- if .Values.addon.gpu.enabled}}
             - name: gpu_enabled
               value: "true"
             {{ end }}
@@ -211,11 +230,20 @@ spec:
             name: node-start-script
         - name: whatap-config-volume
           emptyDir: {}
-        {{- if .Values.gpuEnabled}}
+        {{- if .Values.addon.gpu.enabled}}
         - hostPath:
             path: "/var/lib/kubelet/pod-resources"
           name: "pod-gpu-resources"
         - configMap:
             name: "dcgm-exporter-csv"
           name: "whatap-dcgm-exporter-csv"
+        {{ end }}
+        {{- if .Values.addon.npm.enabled}}
+        - name: configmap-volume
+          configMap:
+            defaultMode: 0700
+            name: whatap-npm-configmap
+        - hostPath:
+            path: /proc
+          name: rootfs
         {{ end }}
