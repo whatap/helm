@@ -57,7 +57,7 @@ spec:
               readOnly: true
           securityContext:
             privileged: true
-        {{ end }}
+      {{ end }}
       {{- if .Values.addon.gpu.enabled }}
         - name: "dcgm-exporter"
           image: "nvcr.io/nvidia/k8s/dcgm-exporter:2.1.8-2.4.0-rc.3-ubuntu18.04"
