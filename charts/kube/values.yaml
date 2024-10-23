@@ -19,6 +19,7 @@ addon:
     enabled: false
   gpu:
     enabled: false
+    image: nvcr.io/nvidia/k8s/dcgm-exporter:2.1.8-2.4.0-rc.3-ubuntu18.04
   apiserver_monitoring:
     enabled: true # Set to false to use apiserver_monitoring_dashboard(default true)
     client_tls_verify: true # Set to false to skip insecure-tls-verify(default true)
