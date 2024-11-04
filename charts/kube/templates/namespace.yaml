@@ -1,3 +1,4 @@
+{{- if not  .Values.namespaceAlreadyExist}}
 {{ if not .Values.namespaceOverrideEnabled }}
 apiVersion: v1
 kind: Namespace
@@ -8,3 +9,4 @@ metadata:
     istio-injection: enabled
   {{end}}
 {{end}}
+  {{end}}

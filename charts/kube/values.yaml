@@ -4,7 +4,7 @@ whatap:
   port: # <whatap-server-port>
 
 namespaceOverrideEnabled: false
-
+namespaceAlreadyExist: false
 # istioEnabled default
 #istioEnabled: false
 
