@@ -29,15 +29,21 @@ spec:
       {{- end }}
       serviceAccountName: whatap
       volumes:
+        {{- if and .Values.addon.etcd_monitoring.enabled .Values.addon.etcd_monitoring.etcd_ca_cert_path}}
         - name: etcd-ca-cert-path
           hostPath:
             path: {{ default "/etc/kubernetes/pki/etcd/ca.crt" .Values.addon.etcd_monitoring.etcd_ca_cert_path }}
+        {{- end }}
+        {{- if and .Values.addon.etcd_monitoring.enabled .Values.addon.etcd_monitoring.etcd_ca_cert_path}}
         - name: etcd-client-cert-path
           hostPath:
-            path: {{ default "/etc/kubernetes/pki/etcd/server.crt" .Values.addon.etcd_monitoring.etcd_client_cert_path }}
+            path: {{ default "/etc/kubernetes/pki/etcd/server.crt" .Values.addon.etcd_monitoring.etcd_ca_cert_path }}
+        {{- end }}
+        {{- if and .Values.addon.etcd_monitoring.enabled .Values.addon.etcd_monitoring.etcd_client_key_path}}
         - name: etcd-client-key-path
           hostPath:
             path: {{ default "/etc/kubernetes/pki/etcd/server.key" .Values.addon.etcd_monitoring.etcd_client_key_path }}
+        {{- end }}
         - name: start-script-volume
           configMap:
             defaultMode: 0700
@@ -60,6 +66,7 @@ spec:
             - containerPort: {{ .Values.deployment.containers.controlPlaneHelper.port }}
           command: [ "/data/agent/master/whatap_control_plane_helper" ]
           args: [ "-collect_control_plane_monitoring_enabled=true" ]
+          {{- if .Values.addon.etcd_monitoring.enabled}}
           volumeMounts:
             - name: etcd-ca-cert-path
               mountPath: {{ default "/etc/kubernetes/pki/etcd/ca.crt" .Values.addon.etcd_monitoring.etcd_ca_cert_path }}
@@ -70,6 +77,7 @@ spec:
             - name: etcd-client-key-path
               mountPath: {{ default "/etc/kubernetes/pki/etcd/server.key" .Values.addon.etcd_monitoring.etcd_client_key_path }}
               readOnly: true
+          {{- end }}
           env:
             - name: kube_apiserver_monitoring_enabled
             {{- if eq .Values.addon.apiserver_monitoring.enabled false }}
@@ -95,15 +103,15 @@ spec:
             {{- else }}
               value: "false"
             {{- end }}
-            {{- if .Values.addon.etcd_monitoring.etcd_ca_cert_path }}
+            {{- if and .Values.addon.etcd_monitoring.enabled .Values.addon.etcd_monitoring.etcd_ca_cert_path }}
             - name: etcd_ca_cert_path
               value: {{ .Values.addon.etcd_monitoring.etcd_ca_cert_path }}
             {{- end }}
-            {{- if .Values.addon.etcd_monitoring.etcd_client_cert_path }}
+            {{- if and .Values.addon.etcd_monitoring.enabled .Values.addon.etcd_monitoring.etcd_client_cert_path }}
             - name: etcd_client_cert_path
               value: {{ .Values.addon.etcd_monitoring.etcd_client_cert_path }}
             {{- end }}
-            {{- if .Values.addon.etcd_monitoring.etcd_client_key_path }}
+            {{- if and .Values.addon.etcd_monitoring.enabled .Values.addon.etcd_monitoring.etcd_client_key_path }}
             - name: etcd_client_key_path
               value: {{ .Values.addon.etcd_monitoring.etcd_client_key_path }}
             {{- end }}
@@ -151,6 +159,7 @@ spec:
               subPath: entrypoint.sh
             - name: whatap-config-volume
               mountPath: /whatap_conf
+            {{- if and .Values.addon.etcd_monitoring.enabled}}
             - name: etcd-ca-cert-path
               mountPath: {{ default "/etc/kubernetes/pki/etcd/ca.crt" .Values.addon.etcd_monitoring.etcd_ca_cert_path }}
               readOnly: true
@@ -160,3 +169,4 @@ spec:
             - name: etcd-client-key-path
               mountPath: {{ default "/etc/kubernetes/pki/etcd/server.key" .Values.addon.etcd_monitoring.etcd_client_key_path }}
               readOnly: true
+            {{- end }}
