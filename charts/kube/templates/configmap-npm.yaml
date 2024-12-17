@@ -27,7 +27,6 @@ data:
         echo "awsAccessKey=" |  tee -a $whatap_conf_path > /dev/null
         echo "awsSecretKey="  |  tee -a $whatap_conf_path > /dev/null
         echo "awsRegions=" |  tee -a $whatap_conf_path > /dev/null
-        echo "natTrace=0" |  tee -a $whatap_conf_path > /dev/null
     fi
-
+    echo "natTrace=0" |  tee -a $whatap_conf_path > /dev/null
     /usr/whatap/whatap-npmd/whatap_npmd
