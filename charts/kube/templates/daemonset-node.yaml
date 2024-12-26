@@ -22,9 +22,6 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.imagePullSecret.name }}
       {{- end }}
-      {{- if or (.Values.hostNetworkEnabled) (and .Values.addon.npm.enabled .Values.addon.npm.hostNetworkEnabled)}}
-      hostNetwork: true
-      {{- end }}
       tolerations:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule
@@ -42,22 +39,6 @@ spec:
       {{- end}}
       serviceAccountName: whatap
       containers:
-      {{- if .Values.addon.npm.enabled }}
-        - name: whatap-npm-ds
-          image: whatap/k8s_npm:latest
-          command:
-            - /bin/entrypoint.sh
-          volumeMounts:
-            - name: configmap-volume
-              mountPath: /bin/entrypoint.sh
-              readOnly: true
-              subPath: entrypoint.sh
-            - name: rootfs
-              mountPath: /rootfs
-              readOnly: true
-          securityContext:
-            privileged: true
-      {{ end }}
       {{- if .Values.addon.gpu.enabled }}
         - name: "dcgm-exporter"
           {{- if .Values.addon.gpu.image }}
@@ -241,10 +222,4 @@ spec:
         - configMap:
             name: "dcgm-exporter-csv"
           name: "whatap-dcgm-exporter-csv"
-        {{ end }}
-        {{- if .Values.addon.npm.enabled}}
-        - name: configmap-volume
-          configMap:
-            defaultMode: 0700
-            name: whatap-npm-configmap
         {{ end }}
