@@ -33,6 +33,13 @@ spec:
       containers:
         - name: whatap-npm-agent
           image: whatap/k8s_npm:latest
+          resources:
+            requests:
+              memory: {{ .Values.daemonSetNpm.containers.npmAgent.requests.memory}}
+              cpu: {{ .Values.daemonSetNpm.containers.npmAgent.requests.cpu}}
+            limits:
+              memory: {{ .Values.daemonSetNpm.containers.npmAgent.limits.memory}}
+              cpu: {{ .Values.daemonSetNpm.containers.npmAgent.limits.cpu}}
           command:
             - /bin/entrypoint.sh
           volumeMounts:
