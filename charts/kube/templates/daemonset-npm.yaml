@@ -31,7 +31,7 @@ spec:
           effect: NoSchedule
       serviceAccountName: whatap
       containers:
-        - name: whatap-npm-ds
+        - name: whatap-npm-agent
           image: whatap/k8s_npm:latest
           command:
             - /bin/entrypoint.sh
