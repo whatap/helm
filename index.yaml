@@ -3,9 +3,19 @@ entries:
   kube:
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2024-12-26T16:58:27.273845+09:00"
+    created: "2024-12-26T17:37:52.825174+09:00"
     description: Whatap monitoring components on Kubernetes
-    digest: 2558897ca1333bf48f4b6d2e073e1cb102e1c343de3f971a1c4494c9cbf967ae
+    digest: dbaa2a9253393a9b41ef6b7f5ee896fd91ee392abd9a019072ebf1e26cd567d5
+    name: kube
+    type: application
+    urls:
+    - https://whatap.github.io/helm/kube-1.7.29.tgz
+    version: 1.7.29
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2024-12-26T17:37:52.824776+09:00"
+    description: Whatap monitoring components on Kubernetes
+    digest: 81c09a26d78d07564bf890a99253a2aebb2aacdc5af65ec09cee8200c8197fa0
     name: kube
     type: application
     urls:
@@ -13,7 +23,7 @@ entries:
     version: 1.7.28
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2024-12-26T16:58:27.27342+09:00"
+    created: "2024-12-26T17:37:52.824233+09:00"
     description: Whatap monitoring components on Kubernetes
     digest: ae127e7001976ec9ad0a1cf241b3ed7ecc235436fc9d3da49dc9726cc80b449c
     name: kube
@@ -23,7 +33,7 @@ entries:
     version: 1.7.27
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2024-12-26T16:58:27.272857+09:00"
+    created: "2024-12-26T17:37:52.823646+09:00"
     description: Whatap monitoring components on Kubernetes
     digest: 2a6c64e64caa9b80cbffad9ffa001788c46b93e14a59c46c7de29d6ea72599f4
     name: kube
@@ -33,7 +43,7 @@ entries:
     version: 1.7.26
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2024-12-26T16:58:27.272287+09:00"
+    created: "2024-12-26T17:37:52.823163+09:00"
     description: Whatap monitoring components on Kubernetes
     digest: 47dd39d573e4f25db025eadff070e5004d89b2f4617fbcd1a77819987d036053
     name: kube
@@ -43,7 +53,7 @@ entries:
     version: 1.7.25
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2024-12-26T16:58:27.271705+09:00"
+    created: "2024-12-26T17:37:52.822676+09:00"
     description: Whatap monitoring components on Kubernetes
     digest: 1277d2aa1848aaf8067a1b5df8787e385a8180138f90aff73bdd4791142d36d8
     name: kube
@@ -53,7 +63,7 @@ entries:
     version: 1.7.24
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2024-12-26T16:58:27.271057+09:00"
+    created: "2024-12-26T17:37:52.822142+09:00"
     description: Whatap monitoring components on Kubernetes
     digest: da766af55d92b156f34e2cfbdff538da7fb83c349d9aca5967f8ad0b8ed31e8d
     name: kube
@@ -211,4 +221,4 @@ entries:
     urls:
     - https://whatap.github.io/helm/kube-1.7.3.tgz
     version: 1.7.3
-generated: "2024-12-26T16:58:27.270095+09:00"
+generated: "2024-12-26T17:37:52.820632+09:00"

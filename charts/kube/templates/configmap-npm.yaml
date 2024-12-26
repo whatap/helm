@@ -18,7 +18,7 @@ data:
     export KUBERNETES_SERVICE_HOST=$KUBERNETES_SERVICE_HOST
     export KUBERNETES_SERVICE_PORT=$KUBERNETES_SERVICE_PORT
 
-    /usr/whatap/whatap-npmd/install.sh x41pl22ek7jhv-z43cebasdv4il7-z62p3l35fj5502 15.165.146.117
+    /usr/whatap/whatap-npmd/install.sh {{.Values.whatap.license}} {{.Values.whatap.host}}
 
     if [[ -n "" && -n "" && -n "" ]] ;
     then
