@@ -18,7 +18,6 @@ collect_apiserver_metric_by_leader: false
 addon:
   npm:
     enabled: false
-    hostNetworkEnabled: true
   gpu:
     enabled: false
     image: nvcr.io/nvidia/k8s/dcgm-exporter:2.1.8-2.4.0-rc.3-ubuntu18.04
@@ -35,6 +34,13 @@ addon:
 imagePullSecret:
   name: #registryKey
 containerRuntime: "docker" # Options: "docker", "containerd", "crio"
+daemonSetNpm:
+  name: whatap-npm-agent
+  label: whatap-npm-agent
+  containers:
+    npmAgent:
+      name: whatap-npm-agent
+      image: "whatap/k8s_npm:latest"
 daemonSet:
   name: whatap-node-agent
   label: whatap-node-agent

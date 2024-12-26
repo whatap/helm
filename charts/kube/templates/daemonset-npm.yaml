@@ -1,0 +1,56 @@
+{{- if .Values.addon.npm.enabled }}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ .Values.daemonSetNpm.name }}
+  {{ if not .Values.namespaceOverrideEnabled }}
+  namespace: "whatap-monitoring"
+  {{ else}}
+  namespace: {{ .Release.Namespace }}
+  {{ end }}
+  labels:
+    name: {{ .Values.daemonSetNpm.label }}
+spec:
+  selector:
+    matchLabels:
+      name: {{ .Values.daemonSetNpm.label }}
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.daemonSetNpm.label }}
+    spec:
+      {{- if .Values.imagePullSecret.name }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret.name }}
+      {{- end }}
+      hostNetwork: true
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        - key: node-role.kubernetes.io/control-plane
+          effect: NoSchedule
+      serviceAccountName: whatap
+      containers:
+        - name: whatap-npm-ds
+          image: whatap/k8s_npm:latest
+          command:
+            - /bin/entrypoint.sh
+          volumeMounts:
+            - name: configmap-volume
+              mountPath: /bin/entrypoint.sh
+              readOnly: true
+              subPath: entrypoint.sh
+            - name: rootfs
+              mountPath: /rootfs/proc
+              readOnly: true
+          securityContext:
+            privileged: true
+      volumes:
+        - name: configmap-volume
+          configMap:
+            defaultMode: 0700
+            name: whatap-npm-configmap
+        - hostPath:
+            path: /proc
+          name: rootfs
+{{ end }}
