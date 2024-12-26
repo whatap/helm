@@ -22,7 +22,7 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.imagePullSecret.name }}
       {{- end }}
-      {{- if .Values.addon.npm.enabled }}
+      {{- if or (.Values.hostNetworkEnabled) (and .Values.addon.npm.enabled .Values.addon.npm.hostNetworkEnabled)}}
       hostNetwork: true
       {{- end }}
       tolerations:

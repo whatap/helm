@@ -4,6 +4,7 @@ whatap:
   port: # <whatap-server-port>
 
 namespaceOverrideEnabled: false
+hostNetworkEnabled: false
 # whatapResourceAlreadyExist: false
 # istioEnabled default
 #istioEnabled: false
@@ -17,6 +18,7 @@ collect_apiserver_metric_by_leader: false
 addon:
   npm:
     enabled: false
+    hostNetworkEnabled: true
   gpu:
     enabled: false
     image: nvcr.io/nvidia/k8s/dcgm-exporter:2.1.8-2.4.0-rc.3-ubuntu18.04
