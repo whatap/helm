@@ -12,7 +12,7 @@ metadata:
   {{ end }}
 rules:
   - apiGroups: ["*"]
-    resources: {{.Values.clusterrole.rules}}
+    resources: {{ .Values.clusterrole.rules.resources }}
     verbs: ["get","list","watch"]
   - apiGroups: [""]
     resources: ["pods/exec"]
