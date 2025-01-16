@@ -12,7 +12,7 @@ metadata:
   {{ end }}
 rules:
   - apiGroups: ["*"]
-    resources: ["namespaces", "pods", "pods/log", "configmaps","services", "endpoints","daemonsets","ingresses","deployments","nodes","persistentvolumes","persistentvolumeclaims", "events", "replicasets", "roles", "rolebindings", "clusterroles", "clusterrolebindings", "jobs", "cronjobs", "statefulsets", "serviceaccounts", "configmaps", "storageclasses", "horizontalpodautoscalers", "replicationcontrollers", "customresourcedefinitions"]
+    resources: {{.Values.clusterrole.rules}}
     verbs: ["get","list","watch"]
   - apiGroups: [""]
     resources: ["pods/exec"]
