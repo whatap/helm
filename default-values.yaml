@@ -4,26 +4,25 @@ whatap:
   port: "6600"
 
 namespaceOverrideEnabled: false
-
+hostNetworkEnabled: false
+# whatapResourceAlreadyExist: false
 # istioEnabled default
 #istioEnabled: false
 
 # k8sOldVersion default
-#k8sOldVersion: false
-
-# gpuEnabled default
-#gpuEnabled: false
+#k8sOldVersion: true
 
 # collect_apiserver_metric_by_leader default
-#collect_apiserver_metric_by_leader: false
+collect_apiserver_metric_by_leader: false
 
 addon:
   npm:
-    enabled: true
+    enabled: false
   gpu:
     enabled: false
+    image: nvcr.io/nvidia/k8s/dcgm-exporter:2.1.8-2.4.0-rc.3-ubuntu18.04
   apiserver_monitoring:
-    enabled: true # Set to false to use apiserver_monitoring_dashboard(default true)
+    enabled: false # Set to true to use apiserver_monitoring_dashboard(default false)
     client_tls_verify: true # Set to false to skip insecure-tls-verify(default true)
   etcd_monitoring:
     enabled: false # Set to true to use apiserver_monitoring_dashboard(default false)
@@ -32,10 +31,22 @@ addon:
     etcd_ca_cert_path: /etc/kubernetes/pki/etcd/ca.crt
     etcd_client_cert_path: /etc/kubernetes/pki/etcd/server.crt
     etcd_client_key_path: /etc/kubernetes/pki/etcd/server.key
-
 imagePullSecret:
   name: #registryKey
 containerRuntime: "docker" # Options: "docker", "containerd", "crio"
+daemonSetNpm:
+  name: whatap-npm-agent
+  label: whatap-npm-agent
+  containers:
+    npmAgent:
+      name: whatap-npm-agent
+      image: "whatap/k8s_npm:latest"
+      requests:
+        memory: "300Mi"
+        cpu: "200m"
+      limits:
+        memory: "350Mi"
+        cpu: "200m"
 daemonSet:
   name: whatap-node-agent
   label: whatap-node-agent
@@ -57,6 +68,7 @@ daemonSet:
       envs:
         collect_nfs_disk_enabled: true
         collect_kube_node_process_metric_enabled: false
+        collect_kube_node_process_metric_target_list: "kubelet,containerd,dockerd,crio,coredns,kube-proxy,aws-k8s-agent,kube-apiserver,etcd,kube-controller,kube-scheduler"
         debug: false
     nodeAgent:
       name: whatap-node-agent
@@ -76,18 +88,18 @@ deployment:
   replicas: 1
   containers:
     controlPlaneHelper:
-#      enabled: true  # Set to false to disable the whatap-control-plane-helper container
+      enabled: true  # Set to false to disable the whatap-control-plane-helper container
       debug: false
       name: whatap-control-plane-helper
       image: whatap/kube_mon
       port: 9496
       resources:
         requests:
-          memory: "300Mi"
-          cpu: "100m"
+          memory: "500Mi"
+          cpu: "500m"
         limits:
-          memory: "350Mi"
-          cpu: "200m"
+          memory: "500Mi"
+          cpu: "500m"
     masterAgent:
       name: whatap-master-agent
       image: "whatap/kube_mon"
@@ -101,3 +113,6 @@ deployment:
           cpu: "200m"
       envs:
         debug: false
+clusterrole:
+  rules:
+    resources: '["namespaces", "pods", "pods/log", "configmaps","services", "endpoints","daemonsets","ingresses","deployments","nodes","persistentvolumes","persistentvolumeclaims", "events", "replicasets", "roles", "rolebindings", "clusterroles", "clusterrolebindings", "jobs", "cronjobs", "statefulsets", "serviceaccounts", "configmaps", "storageclasses", "horizontalpodautoscalers", "replicationcontrollers", "customresourcedefinitions"]'
