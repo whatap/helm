@@ -121,7 +121,7 @@ spec:
             {{ end }}
             {{- if .Values.collect_custom_resources_interval}}
             - name: collect_cr_interval
-              value: {{.Values.collect_custom_resources_interval}}
+              value: {{.Values.collect_custom_resources_interval | quote}}
             {{ end }}
         {{- end }}
         - name: {{ .Values.deployment.containers.masterAgent.name }}
