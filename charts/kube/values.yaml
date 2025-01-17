@@ -14,7 +14,8 @@ hostNetworkEnabled: false
 
 # collect_apiserver_metric_by_leader default
 collect_apiserver_metric_by_leader: false
-
+collect_custom_resources: false
+collect_custom_resources_interval: 300000
 addon:
   npm:
     enabled: false
@@ -115,4 +116,4 @@ deployment:
         debug: false
 clusterrole:
   rules:
-    resources: ["namespaces", "pods", "pods/log", "configmaps","services", "endpoints","daemonsets","ingresses","deployments","nodes","persistentvolumes","persistentvolumeclaims", "events", "replicasets", "roles", "rolebindings", "clusterroles", "clusterrolebindings", "jobs", "cronjobs", "statefulsets", "serviceaccounts", "configmaps", "storageclasses", "horizontalpodautoscalers", "replicationcontrollers", "customresourcedefinitions"]
+    resources: '["namespaces", "pods", "pods/log", "configmaps","services", "endpoints","daemonsets","ingresses","deployments","nodes","persistentvolumes","persistentvolumeclaims", "events", "replicasets", "roles", "rolebindings", "clusterroles", "clusterrolebindings", "jobs", "cronjobs", "statefulsets", "serviceaccounts", "configmaps", "storageclasses", "horizontalpodautoscalers", "replicationcontrollers", "customresourcedefinitions"]'

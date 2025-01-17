@@ -115,6 +115,14 @@ spec:
             - name: etcd_client_key_path
               value: {{ .Values.addon.etcd_monitoring.etcd_client_key_path }}
             {{- end }}
+            {{- if eq .Values.collect_custom_resources true}}
+            - name: collect_cr
+              value: "true"
+            {{ end }}
+            {{- if .Values.collect_custom_resources_interval}}
+            - name: collect_cr_interval
+              value: {{.Values.collect_custom_resources_interval}}
+            {{ end }}
         {{- end }}
         - name: {{ .Values.deployment.containers.masterAgent.name }}
           image: {{ .Values.deployment.containers.masterAgent.image }}
