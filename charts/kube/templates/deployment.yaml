@@ -115,14 +115,6 @@ spec:
             - name: etcd_client_key_path
               value: {{ .Values.addon.etcd_monitoring.etcd_client_key_path }}
             {{- end }}
-            {{- if eq .Values.collect_custom_resources true}}
-            - name: collect_cr
-              value: "true"
-            {{ end }}
-            {{- if .Values.collect_custom_resources_interval}}
-            - name: collect_cr_interval
-              value: {{.Values.collect_custom_resources_interval | quote}}
-            {{ end }}
         {{- end }}
         - name: {{ .Values.deployment.containers.masterAgent.name }}
           image: {{ .Values.deployment.containers.masterAgent.image }}
@@ -137,6 +129,14 @@ spec:
             - containerPort: {{ .Values.deployment.containers.masterAgent.port }}
           command: ["/bin/entrypoint.sh"]
           env:
+            {{- if eq .Values.collect_custom_resources true}}
+            - name: collect_cr
+              value: "true"
+            {{ end }}
+            {{- if .Values.collect_custom_resources_interval}}
+            - name: collect_cr_interval
+              value: {{.Values.collect_custom_resources_interval | quote}}
+            {{ end }}
             {{- if .Values.deployment.containers.controlPlaneHelper.enabled }}
             - name: collect_control_plane_monitoring_enabled
               value: "true"
