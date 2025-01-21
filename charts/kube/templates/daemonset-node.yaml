@@ -169,8 +169,12 @@ spec:
               value: {{.Values.daemonSet.containers.nodeAgent.envs.collect_kube_node_process_metric_enabled | quote}}
             {{- end }}
             {{- if .Values.daemonSet.containers.nodeAgent.envs.debug }}
-            - name: collect_kube_node_process_metric_enabled
+            - name: debug
               value: {{.Values.daemonSet.containers.nodeAgent.envs.debug | quote}}
+            {{- end }}
+            {{- if .Values.daemonSet.containers.nodeAgent.envs.count_interval }}
+            - name: count_interval
+              value: {{.Values.daemonSet.containers.nodeAgent.envs.count_interval | quote}}
             {{- end }}
             {{- if eq .Values.collect_apiserver_metric_by_leader true }}
             - name: collect_apiserver_metric_by_leader

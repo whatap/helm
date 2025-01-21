@@ -83,6 +83,7 @@ daemonSet:
       envs:
         collect_kube_node_process_metric_enabled: false
         debug: false
+        count_interval: 5000
 deployment:
   name: whatap-master-agent
   label: whatap-master-agent
