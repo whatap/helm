@@ -12,11 +12,40 @@ metadata:
   {{ end }}
 rules:
   - apiGroups: ["*"]
-    {{ if not .Values.clusterrole.rules.resources }}
-    resources: ["namespaces", "pods", "pods/log", "configmaps","services", "endpoints","daemonsets","ingresses","deployments","nodes","persistentvolumes","persistentvolumeclaims", "events", "replicasets", "roles", "rolebindings", "clusterroles", "clusterrolebindings", "jobs", "cronjobs", "statefulsets", "serviceaccounts", "configmaps", "storageclasses", "horizontalpodautoscalers", "replicationcontrollers", "customresourcedefinitions"]
-    {{else}}
-    resources: {{ .Values.clusterrole.rules.resources}}
-    {{end}}
+    resources:
+    - "namespaces"
+    - "pods"
+    - "pods/log"
+    - "configmaps"
+    - "services"
+    - "endpoints"
+    - "daemonsets"
+    - "ingresses"
+    - "deployments"
+    - "nodes"
+    - "persistentvolumes"
+    - "persistentvolumeclaims"
+    - "events"
+    - "replicasets"
+    - "roles"
+    - "rolebindings"
+    - "clusterroles"
+    - "clusterrolebindings"
+    - "jobs"
+    - "cronjobs"
+    - "statefulsets"
+    - "serviceaccounts"
+    - "configmaps"
+    - "storageclasses"
+    - "horizontalpodautoscalers"
+    - "replicationcontrollers"
+    - "customresourcedefinitions"
+    {{- /* 사용자가 추가한 리소스들을 출력 (값이 존재할 경우) */}}
+    {{- if .Values.clusterrole.extraResources }}
+    {{- range .Values.clusterrole.extraResources }}
+    - {{ . | quote }}
+    {{- end }}
+    {{- end }}
     verbs: ["get","list","watch"]
   - apiGroups: [""]
     resources: ["pods/exec"]

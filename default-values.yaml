@@ -2,7 +2,7 @@ whatap:
   license: "x423h2197u810-x1jh0prkj2ofme-z2v3cc6u6r6fjk"
   host: "15.165.146.117"
   port: "6600"
-
+collect_custom_resources: false
 namespaceOverrideEnabled: false
 hostNetworkEnabled: false
 # whatapResourceAlreadyExist: false
@@ -114,5 +114,5 @@ deployment:
       envs:
         debug: false
 clusterrole:
-  rules:
-    resources: '["namespaces", "pods", "pods/log", "configmaps","services", "endpoints","daemonsets","ingresses","deployments","nodes","persistentvolumes","persistentvolumeclaims", "events", "replicasets", "roles", "rolebindings", "clusterroles", "clusterrolebindings", "jobs", "cronjobs", "statefulsets", "serviceaccounts", "configmaps", "storageclasses", "horizontalpodautoscalers", "replicationcontrollers", "customresourcedefinitions"]'
+  extraResources:
+    - "samplecrds"
