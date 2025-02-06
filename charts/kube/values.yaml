@@ -34,7 +34,7 @@ addon:
     etcd_client_key_path: /etc/kubernetes/pki/etcd/server.key
 imagePullSecret:
   name: #registryKey
-containerRuntime: "docker" # Options: "docker", "containerd", "crio"
+containerRuntime: #"docker" # Options: "docker", "containerd", "crio"
 daemonSetNpm:
   name: whatap-npm-agent
   label: whatap-npm-agent
@@ -117,4 +117,4 @@ deployment:
         debug: false
 clusterrole:
   extraResources:
-    - "samplecrds"
+    #- "samplecrds"

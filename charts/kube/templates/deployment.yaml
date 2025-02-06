@@ -130,6 +130,10 @@ spec:
           command: ["/bin/entrypoint.sh"]
           env:
             {{- if eq .Values.collect_custom_resources true}}
+            - name: collect_custom_resources
+              value: "true"
+            {{ end }}
+            {{- if eq .Values.collect_custom_resources true}}
             - name: collect_cr
               value: "true"
             {{ end }}
