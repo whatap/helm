@@ -20,10 +20,11 @@ helm repo update
 ```
 2. values.yaml(설치에 필요한 기본 설정파일) 생성
 ```yaml
-#기본 yaml 구성whatap:
-license: # <license-key>
-host: # <whatap-server-host>
-port: # <whatap-server-port>
+#기본 yaml 구성
+whatap:
+  license: # <license-key>
+  host: # <whatap-server-host>
+  port: # <whatap-server-port>
 
 namespaceOverrideEnabled: false
 hostNetworkEnabled: false
