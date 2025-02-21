@@ -19,6 +19,140 @@ helm repo add whatap https://whatap.github.io/helm/
 helm repo update
 ```
 2. values.yaml(설치에 필요한 기본 설정파일) 생성
+```yaml
+#기본 yaml 구성whatap:
+license: # <license-key>
+host: # <whatap-server-host>
+port: # <whatap-server-port>
+
+namespaceOverrideEnabled: false
+hostNetworkEnabled: false
+# whatapResourceAlreadyExist: false
+# istioEnabled default
+#istioEnabled: false
+
+# k8sOldVersion default
+#k8sOldVersion: true
+
+# collect_apiserver_metric_by_leader default
+collect_apiserver_metric_by_leader: false
+collect_custom_resources: false
+collect_custom_resources_interval: 300000
+addon:
+  npm:
+    enabled: false
+  gpu:
+    enabled: false
+    image: nvcr.io/nvidia/k8s/dcgm-exporter:2.1.8-2.4.0-rc.3-ubuntu18.04
+  apiserver_monitoring:
+    enabled: false # Set to true to use apiserver_monitoring_dashboard(default false)
+    client_tls_verify: true # Set to false to skip insecure-tls-verify(default true)
+  etcd_monitoring:
+    enabled: false # Set to true to use apiserver_monitoring_dashboard(default false)
+    # Set path to use customized path
+    # minikube: /var/lib/minikube/certs/etcd
+    etcd_ca_cert_path: /etc/kubernetes/pki/etcd/ca.crt
+    etcd_client_cert_path: /etc/kubernetes/pki/etcd/server.crt
+    etcd_client_key_path: /etc/kubernetes/pki/etcd/server.key
+imagePullSecret:
+  name: #registryKey
+containerRuntime: #"docker" # Options: "docker", "containerd", "crio"
+daemonSetNpm:
+  name: whatap-npm-agent
+  label: whatap-npm-agent
+  containers:
+    npmAgent:
+      name: whatap-npm-agent
+      image: "whatap/k8s_npm:latest"
+      requests:
+        memory: "300Mi"
+        cpu: "200m"
+      limits:
+        memory: "350Mi"
+        cpu: "200m"
+daemonSet:
+  name: whatap-node-agent
+  label: whatap-node-agent
+  tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
+  initContainers:
+    nodeDebugger:
+      enabled: true  # Set to false to disable the whatap-node-debug initContainer
+      name: whatap-node-debug
+      image: "whatap/kube_mon"
+  containers:
+    nodeHelper:
+      name: whatap-node-helper
+      image: "whatap/kube_mon"
+      requests:
+        memory: "100Mi"
+        cpu: "100m"
+      limits:
+        memory: "350Mi"
+        cpu: "200m"
+      envs:
+        collect_nfs_disk_enabled: true
+        collect_kube_node_process_metric_enabled: false
+        collect_kube_node_process_metric_target_list: "kubelet,containerd,dockerd,crio,coredns,kube-proxy,aws-k8s-agent,kube-apiserver,etcd,kube-controller,kube-scheduler"
+        debug: false
+    nodeAgent:
+      name: whatap-node-agent
+      image: "whatap/kube_mon"
+      requests:
+        memory: "300Mi"
+        cpu: "100m"
+      limits:
+        memory: "350Mi"
+        cpu: "200m"
+      envs:
+        collect_kube_node_process_metric_enabled: false
+        debug: false
+        count_interval: 5000
+deployment:
+  name: whatap-master-agent
+  label: whatap-master-agent
+  replicas: 1
+  tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
+  containers:
+    controlPlaneHelper:
+      enabled: true  # Set to false to disable the whatap-control-plane-helper container
+      debug: false
+      name: whatap-control-plane-helper
+      image: whatap/kube_mon
+      port: 9496
+      resources:
+        requests:
+          memory: "500Mi"
+          cpu: "500m"
+        limits:
+          memory: "500Mi"
+          cpu: "500m"
+    masterAgent:
+      name: whatap-master-agent
+      image: "whatap/kube_mon"
+      port: 6600
+      resources:
+        requests:
+          memory: "300Mi"
+          cpu: "100m"
+        limits:
+          memory: "350Mi"
+          cpu: "200m"
+      envs:
+        debug: false
+
+clusterrole:
+  extraResources:
+  #- "samplecrds"
+
+```
 - 사용자 CONTAINER-RUNTIME 확인
 ```shell
 kubectl get nodes -o wide
@@ -153,8 +287,30 @@ whatap:
   port: "와탭 수집서버 포트 입력"
 ```
 
-#### 에이전트가 설치될 namespace 를 지정할 경우 아래의 방법으로 설치할 수 있습니다.
+#### tolerations 설정 가이드
+```yaml
+#whatap-node-agent DaemonSet Tolerations 설정 예시
+#values.yaml DaemonSet 에  아래와 같이 tolerations 추가
+daemonSet:
+  tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
+```
 
+```yaml
+#whatap-master-agent Deployment Tolerations 설정 
+#values.yaml Deployment 에 아래와 같이 tolerations 추가
+deployment:
+  tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
+```
+
+#### 에이전트가 설치될 namespace 를 지정할 경우 아래의 방법으로 설치할 수 있습니다.
 #### pre-requirement : whatap/kube 차트 1.7.11 이상 버전
 ```shell
 helm search repo whatap --version '>=1.7.11'
