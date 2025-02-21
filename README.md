@@ -19,6 +19,7 @@ helm repo add whatap https://whatap.github.io/helm/
 helm repo update
 ```
 2. values.yaml(설치에 필요한 기본 설정파일) 생성
+- 기본 values.yaml 구성
 ```yaml
 #기본 yaml 구성
 whatap:
@@ -152,7 +153,6 @@ deployment:
 clusterrole:
   extraResources:
   #- "samplecrds"
-
 ```
 - 사용자 CONTAINER-RUNTIME 확인
 ```shell
