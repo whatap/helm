@@ -311,7 +311,7 @@ deployment:
       effect: NoSchedule
 ```
 
-#### 에이전트가 설치될 namespace 를 지정할 경우 아래의 방법으로 설치할 수 있습니다.
+### 에이전트가 설치될 namespace 를 지정할 경우 아래의 방법으로 설치할 수 있습니다.
 #### pre-requirement : whatap/kube 차트 1.7.11 이상 버전
 ```shell
 helm search repo whatap --version '>=1.7.11'
