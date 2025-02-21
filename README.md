@@ -154,6 +154,7 @@ clusterrole:
   extraResources:
   #- "samplecrds"
 ```
+
 - 사용자 CONTAINER-RUNTIME 확인
 ```shell
 kubectl get nodes -o wide
