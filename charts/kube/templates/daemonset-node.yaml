@@ -23,10 +23,9 @@ spec:
         - name: {{ .Values.imagePullSecret.name }}
       {{- end }}
       tolerations:
-        - key: node-role.kubernetes.io/master
-          effect: NoSchedule
-        - key: node-role.kubernetes.io/control-plane
-          effect: NoSchedule
+      {{- if .Values.daemonSet.tolerations}}
+      {{- toYaml .Values.daemonSet.tolerations | nindent 8 }}
+      {{- end }}
       {{- if .Values.daemonSet.initContainers.nodeDebugger.enabled }}
       initContainers:
         - name:  {{ .Values.daemonSet.initContainers.nodeDebugger.name }}

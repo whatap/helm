@@ -51,6 +51,11 @@ daemonSetNpm:
 daemonSet:
   name: whatap-node-agent
   label: whatap-node-agent
+  tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
   initContainers:
     nodeDebugger:
       enabled: true  # Set to false to disable the whatap-node-debug initContainer
@@ -88,6 +93,11 @@ deployment:
   name: whatap-master-agent
   label: whatap-master-agent
   replicas: 1
+  tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
   containers:
     controlPlaneHelper:
       enabled: true  # Set to false to disable the whatap-control-plane-helper container
@@ -115,6 +125,7 @@ deployment:
           cpu: "200m"
       envs:
         debug: false
+
 clusterrole:
   extraResources:
-    #- "samplecrds"
+  #- "samplecrds"
