@@ -290,6 +290,7 @@ whatap:
 ```
 
 #### tolerations 설정 가이드
+#### pre-requirement : whatap/kube 차트 1.8.43 이상 버전
 ```yaml
 #whatap-node-agent DaemonSet Tolerations 설정 예시
 #values.yaml DaemonSet 에  아래와 같이 tolerations 추가

@@ -163,6 +163,10 @@ spec:
                 resourceFieldRef:
                   containerName: whatap-node-agent
                   resource: limits.memory
+            {{- if .Values.daemonSet.containers.nodeAgent.envs.log_parser_containerd_std_enabled }}
+            - name: log_parser_containerd_std_enabled
+              value: {{.Values.daemonSet.containers.nodeAgent.envs.log_parser_containerd_std_enabled | quote}}
+            {{- end }}
             {{- if .Values.daemonSet.containers.nodeAgent.envs.collect_kube_node_process_metric_enabled }}
             - name: collect_kube_node_process_metric_enabled
               value: {{.Values.daemonSet.containers.nodeAgent.envs.collect_kube_node_process_metric_enabled | quote}}

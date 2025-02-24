@@ -86,6 +86,7 @@ daemonSet:
         memory: "350Mi"
         cpu: "200m"
       envs:
+        log_parser_containerd_std_enabled: false
         collect_kube_node_process_metric_enabled: false
         debug: false
         count_interval: 5000
