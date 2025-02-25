@@ -158,7 +158,7 @@ spec:
             - name: gpu_enabled
               value: "true"
             {{ end }}
-            - name: WHATP_MEM_LIMIT
+            - name: WHATAP_MEM_LIMIT
               valueFrom:
                 resourceFieldRef:
                   containerName: whatap-node-agent

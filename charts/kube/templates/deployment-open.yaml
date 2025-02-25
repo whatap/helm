@@ -1,0 +1,74 @@
+{{- if .Values.k8sOldVersion }}
+apiVersion: extensions/v1beta1
+{{- else }}
+apiVersion: apps/v1
+{{end}}
+kind: Deployment
+metadata:
+  name: {{ .Values.deploymentOpen.name }}
+  {{ if not .Values.namespaceOverrideEnabled }}
+  namespace: "whatap-monitoring"
+  {{ else}}
+  namespace: {{ .Release.Namespace }}
+  {{ end }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  {{- if not .Values.k8sOldVersion }}
+  selector:
+    matchLabels:
+      name: {{ .Values.deploymentOpen.label }}
+  {{end}}
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.deploymentOpen.label }}
+    spec:
+
+      {{- if .Values.imagePullSecret.name }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret.name }}
+      {{- end }}
+      tolerations:
+      {{- if .Values.deployment.tolerations}}
+      {{- toYaml .Values.deployment.tolerations | nindent 8 }}
+      {{- end }}
+      serviceAccountName: whatap
+      volumes:
+        - name: start-script-volume
+          configMap:
+            defaultMode: 0700
+            name: open-start-script
+        - name: whatap-config-volume
+          emptyDir: {}
+      containers:
+        - name: {{ .Values.deploymentOpen.containers.openAgent.name }}
+          image: {{ .Values.deployment.containers.masterAgent.image }}
+          resources:
+            requests:
+              memory: {{ .Values.deployment.containers.masterAgent.resources.requests.memory }}
+              cpu: {{ .Values.deployment.containers.masterAgent.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.deployment.containers.masterAgent.resources.limits.memory }}
+              cpu: {{ .Values.deployment.containers.masterAgent.resources.limits.cpu }}
+          ports:
+            - containerPort: {{ .Values.deployment.containers.masterAgent.port }}
+          command: ["/bin/entrypoint.sh"]
+          env:
+            - name: WHATAP_LICENSE
+              value: {{ .Values.whatap.license | quote}}
+            - name: WHATAP_HOST
+              value: {{ .Values.whatap.host | quote }}
+            - name: WHATAP_PORT
+              value: {{ .Values.whatap.port | quote }}
+            - name: WHATAP_MEM_LIMIT
+              valueFrom:
+                resourceFieldRef:
+                  containerName: {{ .Values.deploymentOpen.containers.openAgent.name }}
+                  resource: limits.memory
+          volumeMounts:
+            - name: start-script-volume
+              mountPath: /bin/entrypoint.sh
+              readOnly: true
+              subPath: entrypoint.sh
+            - name: whatap-config-volume
+              mountPath: /whatap_conf

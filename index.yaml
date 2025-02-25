@@ -3,7 +3,17 @@ entries:
   kube:
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2025-02-24T18:22:18.647103+09:00"
+    created: "2025-02-25T14:23:41.200807+09:00"
+    description: Whatap monitoring components on Kubernetes
+    digest: e44940c9e9cf13a5bfa75d0704ddce24f7ba021198158b8996feec716a60251a
+    name: kube
+    type: application
+    urls:
+    - https://whatap.github.io/helm/kube-1.8.45.tgz
+    version: 1.8.45
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2025-02-25T14:23:41.200346+09:00"
     description: Whatap monitoring components on Kubernetes
     digest: 271e0b43417106142b160668dbeb276e957e04ca6e3615c1a6c5bd0efc402581
     name: kube
@@ -13,7 +23,7 @@ entries:
     version: 1.8.44
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2025-02-24T18:22:18.646691+09:00"
+    created: "2025-02-25T14:23:41.199668+09:00"
     description: Whatap monitoring components on Kubernetes
     digest: 46fb320962dd80f7bcc3f20cfa2d9abe505aaa9e214001b637618f2f0f5e55ec
     name: kube
@@ -23,7 +33,7 @@ entries:
     version: 1.8.43
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2025-02-24T18:22:18.646049+09:00"
+    created: "2025-02-25T14:23:41.198626+09:00"
     description: Whatap monitoring components on Kubernetes
     digest: f12f259d0b2300c6ed0cc0e066714638ea49db288184c2c40da645c6e5264595
     name: kube
@@ -401,4 +411,4 @@ entries:
     urls:
     - https://whatap.github.io/helm/kube-1.7.3.tgz
     version: 1.7.3
-generated: "2025-02-24T18:22:18.644768+09:00"
+generated: "2025-02-25T14:23:41.196865+09:00"
