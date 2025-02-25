@@ -92,7 +92,7 @@ daemonSet:
         count_interval: 5000
 deploymentOpen:
   name: whatap-open-agent
-  label: whatap-open:agent
+  label: whatap-open-agent
   replicas: 1
   tolerations:
     - key: node-role.kubernetes.io/master
