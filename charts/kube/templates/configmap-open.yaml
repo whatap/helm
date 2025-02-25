@@ -10,18 +10,8 @@ metadata:
 data:
   entrypoint.sh: |-
     #!/usr/bin/env bash
-
-    mkdir /whatap_conf/confbase -p
-    if [ ! -f /whatap_conf/confbase/whatap_server.conf ]; then
-    cat >/whatap_conf/confbase/whatap_server.conf <<EOL
-    license={{ .Values.whatap.license }}
-    whatap.server.host={{ .Values.whatap.host }}
-    whatap.server.port={{ .Values.whatap.port }}
-    EOL
-    fi
-
-    if [ ! -f /whatap_conf/whatap.master.conf ]; then
-    cat >/whatap_conf/whatap.master.conf <<EOL
+    if [ ! -f /whatap_conf/whatap.conf ]; then
+    cat >/whatap_conf/whatap.conf <<EOL
     master_agent_port={{ .Values.deployment.containers.masterAgent.port }}
     license={{ .Values.whatap.license }}
     whatap.server.host={{ .Values.whatap.host }}
