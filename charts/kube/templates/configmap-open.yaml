@@ -12,14 +12,14 @@ data:
     #!/usr/bin/env bash
     if [ ! -f /whatap_conf/whatap.conf ]; then
     cat >/whatap_conf/whatap.conf <<EOL
-    master_agent_port={{ .Values.deployment.containers.masterAgent.port }}
+    open_agent_port={{ .Values.deploymentOpen.containers.openAgent.port }}
     license={{ .Values.whatap.license }}
     whatap.server.host={{ .Values.whatap.host }}
     whatap.server.port={{ .Values.whatap.port }}
     confbase_backup_enabled=true
     EOL
     fi
-
+    #/data/agent/open/whatap_open_agent
     heapsize=$(echo "0.45 $WHATAP_MEM_LIMIT" | awk '{print int($1 * $2 / 1048576)}')
     JAVA_OPTS="-Xms${heapsize}m -Xmx${heapsize}m"
     JAVA_OPTS="$JAVA_OPTS -XX:+UseG1GC -XX:+UseStringDeduplication  -XX:+ExitOnOutOfMemoryError -XshowSettings:vm"
