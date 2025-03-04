@@ -35,6 +35,12 @@ spec:
       {{- end }}
       serviceAccountName: whatap
       volumes:
+        - name: whatap-openmx-config
+          configMap:
+            name: whatap-openmx-config
+            items:
+              key: "scrape_config.yaml"
+              path: "scrape_config.yaml"
         - name: start-script-volume
           configMap:
             defaultMode: 0700
@@ -79,4 +85,7 @@ spec:
               subPath: entrypoint.sh
             - name: whatap-config-volume
               mountPath: /whatap_conf
+            - name: whatap-openmx-config
+              mountPath: /whatap_conf/scrape_config.yaml
+              subPath: scrape_config.yaml
 {{- end }}
