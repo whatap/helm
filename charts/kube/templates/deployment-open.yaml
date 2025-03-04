@@ -39,7 +39,7 @@ spec:
           configMap:
             name: whatap-openmx-config
             items:
-              key: "scrape_config.yaml"
+            - key: "scrape_config.yaml"
               path: "scrape_config.yaml"
         - name: start-script-volume
           configMap:
