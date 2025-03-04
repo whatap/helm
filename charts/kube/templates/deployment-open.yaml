@@ -1,3 +1,4 @@
+{{- if .Values.deploymentOpen.enabled }}
 {{- if .Values.k8sOldVersion }}
 apiVersion: extensions/v1beta1
 {{- else }}
@@ -12,7 +13,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   {{ end }}
 spec:
-  replicas: {{ .Values.deployment.replicas }}
+  replicas: {{ .Values.deploymentOpen.replicas }}
   {{- if not .Values.k8sOldVersion }}
   selector:
     matchLabels:
@@ -78,3 +79,4 @@ spec:
               subPath: entrypoint.sh
             - name: whatap-config-volume
               mountPath: /whatap_conf
+{{- end }}
