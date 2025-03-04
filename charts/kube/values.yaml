@@ -114,13 +114,11 @@ deploymentOpen:
           cpu: "200m"
   config:
     global:
-      scrape_interval: "15s"
+      scrape_interval: #
     scrape_configs:
-      - job_name: "kube-apiserver"
+      - job_name: #
         static_configs:
           - targets:
-              - "10.21.10.71:8080"
-              - "10.21.10.72:8080"
 deployment:
   name: whatap-master-agent
   label: whatap-master-agent
