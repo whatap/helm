@@ -61,6 +61,14 @@ daemonSetNpm:
       limits:
         memory: "350Mi"
         cpu: "200m"
+daemonSet:
+  name: whatap-node-agent
+  label: whatap-node-agent
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      effect: NoSchedule
+    - key: "node-role.kubernetes.io/control-plane"
+      effect: NoSchedule
 ```
 
 - 사용자 CONTAINER-RUNTIME 확인
