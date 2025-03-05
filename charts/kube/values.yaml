@@ -56,6 +56,7 @@ daemonSet:
       effect: NoSchedule
     - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
+  affinity: {}
   initContainers:
     nodeDebugger:
       enabled: true  # Set to false to disable the whatap-node-debug initContainer
@@ -100,6 +101,7 @@ deploymentOpen:
       effect: NoSchedule
     - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
+  affinity: {}
   containers:
     openAgent:
       name: whatap-open-agent
@@ -128,6 +130,7 @@ deployment:
       effect: NoSchedule
     - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
+  affinity: {}
   containers:
     controlPlaneHelper:
       enabled: true  # Set to false to disable the whatap-control-plane-helper container

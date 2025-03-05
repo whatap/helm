@@ -33,6 +33,10 @@ spec:
       {{- if .Values.deploymentOpen.tolerations}}
       {{- toYaml .Values.deploymentOpen.tolerations | nindent 8 }}
       {{- end }}
+      affinity:
+        {{- if .Values.deploymentOpen.affinity }}
+        {{- toYaml .Values.deploymentOpen.affinity | nindent 8 }}
+        {{- end }}
       serviceAccountName: whatap
       volumes:
         - name: whatap-openmx-config

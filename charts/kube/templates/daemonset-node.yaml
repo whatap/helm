@@ -27,6 +27,10 @@ spec:
       {{- toYaml .Values.daemonSet.tolerations | nindent 8 }}
       {{- end }}
       {{- if .Values.daemonSet.initContainers.nodeDebugger.enabled }}
+      affinity:
+      {{- if .Values.daemonSet.affinity }}
+      {{- toYaml .Values.daemonSet.affinity | nindent 8 }}
+      {{- end }}
       initContainers:
         - name:  {{ .Values.daemonSet.initContainers.nodeDebugger.name }}
           image: {{ .Values.daemonSet.initContainers.nodeDebugger.image }}

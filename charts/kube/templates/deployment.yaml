@@ -32,6 +32,10 @@ spec:
       {{- if .Values.deployment.tolerations}}
       {{- toYaml .Values.deployment.tolerations | nindent 8 }}
       {{- end }}
+      affinity:
+      {{- if. Values.deployment.affinity }}
+      {{- toYaml .Values.deployment.affinity | nindent 8 }}
+      {{- end }}
       serviceAccountName: whatap
       volumes:
         {{- if and .Values.addon.etcd_monitoring.enabled .Values.addon.etcd_monitoring.etcd_ca_cert_path}}

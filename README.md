@@ -80,6 +80,7 @@ daemonSet:
       effect: NoSchedule
     - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
+  affinity: {}
   initContainers:
     nodeDebugger:
       enabled: true  # Set to false to disable the whatap-node-debug initContainer
@@ -122,6 +123,7 @@ deployment:
       effect: NoSchedule
     - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
+  affinity: {}
   containers:
     controlPlaneHelper:
       enabled: true  # Set to false to disable the whatap-control-plane-helper container
@@ -312,6 +314,26 @@ deployment:
     - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
 ```
+
+### Node Affinity 설정 방법
+### pre-requirement : whatap/kube 차트 1.8.54 이상 버전
+### Affinity 설정은 다음과 같이 Kubernetes 기본 문법과 동일하게 작성하면 됩니다.
+### Affinity 관련 자세한 설명은 https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity/ 에서 찾아 볼 수 있습니다. 
+`values.yaml` 예시:
+```yaml
+deployment:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: disktype
+                  operator: In
+                  values:
+                    - ssd
+```
+
+
 
 ### 에이전트가 설치될 namespace 를 지정할 경우 아래의 방법으로 설치할 수 있습니다.
 #### pre-requirement : whatap/kube 차트 1.7.11 이상 버전
