@@ -22,13 +22,11 @@ helm repo update
 - 기본 values.yaml 구성
 ```yaml
 whatap:
-  license: <license-key>
-  host: <whatap-server-host>
-  port: <whatap-server-port>
-
+  license:
+  host:
+  port:
 namespaceOverrideEnabled: false
 hostNetworkEnabled: false
-
 collect_apiserver_metric_by_leader: false
 collect_custom_resources: false
 collect_custom_resources_interval: 300000
@@ -47,7 +45,7 @@ addon:
     etcd_client_cert_path: /etc/kubernetes/pki/etcd/server.crt
     etcd_client_key_path: /etc/kubernetes/pki/etcd/server.key
 imagePullSecret:
-  name: <registryKey>
+  name:
 containerRuntime: "containerd"
 daemonSetNpm:
   name: whatap-npm-agent
@@ -142,7 +140,6 @@ deployment:
           cpu: "200m"
       envs:
         debug: false
-
 clusterrole:
   extraResources:
 ```
