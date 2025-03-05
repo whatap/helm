@@ -61,49 +61,6 @@ daemonSetNpm:
       limits:
         memory: "350Mi"
         cpu: "200m"
-daemonSet:
-  name: whatap-node-agent
-  label: whatap-node-agent
-  tolerations:
-    - key: "node-role.kubernetes.io/master"
-      effect: NoSchedule
-    - key: "node-role.kubernetes.io/control-plane"
-      effect: NoSchedule
-  affinity: {}
-  initContainers:
-    nodeDebugger:
-      enabled: true
-      name: whatap-node-debug
-      image: "whatap/kube_mon"
-  containers:
-    nodeHelper:
-      name: whatap-node-helper
-      image: "whatap/kube_mon"
-      requests:
-        memory: "100Mi"
-        cpu: "100m"
-      limits:
-        memory: "350Mi"
-        cpu: "200m"
-      envs:
-        collect_nfs_disk_enabled: true
-        collect_kube_node_process_metric_enabled: false
-        collect_kube_node_process_metric_target_list: "kubelet,containerd,dockerd,crio,coredns,kube-proxy,aws-k8s-agent,kube-apiserver,etcd,kube-controller,kube-scheduler"
-        debug: false
-    nodeAgent:
-      name: whatap-node-agent
-      image: "whatap/kube_mon"
-      requests:
-        memory: "300Mi"
-        cpu: "100m"
-      limits:
-        memory: "350Mi"
-        cpu: "200m"
-      envs:
-        log_parser_containerd_std_enabled: false
-        collect_kube_node_process_metric_enabled: false
-        debug: false
-        count_interval: 5000
 ```
 
 - 사용자 CONTAINER-RUNTIME 확인
