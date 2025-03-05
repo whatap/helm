@@ -21,6 +21,7 @@ helm repo update
 
 2. values.yaml(설치에 필요한 기본 설정파일) 생성
 - 기본 values.yaml 구성
+
 ```yaml
 whatap:
   license:
@@ -69,6 +70,80 @@ daemonSet:
       effect: NoSchedule
     - key: "node-role.kubernetes.io/control-plane"
       effect: NoSchedule
+  affinity: {}
+  initContainers:
+    nodeDebugger:
+      enabled: true
+      name: whatap-node-debug
+      image: "whatap/kube_mon"
+  containers:
+    nodeHelper:
+      name: whatap-node-helper
+      image: "whatap/kube_mon"
+      requests:
+        memory: "100Mi"
+        cpu: "100m"
+      limits:
+        memory: "350Mi"
+        cpu: "200m"
+      envs:
+        collect_nfs_disk_enabled: true
+        collect_kube_node_process_metric_enabled: false
+        collect_kube_node_process_metric_target_list: "kubelet,containerd,dockerd,crio,coredns,kube-proxy,aws-k8s-agent,kube-apiserver,etcd,kube-controller,kube-scheduler"
+        debug: false
+    nodeAgent:
+      name: whatap-node-agent
+      image: "whatap/kube_mon"
+      requests:
+        memory: "300Mi"
+        cpu: "100m"
+      limits:
+        memory: "350Mi"
+        cpu: "200m"
+      envs:
+        log_parser_containerd_std_enabled: false
+        collect_kube_node_process_metric_enabled: false
+        debug: false
+        count_interval: 5000
+deployment:
+  name: whatap-master-agent
+  label: whatap-master-agent
+  replicas: 1
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      effect: NoSchedule
+    - key: "node-role.kubernetes.io/control-plane"
+      effect: NoSchedule
+  affinity: {}
+  containers:
+    controlPlaneHelper:
+      enabled: true
+      debug: false
+      name: whatap-control-plane-helper
+      image: whatap/kube_mon
+      port: 9496
+      resources:
+        requests:
+          memory: "500Mi"
+          cpu: "500m"
+        limits:
+          memory: "500Mi"
+          cpu: "500m"
+    masterAgent:
+      name: whatap-master-agent
+      image: "whatap/kube_mon"
+      port: 6600
+      resources:
+        requests:
+          memory: "300Mi"
+          cpu: "100m"
+        limits:
+          memory: "350Mi"
+          cpu: "200m"
+      envs:
+        debug: false
+clusterrole:
+  extraResources:
 ```
 
 - 사용자 CONTAINER-RUNTIME 확인
@@ -208,6 +283,7 @@ whatap:
 #### tolerations 설정 가이드
 - pre-requirement : whatap/kube 차트 1.8.43 이상 버전
 - `values.yaml` 예시:
+
 ```yaml
 daemonSet:
   tolerations:
