@@ -104,45 +104,6 @@ daemonSet:
         collect_kube_node_process_metric_enabled: false
         debug: false
         count_interval: 5000
-deployment:
-  name: whatap-master-agent
-  label: whatap-master-agent
-  replicas: 1
-  tolerations:
-    - key: "node-role.kubernetes.io/master"
-      effect: NoSchedule
-    - key: "node-role.kubernetes.io/control-plane"
-      effect: NoSchedule
-  affinity: {}
-  containers:
-    controlPlaneHelper:
-      enabled: true
-      debug: false
-      name: whatap-control-plane-helper
-      image: whatap/kube_mon
-      port: 9496
-      resources:
-        requests:
-          memory: "500Mi"
-          cpu: "500m"
-        limits:
-          memory: "500Mi"
-          cpu: "500m"
-    masterAgent:
-      name: whatap-master-agent
-      image: "whatap/kube_mon"
-      port: 6600
-      resources:
-        requests:
-          memory: "300Mi"
-          cpu: "100m"
-        limits:
-          memory: "350Mi"
-          cpu: "200m"
-      envs:
-        debug: false
-clusterrole:
-  extraResources:
 ```
 
 - 사용자 CONTAINER-RUNTIME 확인
