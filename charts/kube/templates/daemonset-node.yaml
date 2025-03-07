@@ -198,6 +198,7 @@ spec:
             {{- if .Values.log_filter_allow_list }}
             - name: log_filter_allow_list
               value: {{ .Values.log_filter_allow_list | quote }}
+            {{ end }}
             {{- if .Values.log_filter_deny_list }}
             - name: log_filter_deny_list
               value: {{ .Values.log_filter_deny_list | quote }}
