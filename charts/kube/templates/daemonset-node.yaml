@@ -187,6 +187,21 @@ spec:
             - name: collect_apiserver_metric_by_leader
               value: "true"
             {{- end }}
+            {{- if .Values.logsink_enabled }}
+            - name: logsink_enabled
+              value: "true"
+            {{- end }}
+            {{- if .Values.log_filter_enabled }}
+            - name: log_filter_enabled
+              value: "true"
+            {{- end }}
+            {{- if .Values.log_filter_allow_list }}
+            - name: log_filter_allow_list
+              value: {{ .Values.log_filter_allow_list | quote }}
+            {{- if .Values.log_filter_deny_list }}
+            - name: log_filter_deny_list
+              value: {{ .Values.log_filter_deny_list | quote }}
+            {{- end }}
           volumeMounts:
             - name: rootfs
               mountPath: /rootfs
