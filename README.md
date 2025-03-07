@@ -320,6 +320,21 @@ deployment:
                     - ssd
 ```
 
+#### log - containerStdOut 설정 방법
+- pre-requirement : whatap/kube 차트 1.8.57 이상 버전
+```yaml
+logsink_enabled: false
+```
+
+#### log - 로그 필터 옵션
+- pre-requirement : whatap/kube 차트 1.8.57 이상 버전
+- [로그 필터 설정 메뉴얼](https://docs.whatap.io/log/log-k8s#%EB%A1%9C%EA%B7%B8-%ED%95%84%ED%84%B0-%EC%98%B5%EC%85%98)
+- ex) 아래와 같이 설정할 경우 infra, monitoring 네임스페이스의 로그가 수집되고, podName에 prod가 포함된 로그는 제외됩니다.
+```yaml
+log_filter_enabled: true
+log_filter_allow_list: "*_infra_*, *_monitoring_*"
+log_filter_deny_list: "*prod*_*_*"
+```
 
 
 ### 에이전트가 설치될 namespace 를 지정할 경우 아래의 방법으로 설치할 수 있습니다.
