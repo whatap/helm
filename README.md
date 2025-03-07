@@ -323,7 +323,7 @@ deployment:
 #### log - containerStdOut 설정 방법
 - pre-requirement : whatap/kube 차트 1.8.57 이상 버전
 ```yaml
-logsink_enabled: false
+logsink_enabled: true
 ```
 
 #### log - 로그 필터 옵션
