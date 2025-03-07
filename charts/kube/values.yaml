@@ -114,6 +114,8 @@ deploymentOpen:
         limits:
           memory: "350Mi"
           cpu: "200m"
+      envs:
+        debug: false
   config:
     global:
       scrape_interval: #

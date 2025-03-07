@@ -73,6 +73,8 @@ spec:
               value: {{ .Values.whatap.host | quote }}
             - name: WHATAP_PORT
               value: {{ .Values.whatap.port | quote }}
+            - name: debug
+              value: {{ .Values.deploymentOpen.containers.openAgent.envs.debug }}
             - name: WHATAP_MEM_LIMIT
               valueFrom:
                 resourceFieldRef:
