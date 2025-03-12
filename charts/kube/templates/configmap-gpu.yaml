@@ -25,4 +25,5 @@ data:
     DCGM_FI_DEV_THERMAL_VIOLATION,     counter, Throttling duration due to thermal constraints (in us).
     DCGM_FI_DEV_FB_FREE, gauge, Framebuffer memory free (in MiB).
     DCGM_FI_DEV_FB_USED, gauge, Framebuffer memory used (in MiB).
+    DCGM_FI_DRIVER_VERSION, label, Driver Version
 {{ end }}
