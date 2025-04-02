@@ -68,11 +68,11 @@ spec:
             - name: WHATAP_HOME
               value: "/whatap_conf"
             - name: WHATAP_LICENSE
-              value: {{ .Values.whatap.license | quote}}
+              value:  {{ .Values.deploymentOpen.license | default .Values.whatap.license | quote }}
             - name: WHATAP_HOST
-              value: {{ .Values.whatap.host | quote }}
+              value: {{ .Values.deploymentOpen.host | .Values.whatap.host | quote }}
             - name: WHATAP_PORT
-              value: {{ .Values.whatap.port | quote }}
+              value: {{ .Values.deploymentOpen.port | .Values.whatap.port | quote }}
             - name: debug
               value: {{ .Values.deploymentOpen.containers.openAgent.envs.debug | quote }}
             - name: WHATAP_MEM_LIMIT
