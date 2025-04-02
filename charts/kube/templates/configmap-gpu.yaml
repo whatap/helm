@@ -22,8 +22,13 @@ data:
     DCGM_FI_DEV_DEC_UTIL ,     gauge, Decoder utilization (in %).
     DCGM_FI_DEV_XID_ERRORS,            gauge,   Value of the last XID error encountered.
     DCGM_FI_DEV_POWER_VIOLATION,       counter, Throttling duration due to power constraints (in us).
-    DCGM_FI_DEV_THERMAL_VIOLATION,     counter, Throttling duration due to thermal constraints (in us).
+    DCGM_FI_DEV_THERMAL_VIOLATION,      counter, Throttling duration due to thermal constraints (in us).
     DCGM_FI_DEV_FB_FREE, gauge, Framebuffer memory free (in MiB).
     DCGM_FI_DEV_FB_USED, gauge, Framebuffer memory used (in MiB).
     DCGM_FI_DRIVER_VERSION, label, Driver Version
+    DCGM_FI_DEV_VGPU_LICENSE_STATUS, gauge, VGPU license status
+    DCGM_FI_PROF_PIPE_TENSOR_ACTIVE, gauge, Pipe tensor active utilization (in %).
+    DCGM_FI_PROF_DRAM_ACTIVE, gauge, DRAM active utilization (in %).
+    DCGM_FI_PROF_PCIE_TX_BYTES, counter, Total PCIe transmit bytes.
+    DCGM_FI_PROF_PCIE_RX_BYTES, counter, Total PCIe receive bytes.
 {{ end }}
