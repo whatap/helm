@@ -1,3 +1,6 @@
+# values.yaml
+allowUse: false
+
 whatap:
   license: # <license-key>
   host: # <whatap-server-host>
@@ -7,7 +10,7 @@ whatap:
 #k8sOldVersion: true
 namespaceOverrideEnabled: false
 deploymentOpen:
-  enabled: false
+  enabled: true
   name: whatap-open-agent
   label: whatap-open-agent
   replicas: 1
