@@ -98,10 +98,10 @@ daemonSet:
         debug: false
         count_interval: 5000
 deploymentOpen:
-  license:
-  host:
-  port:
-  enabled: false
+  license: "x238g9ko5h1bl-x3er4ms733neus-x6o1v1linsugco"
+  host: "59.13.101.109"
+  port: "61574"
+  enabled: true
   name: whatap-open-agent
   label: whatap-open-agent
   replicas: 1

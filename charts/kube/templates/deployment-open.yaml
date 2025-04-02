@@ -70,9 +70,9 @@ spec:
             - name: WHATAP_LICENSE
               value:  {{ .Values.deploymentOpen.license | default .Values.whatap.license | quote }}
             - name: WHATAP_HOST
-              value: {{ .Values.deploymentOpen.host | .Values.whatap.host | quote }}
+              value: {{ .Values.deploymentOpen.host | default .Values.whatap.host | quote }}
             - name: WHATAP_PORT
-              value: {{ .Values.deploymentOpen.port | .Values.whatap.port | quote }}
+              value: {{ .Values.deploymentOpen.port | default .Values.whatap.port | quote }}
             - name: debug
               value: {{ .Values.deploymentOpen.containers.openAgent.envs.debug | quote }}
             - name: WHATAP_MEM_LIMIT
