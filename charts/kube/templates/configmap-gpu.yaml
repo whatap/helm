@@ -26,6 +26,8 @@ data:
     DCGM_FI_DEV_FB_FREE, gauge, Framebuffer memory free (in MiB).
     DCGM_FI_DEV_FB_USED, gauge, Framebuffer memory used (in MiB).
     DCGM_FI_DRIVER_VERSION, label, Driver Version
+    DCGM_FI_PROF_GR_ENGINE_ACTIVE, gauge, Graphics engine active utilization (in %).
+    DCGM_FI_DEV_NVLINK_BANDWIDTH_TOTAL, gauge, Total NVLink bandwidth (in MB/s).
     DCGM_FI_DEV_VGPU_LICENSE_STATUS, gauge, VGPU license status
     DCGM_FI_PROF_PIPE_TENSOR_ACTIVE, gauge, Pipe tensor active utilization (in %).
     DCGM_FI_PROF_DRAM_ACTIVE, gauge, DRAM active utilization (in %).
