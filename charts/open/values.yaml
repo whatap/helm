@@ -5,7 +5,8 @@ whatap:
   license: # <license-key>
   host: # <whatap-server-host>
   port: # <whatap-server-port>
-
+imagePullSecret:
+  name:
 # k8sOldVersion default
 #k8sOldVersion: true
 namespaceOverrideEnabled: false
