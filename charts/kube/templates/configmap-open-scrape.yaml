@@ -10,8 +10,5 @@ metadata:
   {{ end }}
 data:
   scrape_config.yaml: |-
-    global:
-      scrape_interval: {{ .Values.deploymentOpen.config.global.scrape_interval | quote }}
-    scrape_configs:
-{{ toYaml .Values.deploymentOpen.config.scrape_configs | indent 4 }}
+    {{ toYaml .Values.deploymentOpen.config | nindent 4 }}
 {{- end }}
