@@ -14,9 +14,9 @@ data:
     if [ ! -f /whatap_conf/whatap.conf ]; then
     cat >/whatap_conf/whatap.conf <<EOL
     open_agent_port={{ .Values.deploymentOpen.containers.openAgent.port }}
-    license: {{ .Values.deploymentOpen.license | default .Values.whatap.license | quote }}
-    host: {{ .Values.deploymentOpen.host | default .Values.whatap.host | quote }}
-    port: {{ .Values.deploymentOpen.port | default .Values.whatap.port | quote }}
+    license={{ .Values.deploymentOpen.license | default .Values.whatap.license | quote }}
+    host={{ .Values.deploymentOpen.host | default .Values.whatap.host | quote }}
+    port={{ .Values.deploymentOpen.port | default .Values.whatap.port | quote }}
     confbase_backup_enabled=true
     EOL
     fi
