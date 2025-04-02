@@ -125,7 +125,7 @@ deploymentOpen:
   config:
     global:
       scrape_interval: 15s
-    scrape_config:
+    scrape_configs:
     - job_name: ""
       static_config:
         targets:
