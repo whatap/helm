@@ -1,0 +1,6 @@
+apiVersion: v2
+name: open
+description: Whatap openMetric Agent
+type: application
+version: 0.0.1
+appVersion: "1.0"
