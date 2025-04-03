@@ -55,6 +55,7 @@ daemonSetNpm:
         memory: "350Mi"
         cpu: "200m"
 daemonSet:
+  enabled: true
   name: whatap-node-agent
   label: whatap-node-agent
   tolerations:
@@ -136,6 +137,7 @@ deploymentOpen:
         filter:
           enabled: false
 deployment:
+  enabled: true
   name: whatap-master-agent
   label: whatap-master-agent
   replicas: 1

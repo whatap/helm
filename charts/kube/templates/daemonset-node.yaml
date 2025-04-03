@@ -1,3 +1,4 @@
+{{- if .Values.daemonSet.enabled }}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -250,3 +251,4 @@ spec:
             name: "dcgm-exporter-csv"
           name: "whatap-dcgm-exporter-csv"
         {{ end }}
+{{ end }}

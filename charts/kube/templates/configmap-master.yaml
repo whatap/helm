@@ -1,3 +1,4 @@
+{{ if .Values.deployment.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -36,3 +37,4 @@ data:
     JAVA_OPTS="$JAVA_OPTS -Dwhatap.home=/whatap_conf"
 
     java $JAVA_OPTS -cp /data/agent/confbase/whatap.agent.confbase-1.0.0.jar:/data/agent/master/whatap.kube.master-1.0.1.jar whatap.agent.App
+{{ end }}

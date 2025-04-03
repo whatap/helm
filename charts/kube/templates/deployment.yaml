@@ -1,3 +1,4 @@
+{{ if .Values.deployment.enabled }}
 {{- if .Values.k8sOldVersion }}
 apiVersion: extensions/v1beta1
 {{- else }}
@@ -191,3 +192,4 @@ spec:
               mountPath: {{ default "/etc/kubernetes/pki/etcd/server.key" .Values.addon.etcd_monitoring.etcd_client_key_path }}
               readOnly: true
             {{- end }}
+  {{ end }}
