@@ -173,6 +173,8 @@ deployment:
           memory: "350Mi"
           cpu: "200m"
       envs:
+        collect_workload: false
+        collect_deployment: false
         debug: false
 
 clusterrole:
