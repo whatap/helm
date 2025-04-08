@@ -10,12 +10,6 @@ metadata:
   {{ end }}
 data:
   whatap-gpu.csv: |-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: whatap-gpu-config
-data:
-  whatap-gpu.csv: |-
     # Static configuration information
     DCGM_FI_DRIVER_VERSION, label, Driver Version.                           # code 1
     DCGM_FI_NVML_VERSION,   label, NVML Version.                               # code 2
@@ -79,5 +73,4 @@ data:
     DCGM_FI_PROF_PIPE_FP64_ACTIVE,   gauge, Ratio of cycles the FP64 pipes are active.        # code 1006
     DCGM_FI_PROF_PIPE_FP32_ACTIVE,   gauge, Ratio of cycles the FP32 pipes are active.        # code 1007
     DCGM_FI_PROF_PIPE_FP16_ACTIVE,   gauge, Ratio of cycles the FP16 pipes are active.        # code 1008
-
 {{ end }}
