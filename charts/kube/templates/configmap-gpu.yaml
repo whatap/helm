@@ -73,4 +73,7 @@ data:
     DCGM_FI_PROF_PIPE_FP64_ACTIVE,   gauge, Ratio of cycles the FP64 pipes are active.        # code 1006
     DCGM_FI_PROF_PIPE_FP32_ACTIVE,   gauge, Ratio of cycles the FP32 pipes are active.        # code 1007
     DCGM_FI_PROF_PIPE_FP16_ACTIVE,   gauge, Ratio of cycles the FP16 pipes are active.        # code 1008
+
+    # P-State (GPU Power State)
+    DCGM_FI_DEV_PSTATE,          gauge, GPU power state.
 {{ end }}
