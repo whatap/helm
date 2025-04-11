@@ -76,8 +76,4 @@ data:
 
     # P-State (GPU Power State)
     DCGM_FI_DEV_PSTATE,          gauge, GPU power state.
-
-    # ECC Aggregated Errors
-    DCGM_FI_DEV_ECC_SBE_AGG_TOTAL, counter, Total aggregate single-bit ECC errors.
-    DCGM_FI_DEV_ECC_DBE_AGG_TOTAL, counter, Total aggregate double-bit ECC errors.
 {{ end }}
