@@ -68,6 +68,8 @@ spec:
               add:
                 - SYS_ADMIN
           volumeMounts:
+            - name: nvidia-caps
+              mountPath: /dev/nvidia-caps
             - name: "pod-gpu-resources"
               readOnly: true
               mountPath: "/var/lib/kubelet/pod-resources"
@@ -245,6 +247,10 @@ spec:
         - name: whatap-config-volume
           emptyDir: {}
         {{- if .Values.addon.gpu.enabled}}
+        - name: nvidia-caps
+          hostPath:
+            path: /dev/nvidia-caps
+            type: Directory
         - hostPath:
             path: "/var/lib/kubelet/pod-resources"
           name: "pod-gpu-resources"
