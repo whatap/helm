@@ -78,7 +78,4 @@ data:
 
     # P-State (GPU Power State)
     DCGM_FI_DEV_PSTATE,          gauge, GPU power state.
-
-    # MIG Compute Instance Information
-    DCGM_FE_GPU_CI,               label, MIG Compute Instance information.
 {{ end }}
