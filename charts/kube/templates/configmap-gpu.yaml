@@ -34,6 +34,7 @@ data:
     # Power
     DCGM_FI_DEV_ENFORCED_POWER_LIMIT, gauge, Enforced power limit (in W).            # code 164
     DCGM_FI_DEV_POWER_USAGE,              gauge, Power usage (in W).                # code 155
+    DCGM_FI_DEV_TOTAL_ENERGY_CONSUMPTION, counter, Total energy consumption since boot (in mJ).
 
     # Performance state & Fan
     DCGM_FI_DEV_PSTATE,      gauge, GPU power state.                              # code 190
