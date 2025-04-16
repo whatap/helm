@@ -44,6 +44,7 @@ data:
 
     # Utilization
     DCGM_FI_DEV_GPU_UTIL,      gauge, GPU utilization (in %).                     # code 203
+    DCGM_FI_DEV_MEM_COPY_UTIL, gauge, Memory copy engine utilization (in %).      # code 204
     DCGM_FI_DEV_ENC_UTIL,      gauge, Encoder utilization (in %).                 # code 206
     DCGM_FI_DEV_DEC_UTIL,      gauge, Decoder utilization (in %).                 # code 207
 
@@ -76,4 +77,7 @@ data:
 
     # P-State (GPU Power State)
     DCGM_FI_DEV_PSTATE,          gauge, GPU power state.
+
+    # MIG Compute Instance Information
+    DCGM_FE_GPU_CI,               label, MIG Compute Instance information.
 {{ end }}
