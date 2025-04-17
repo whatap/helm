@@ -159,10 +159,10 @@ spec:
               value: {{ .Values.whatap.port | quote }}
             - name: HOST_PREFIX
               value: "/rootfs"
-            {{- if .Values.addon.gpu.enabled}}
+            {{- if and .Values.addon.gpu.enabled (ne .Values.daemonSet.containers.nodeAgent.envs.gpu_enabled false) }}
             - name: gpu_enabled
               value: "true"
-            {{ end }}
+            {{- end }}
             - name: WHATAP_MEM_LIMIT
               valueFrom:
                 resourceFieldRef:

@@ -94,6 +94,7 @@ daemonSet:
         memory: "350Mi"
         cpu: "200m"
       envs:
+        gpu_enabled: false
         log_parser_containerd_std_enabled: false
         collect_kube_node_process_metric_enabled: false
         debug: false
