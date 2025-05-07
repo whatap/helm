@@ -1,0 +1,18 @@
+namespace: "whatap-monitoring"
+image:
+  repository: public.ecr.aws/whatap/whatap-operator
+  tag: latest
+  pullPolicy: Always
+
+#serviceAccount:
+#  name: whatap-operator
+#
+#agent:
+#  serviceAccountName: whatap
+#  clusterRoleName: whatap
+#  clusterRoleBindingName: whatap
+#
+#operator:
+#  serviceAccountName: whatap-operator
+#  clusterRoleName: whatap-operator
+#  clusterRoleBindingName: whatap-operator

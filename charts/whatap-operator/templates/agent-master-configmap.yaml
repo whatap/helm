@@ -1,0 +1,39 @@
+{{- if not (lookup "v1" "ConfigMap" .Values.namespace "master-start-script") }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: master-start-script
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+data:
+  entrypoint.sh: |
+    #!/usr/bin/env bash
+
+    mkdir -p /whatap_conf/confbase
+    if [ ! -f /whatap_conf/confbase/whatap_server.conf ]; then
+    cat >/whatap_conf/confbase/whatap_server.conf <<EOL
+    license=$WHATAP_LICENSE
+    whatap.server.host=$WHATAP_HOST
+    whatap.server.port=$WHATAP_PORT
+    EOL
+    fi
+
+    if [ ! -f /whatap_conf/whatap.master.conf ]; then
+    cat >/whatap_conf/whatap.master.conf <<EOL
+    master_agent_port=6600
+    license=$WHATAP_LICENSE
+    whatap.server.host=$WHATAP_HOST
+    whatap.server.port=$WHATAP_PORT
+    confbase_backup_enabled=true
+    EOL
+    fi
+
+    heapsize=$(echo "0.45 $WHATP_MEM_LIMIT" | awk '{print int($1 * $2 / 1048576)}')
+    JAVA_OPTS="-Xms${heapsize}m -Xmx${heapsize}m"
+    JAVA_OPTS="$JAVA_OPTS -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+ExitOnOutOfMemoryError -XshowSettings:vm"
+    JAVA_OPTS="$JAVA_OPTS -Dwhatap.home=/whatap_conf"
+
+    java $JAVA_OPTS -cp /data/agent/confbase/whatap.agent.confbase-1.0.0.jar:/data/agent/master/whatap.kube.master-1.0.1.jar whatap.agent.App
+{{ end }}

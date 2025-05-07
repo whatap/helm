@@ -1,3 +1,4 @@
+{{ if .Values.deployment.enabled }}
 {{- if .Values.k8sOldVersion }}
 apiVersion: extensions/v1beta1
 {{- else }}
@@ -158,6 +159,14 @@ spec:
             - name: debug
               value: "true"
             {{- end }}
+            {{- if .Values.deployment.containers.masterAgent.envs.collect_workload }}
+            - name: collect_workload
+              value: "true"
+            {{- end }}
+            {{- if .Values.deployment.containers.masterAgent.envs.collect_deployment }}
+            - name: collect_deployment
+              value: "true"
+            {{- end }}
             {{- if eq .Values.collect_apiserver_metric_by_leader true }}
             - name: collect_apiserver_metric_by_leader
               value: "true"
@@ -191,3 +200,4 @@ spec:
               mountPath: {{ default "/etc/kubernetes/pki/etcd/server.key" .Values.addon.etcd_monitoring.etcd_client_key_path }}
               readOnly: true
             {{- end }}
+  {{ end }}

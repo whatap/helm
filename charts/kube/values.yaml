@@ -93,14 +93,12 @@ daemonSet:
         memory: "350Mi"
         cpu: "200m"
       envs:
+        gpu_enabled: false
         log_parser_containerd_std_enabled: false
         collect_kube_node_process_metric_enabled: false
         debug: false
         count_interval: 5000
 deploymentOpen:
-  license:
-  host:
-  port:
   enabled: false
   name: whatap-open-agent
   label: whatap-open-agent
@@ -136,6 +134,7 @@ deploymentOpen:
         filter:
           enabled: false
 deployment:
+  enabled: true
   name: whatap-master-agent
   label: whatap-master-agent
   replicas: 1
@@ -171,6 +170,8 @@ deployment:
           memory: "350Mi"
           cpu: "200m"
       envs:
+        collect_workload: false
+        collect_deployment: false
         debug: false
 
 clusterrole:

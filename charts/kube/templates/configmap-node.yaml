@@ -1,3 +1,4 @@
+{{ if .Values.daemonSet.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -27,3 +28,4 @@ data:
     JAVA_OPTS="$JAVA_OPTS -Dwhatap.home=/whatap_conf"
 
     java $JAVA_OPTS -jar /data/agent/node/whatap.kube.node-*.jar
+{{ end }}

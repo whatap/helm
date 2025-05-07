@@ -1,0 +1,6 @@
+# whatap-operator/Chart.yaml
+apiVersion: v2
+name: whatap-operator
+description: A Helm chart for deploying the WhaTap Operator
+version: 1.0.3
+appVersion: "1.0"

@@ -1,3 +1,4 @@
+{{- if .Values.daemonSet.enabled }}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -47,7 +48,7 @@ spec:
           {{- if .Values.addon.gpu.image }}
           image: {{ .Values.addon.gpu.image }}
           {{- else }}
-          image: "nvcr.io/nvidia/k8s/dcgm-exporter:4.1.1-4.0.4-ubuntu22.04"
+          image: "nvcr.io/nvidia/k8s/dcgm-exporter:4.2.0-4.1.0-ubuntu22.04"
           {{- end }}
           env:
             - name: "DCGM_EXPORTER_LISTEN"
@@ -158,10 +159,10 @@ spec:
               value: {{ .Values.whatap.port | quote }}
             - name: HOST_PREFIX
               value: "/rootfs"
-            {{- if .Values.addon.gpu.enabled}}
+            {{- if and .Values.addon.gpu.enabled (ne .Values.daemonSet.containers.nodeAgent.envs.gpu_enabled false) }}
             - name: gpu_enabled
               value: "true"
-            {{ end }}
+            {{- end }}
             - name: WHATAP_MEM_LIMIT
               valueFrom:
                 resourceFieldRef:
@@ -250,3 +251,4 @@ spec:
             name: "dcgm-exporter-csv"
           name: "whatap-dcgm-exporter-csv"
         {{ end }}
+{{ end }}
