@@ -1,4 +1,4 @@
-namespace: "whatap-monitoring"
+namespace: ""
 image:
   repository: public.ecr.aws/whatap/whatap-operator
   tag: latest

@@ -1,9 +1,9 @@
-{{- if not (lookup "v1" "ConfigMap" .Values.namespace "master-start-script") }}
+{{- if not (lookup "v1" "ConfigMap" .Release.Namespace "master-start-script") }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: master-start-script
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}
     app.kubernetes.io/instance: {{ .Release.Name }}
