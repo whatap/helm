@@ -14,153 +14,152 @@ spec:
     singular: whatapagent
   scope: Namespaced
   versions:
-  - name: v2alpha1
-    schema:
-      openAPIV3Schema:
-        description: WhatapAgent is the Schema for the whatapagents API
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: WhatapAgentSpec defines the desired state of WhatapAgent
-            properties:
-              agentImageVersion:
-                type: string
-              features:
-                properties:
-                  apm:
-                    properties:
-                      instrumentation:
-                        properties:
-                          targets:
-                            items:
-                              properties:
-                                config:
-                                  properties:
-                                    configMapRef:
-                                      properties:
-                                        name:
-                                          type: string
-                                        namespace:
-                                          type: string
-                                      required:
-                                      - name
-                                      - namespace
-                                      type: object
-                                    mode:
-                                      type: string
-                                  type: object
-                                enabled:
-                                  type: string
-                                language:
-                                  enum:
-                                  - java
-                                  - python
-                                  - php
-                                  - dotnet
-                                  - nodejs
-                                  - golang
-                                  type: string
-                                name:
-                                  type: string
-                                namespaceSelector:
-                                  properties:
-                                    matchNames:
-                                      items:
+    - name: v2alpha1
+      schema:
+        openAPIV3Schema:
+          description: WhatapAgent is the Schema for the whatapagents API
+          properties:
+            apiVersion:
+              description: |-
+                APIVersion defines the versioned schema of this representation of an object.
+                Servers should convert recognized schemas to the latest internal value, and
+                may reject unrecognized values.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: |-
+                Kind is a string value representing the REST resource this object represents.
+                Servers may infer this from the endpoint the client submits requests to.
+                Cannot be updated.
+                In CamelCase.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: WhatapAgentSpec defines the desired state of WhatapAgent
+              properties:
+                agentImageVersion:
+                  type: string
+                features:
+                  properties:
+                    apm:
+                      properties:
+                        instrumentation:
+                          properties:
+                            targets:
+                              items:
+                                properties:
+                                  config:
+                                    properties:
+                                      configMapRef:
+                                        properties:
+                                          name:
+                                            type: string
+                                          namespace:
+                                            type: string
+                                        required:
+                                          - name
+                                          - namespace
+                                        type: object
+                                      mode:
                                         type: string
-                                      type: array
-                                  required:
-                                  - matchNames
-                                  type: object
-                                podSelector:
-                                  properties:
-                                    matchLabels:
-                                      additionalProperties:
-                                        type: string
-                                      type: object
-                                  required:
-                                  - matchLabels
-                                  type: object
-                                whatapApmVersions:
-                                  additionalProperties:
+                                    type: object
+                                  enabled:
                                     type: string
-                                  type: object
-                              required:
-                              - config
-                              - enabled
-                              - language
-                              - name
-                              - namespaceSelector
-                              - podSelector
-                              - whatapApmVersions
-                              type: object
-                            type: array
-                        required:
-                        - targets
-                        type: object
-                    required:
-                    - instrumentation
-                    type: object
-                  kubernetesMonitoring:
-                    properties:
-                      KubernetesMonitoringNamespace:
-                        type: string
-                      apiserverEnabled:
-                        type: string
-                      etcdEnabled:
-                        type: string
-                      gpuEnabled:
-                        type: string
-                      masterAgentEnabled:
-                        type: string
-                      nodeAgentEnabled:
-                        type: string
-                      openAgentEnabled:
-                        type: string
-                      schedulerEnabled:
-                        type: string
-                    required:
-                    - KubernetesMonitoringNamespace
-                    - masterAgentEnabled
-                    - nodeAgentEnabled
-                    type: object
-                required:
-                - apm
-                - kubernetesMonitoring
-                type: object
-              host:
-                type: string
-              license:
-                type: string
-              port:
-                type: string
-            required:
-            - agentImageVersion
-            - features
-            - host
-            - license
-            - port
-            type: object
-          status:
-            description: WhatapAgentStatus defines the observed state of WhatapAgent
-            type: object
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
+                                  language:
+                                    enum:
+                                      - java
+                                      - python
+                                      - php
+                                      - dotnet
+                                      - nodejs
+                                      - golang
+                                    type: string
+                                  name:
+                                    type: string
+                                  namespaceSelector:
+                                    properties:
+                                      matchNames:
+                                        items:
+                                          type: string
+                                        type: array
+                                    required:
+                                      - matchNames
+                                    type: object
+                                  podSelector:
+                                    properties:
+                                      matchLabels:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                    required:
+                                      - matchLabels
+                                    type: object
+                                  whatapApmVersions:
+                                    additionalProperties:
+                                      type: string
+                                    type: object
+                                required:
+                                  - config
+                                  - enabled
+                                  - language
+                                  - name
+                                  - namespaceSelector
+                                  - podSelector
+                                  - whatapApmVersions
+                                type: object
+                              type: array
+                          required:
+                            - targets
+                          type: object
+                      required:
+                        - instrumentation
+                      type: object
+                    kubernetesMonitoring:
+                      properties:
+                        apiserverEnabled:
+                          type: string
+                        etcdEnabled:
+                          type: string
+                        gpuEnabled:
+                          type: string
+                        kubernetesMonitoringNamespace:
+                          type: string
+                        masterAgentEnabled:
+                          type: string
+                        nodeAgentEnabled:
+                          type: string
+                        openAgentEnabled:
+                          type: string
+                        schedulerEnabled:
+                          type: string
+                      required:
+                        - masterAgentEnabled
+                        - nodeAgentEnabled
+                      type: object
+                  required:
+                    - apm
+                    - kubernetesMonitoring
+                  type: object
+                host:
+                  type: string
+                license:
+                  type: string
+                port:
+                  type: string
+              required:
+                - agentImageVersion
+                - features
+                - host
+                - license
+                - port
+              type: object
+            status:
+              description: WhatapAgentStatus defines the observed state of WhatapAgent
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
