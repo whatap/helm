@@ -39,8 +39,8 @@ spec:
               properties:
                 name:
                   type: string
-                  pattern: '^whatap$'
-                  description: 'must be exactly "whatap"'
+                  pattern: ^whatap$
+                  description: must be exactly "whatap"
             spec:
               description: WhatapAgentSpec defines the desired state of WhatapAgent
               properties:
