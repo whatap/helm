@@ -149,7 +149,6 @@ spec:
                 port:
                   type: string
               required:
-                - agentImageVersion
                 - features
                 - host
                 - license
