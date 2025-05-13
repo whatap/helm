@@ -12,7 +12,7 @@ spec:
     listKind: WhatapAgentList
     plural: whatapagents
     singular: whatapagent
-  scope: Namespaced
+  scope: Cluster
   versions:
     - name: v2alpha1
       schema:
