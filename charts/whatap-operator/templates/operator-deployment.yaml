@@ -29,3 +29,8 @@ spec:
             requests:
               cpu: 100m
               memory: 128Mi
+          env:
+            - name: WHATAP_DEFAULT_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
