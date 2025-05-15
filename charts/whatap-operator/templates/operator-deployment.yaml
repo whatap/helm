@@ -7,11 +7,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: whatap-operator
+      app.kubernetes.io/name: "whatap-operator"
   template:
     metadata:
       labels:
-        app: whatap-operator
+        app.kubernetes.io/name: "whatap-operator"
     spec:
       serviceAccountName: whatap-operator
       containers:
