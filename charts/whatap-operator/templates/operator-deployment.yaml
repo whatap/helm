@@ -34,3 +34,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+          volumeMounts:
+            - name: webhook-certs
+              mountPath: /etc/webhook/certs
+              readOnly: false
+      volumes:
+        - name: webhook-certs
+          emptyDir: {}
