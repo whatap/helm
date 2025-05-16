@@ -1,0 +1,20 @@
+{{- if not (lookup "v1" "Service" .Release.Namespace "whatap-master-agent") }}
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Release.Namespace }}
+  labels:
+    run: whatap-master-agent
+  name: whatap-master-agent
+spec:
+  clusterIP: None
+  ports:
+    - port: 6600
+      protocol: TCP
+      name: tcp-whatap-master-agent
+    - port: 6800
+      protocol: TCP
+      name: tcp-whatap-confbase
+  selector:
+    name: whatap-master-agent
+{{- end }}

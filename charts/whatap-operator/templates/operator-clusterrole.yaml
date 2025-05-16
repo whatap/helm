@@ -13,11 +13,7 @@ rules:
     resources: ["whatapagents", "whatapagents/status"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 
-  - apiGroups: ["apps"]
-    resources: ["deployments", "statefulsets", "daemonsets"]
-    verbs: ["get", "list", "watch", "update", "patch"]
-
-  - apiGroups: [""]
-    resources: ["pods", "namespaces"]
-    verbs: ["get", "list", "watch", "update", "patch"]
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch", "update", "patch","delete"]
 {{- end }}
