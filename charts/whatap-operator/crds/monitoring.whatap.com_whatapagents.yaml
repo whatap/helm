@@ -46,68 +46,6 @@ spec:
               properties:
                 features:
                   properties:
-                    K8sAgent:
-                      properties:
-                        agentImageVersion:
-                          type: string
-                        apiserverMonitoring:
-                          properties:
-                            enabled:
-                              default: false
-                              type: boolean
-                          required:
-                            - enabled
-                          type: object
-                        etcdMonitoring:
-                          properties:
-                            enabled:
-                              default: false
-                              type: boolean
-                          required:
-                            - enabled
-                          type: object
-                        gpuMonitoring:
-                          properties:
-                            enabled:
-                              default: false
-                              type: boolean
-                          required:
-                            - enabled
-                          type: object
-                        masterAgent:
-                          properties:
-                            enabled:
-                              default: false
-                              type: boolean
-                          required:
-                            - enabled
-                          type: object
-                        namespace:
-                          type: string
-                        nodeAgent:
-                          properties:
-                            enabled:
-                              default: false
-                              type: boolean
-                          required:
-                            - enabled
-                          type: object
-                        schedulerMonitoring:
-                          properties:
-                            enabled:
-                              default: false
-                              type: boolean
-                          required:
-                            - enabled
-                          type: object
-                      required:
-                        - apiserverMonitoring
-                        - etcdMonitoring
-                        - gpuMonitoring
-                        - masterAgent
-                        - nodeAgent
-                        - schedulerMonitoring
-                      type: object
                     apm:
                       description: ApmSpec defines APM-specific settings
                       properties:
@@ -187,6 +125,68 @@ spec:
                       required:
                         - instrumentation
                       type: object
+                    k8sAgent:
+                      properties:
+                        agentImageVersion:
+                          type: string
+                        apiserverMonitoring:
+                          properties:
+                            enabled:
+                              default: false
+                              type: boolean
+                          required:
+                            - enabled
+                          type: object
+                        etcdMonitoring:
+                          properties:
+                            enabled:
+                              default: false
+                              type: boolean
+                          required:
+                            - enabled
+                          type: object
+                        gpuMonitoring:
+                          properties:
+                            enabled:
+                              default: false
+                              type: boolean
+                          required:
+                            - enabled
+                          type: object
+                        masterAgent:
+                          properties:
+                            enabled:
+                              default: false
+                              type: boolean
+                          required:
+                            - enabled
+                          type: object
+                        namespace:
+                          type: string
+                        nodeAgent:
+                          properties:
+                            enabled:
+                              default: false
+                              type: boolean
+                          required:
+                            - enabled
+                          type: object
+                        schedulerMonitoring:
+                          properties:
+                            enabled:
+                              default: false
+                              type: boolean
+                          required:
+                            - enabled
+                          type: object
+                      required:
+                        - apiserverMonitoring
+                        - etcdMonitoring
+                        - gpuMonitoring
+                        - masterAgent
+                        - nodeAgent
+                        - schedulerMonitoring
+                      type: object
                     openAgent:
                       description: OpenAgentSpec defines the openAgent enablement
                       properties:
@@ -197,8 +197,8 @@ spec:
                         - enabled
                       type: object
                   required:
-                    - K8sAgent
                     - apm
+                    - k8sAgent
                     - openAgent
                   type: object
                 host:
