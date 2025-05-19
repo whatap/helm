@@ -44,20 +44,86 @@ spec:
             spec:
               description: WhatapAgentSpec defines the desired state of WhatapAgent
               properties:
-                agentImageVersion:
-                  type: string
                 features:
                   properties:
+                    K8sAgent:
+                      properties:
+                        agentImageVersion:
+                          type: string
+                        apiserverMonitoring:
+                          properties:
+                            enabled:
+                              default: false
+                              type: boolean
+                          required:
+                            - enabled
+                          type: object
+                        etcdMonitoring:
+                          properties:
+                            enabled:
+                              default: false
+                              type: boolean
+                          required:
+                            - enabled
+                          type: object
+                        gpuMonitoring:
+                          properties:
+                            enabled:
+                              default: false
+                              type: boolean
+                          required:
+                            - enabled
+                          type: object
+                        masterAgent:
+                          properties:
+                            enabled:
+                              default: false
+                              type: boolean
+                          required:
+                            - enabled
+                          type: object
+                        namespace:
+                          type: string
+                        nodeAgent:
+                          properties:
+                            enabled:
+                              default: false
+                              type: boolean
+                          required:
+                            - enabled
+                          type: object
+                        schedulerMonitoring:
+                          properties:
+                            enabled:
+                              default: false
+                              type: boolean
+                          required:
+                            - enabled
+                          type: object
+                      required:
+                        - apiserverMonitoring
+                        - etcdMonitoring
+                        - gpuMonitoring
+                        - masterAgent
+                        - nodeAgent
+                        - schedulerMonitoring
+                      type: object
                     apm:
+                      description: ApmSpec defines APM-specific settings
                       properties:
                         instrumentation:
+                          description: InstrumentationSpec holds instrumentation targets
                           properties:
                             targets:
                               items:
                                 properties:
                                   config:
+                                    description: ConfigSpec holds custom configuration
+                                      reference
                                     properties:
                                       configMapRef:
+                                        description: ConfigMapRef identifies a ConfigMap
+                                          resource
                                         properties:
                                           name:
                                             type: string
@@ -68,22 +134,21 @@ spec:
                                           - namespace
                                         type: object
                                       mode:
+                                        description: Mode can be "default" or "custom"
+                                        enum:
+                                          - default
+                                          - custom
                                         type: string
                                     type: object
                                   enabled:
-                                    type: string
+                                    type: boolean
                                   language:
-                                    enum:
-                                      - java
-                                      - python
-                                      - php
-                                      - dotnet
-                                      - nodejs
-                                      - golang
                                     type: string
                                   name:
                                     type: string
                                   namespaceSelector:
+                                    description: NamespaceSelector matches specific
+                                      namespaces
                                     properties:
                                       matchNames:
                                         items:
@@ -93,6 +158,7 @@ spec:
                                       - matchNames
                                     type: object
                                   podSelector:
+                                    description: PodSelector matches pods by labels
                                     properties:
                                       matchLabels:
                                         additionalProperties:
@@ -121,31 +187,19 @@ spec:
                       required:
                         - instrumentation
                       type: object
-                    kubernetesMonitoring:
+                    openAgent:
+                      description: OpenAgentSpec defines the openAgent enablement
                       properties:
-                        apiserverEnabled:
-                          type: string
-                        etcdEnabled:
-                          type: string
-                        gpuEnabled:
-                          type: string
-                        kubernetesMonitoringNamespace:
-                          type: string
-                        masterAgentEnabled:
-                          type: string
-                        nodeAgentEnabled:
-                          type: string
-                        openAgentEnabled:
-                          type: string
-                        schedulerEnabled:
-                          type: string
+                        enabled:
+                          default: false
+                          type: boolean
                       required:
-                        - masterAgentEnabled
-                        - nodeAgentEnabled
+                        - enabled
                       type: object
                   required:
+                    - K8sAgent
                     - apm
-                    - kubernetesMonitoring
+                    - openAgent
                   type: object
                 host:
                   type: string
