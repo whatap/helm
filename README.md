@@ -1,7 +1,7 @@
 # kube-agent Helm Chart 배포 및 설치 가이드
 
 ## 사전 환경 테스트
-- 아래 명령어로 helm 버전 조회, 3.x 이상 지원
+- 아래 명령어로 helm 버전 조회, 3.2 이상 지원
 ```shell
 helm version
 ```
@@ -27,7 +27,6 @@ whatap:
   license:
   host:
   port:
-namespaceOverrideEnabled: false
 hostNetworkEnabled: false
 collect_apiserver_metric_by_leader: false
 collect_custom_resources: false
@@ -353,9 +352,9 @@ whatap/kube     1.7.11          1.0             Whatap monitoring components on 
 No results found
 ```
 
-1.7.11 이상 버전인 경우 아래 명령어를 통해 에이전트가 설치될 namespace 를 지정할 수 있습니다.
+1.8.88 이상 버전인 경우 아래 명령어를 통해 에이전트가 설치될 namespace 를 지정할 수 있습니다.
 ```shell
-helm install whatap-kube-agent whatap/kube --create-namespace --namespace <namespace> --set namespaceOverrideEnabled=true --wait
+helm install whatap-kube-agent whatap/kube --create-namespace --namespace <namespace>
 ```
 
 ### 

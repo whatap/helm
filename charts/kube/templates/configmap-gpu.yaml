@@ -3,11 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dcgm-exporter-csv
-  {{ if not .Values.namespaceOverrideEnabled }}
-  namespace: "whatap-monitoring"
-  {{ else}}
   namespace: {{ .Release.Namespace }}
-  {{ end }}
 data:
   whatap-gpu.csv: |-
     # Static configuration information

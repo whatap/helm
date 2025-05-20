@@ -3,7 +3,6 @@ whatap:
   host: "15.165.146.117"
   port: "6600"
 collect_custom_resources: false
-namespaceOverrideEnabled: false
 hostNetworkEnabled: false
 # whatapResourceAlreadyExist: false
 # istioEnabled default

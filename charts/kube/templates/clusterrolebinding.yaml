@@ -1,4 +1,3 @@
-{{- if not  .Values.whatapResourceAlreadyExist}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -10,9 +9,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: whatap
-    {{ if not .Values.namespaceOverrideEnabled }}
-    namespace: "whatap-monitoring"
-    {{ else}}
     namespace: {{ .Release.Namespace }}
-    {{ end }}
-{{- end }}

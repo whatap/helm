@@ -1,15 +1,9 @@
-{{- if not  .Values.whatapResourceAlreadyExist}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
     rbac.authorization.kubernetes.io/autoupdate: "true"
   name: whatap
-  {{ if not .Values.namespaceOverrideEnabled }}
-  namespace: "whatap-monitoring"
-  {{ else}}
-  namespace: {{ .Release.Namespace }}
-  {{ end }}
 rules:
   - apiGroups: ["*"]
     resources:
@@ -55,4 +49,3 @@ rules:
     verbs: ["*"]
   - nonResourceURLs: [ "/metrics" ]
     verbs: [ "*" ]
-{{end}}

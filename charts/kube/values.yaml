@@ -3,7 +3,6 @@ whatap:
   host: # <whatap-server-host>
   port: # <whatap-server-port>
 
-namespaceOverrideEnabled: false
 hostNetworkEnabled: false
 # whatapResourceAlreadyExist: false
 # istioEnabled default

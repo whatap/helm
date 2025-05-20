@@ -3,11 +3,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ .Values.daemonSet.name }}
-  {{ if not .Values.namespaceOverrideEnabled }}
-  namespace: "whatap-monitoring"
-  {{ else}}
   namespace: {{ .Release.Namespace }}
-  {{ end }}
   labels:
     name: {{ .Values.daemonSet.label }}
 spec:
