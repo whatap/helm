@@ -30,7 +30,7 @@ data:
     EOL
     fi
 
-    heapsize=$(echo "0.45 $WHATP_MEM_LIMIT" | awk '{print int($1 * $2 / 1048576)}')
+    heapsize=$(echo "0.45 $WHATAP_MEM_LIMIT" | awk '{print int($1 * $2 / 1048576)}')
     JAVA_OPTS="-Xms${heapsize}m -Xmx${heapsize}m"
     JAVA_OPTS="$JAVA_OPTS -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+ExitOnOutOfMemoryError -XshowSettings:vm"
     JAVA_OPTS="$JAVA_OPTS -Dwhatap.home=/whatap_conf"
