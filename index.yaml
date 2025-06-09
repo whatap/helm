@@ -3,7 +3,7 @@ entries:
   kube:
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2025-06-09T12:13:47.571492+09:00"
+    created: "2025-06-09T13:10:07.797941+09:00"
     description: Whatap monitoring components on Kubernetes
     digest: 3c92405a2efd3600627af11b79afde7559a05bc5984289c5c4d370f8d1013637
     name: kube
@@ -13,7 +13,7 @@ entries:
     version: 1.8.88
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2025-06-09T12:13:47.569797+09:00"
+    created: "2025-06-09T13:10:07.797089+09:00"
     description: Whatap monitoring components on Kubernetes
     digest: d7fb4250be9a6e19636be5ebc466d4434eecc237ae1683e484d0cb79ad5632a4
     name: kube
@@ -844,7 +844,16 @@ entries:
   whatap-operator:
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2025-06-09T12:13:47.573311+09:00"
+    created: "2025-06-09T13:10:07.801041+09:00"
+    description: A Helm chart for deploying the WhaTap Operator
+    digest: cdb32580bf4909200e2f560f4a9b7c21d0b99cc57a48dcce82bbd34d73f12c67
+    name: whatap-operator
+    urls:
+    - https://whatap.github.io/helm/whatap-operator-1.2.9.tgz
+    version: 1.2.9
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2025-06-09T13:10:07.80064+09:00"
     description: A Helm chart for deploying the WhaTap Operator
     digest: b90febb3f15d9e4fbaed5faaca9fc7359ad1a0613645c9b0b5a66e3bde97fb39
     name: whatap-operator
@@ -853,7 +862,7 @@ entries:
     version: 1.2.8
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2025-06-09T12:13:47.573061+09:00"
+    created: "2025-06-09T13:10:07.800194+09:00"
     description: A Helm chart for deploying the WhaTap Operator
     digest: 435ee1453192ebec6f76ac9c3a1e6c3219b506e11872d73cf622c1287477ad8b
     name: whatap-operator
@@ -862,7 +871,7 @@ entries:
     version: 1.2.7
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2025-06-09T12:13:47.572716+09:00"
+    created: "2025-06-09T13:10:07.799584+09:00"
     description: A Helm chart for deploying the WhaTap Operator
     digest: 1629821eb0922578c3455781ba54d85895a5624257a30932bcfb852d6804cb12
     name: whatap-operator
@@ -871,7 +880,7 @@ entries:
     version: 1.2.6
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2025-06-09T12:13:47.572372+09:00"
+    created: "2025-06-09T13:10:07.798966+09:00"
     description: A Helm chart for deploying the WhaTap Operator
     digest: c95590700bca8e0daebb32511a3709875aa2aadd4d93d23630e72ae44c007c9a
     name: whatap-operator
@@ -880,7 +889,7 @@ entries:
     version: 1.2.4
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2025-06-09T12:13:47.572016+09:00"
+    created: "2025-06-09T13:10:07.79846+09:00"
     description: A Helm chart for deploying the WhaTap Operator
     digest: d4091c69d6ec916e46a7b455c9ed17af34348cc1755a6042bf9ae9c0c98ea4dc
     name: whatap-operator
@@ -1067,4 +1076,4 @@ entries:
     urls:
     - https://whatap.github.io/helm/whatap-operator-0.1.0.tgz
     version: 0.1.0
-generated: "2025-06-09T12:13:47.56874+09:00"
+generated: "2025-06-09T13:10:07.795984+09:00"
