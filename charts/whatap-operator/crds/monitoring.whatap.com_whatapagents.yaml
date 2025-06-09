@@ -1030,7 +1030,12 @@ spec:
                                 description: TargetName is the name of the target
                                 type: string
                               type:
-                                description: Type is the type of the target (e.g., ServiceMonitor)
+                                description: Type is the type of the target (ServiceMonitor,
+                                  PodMonitor, or StaticEndpoints)
+                                enum:
+                                  - ServiceMonitor
+                                  - PodMonitor
+                                  - StaticEndpoints
                                 type: string
                             required:
                               - targetName
