@@ -1124,16 +1124,16 @@ spec:
                     - openAgent
                   type: object
                 host:
+                  description: Host address for Whatap server
                   type: string
                 license:
+                  description: License key for Whatap monitoring
                   type: string
                 port:
+                  description: Port for Whatap server
                   type: string
               required:
                 - features
-                - host
-                - license
-                - port
               type: object
             status:
               description: WhatapAgentStatus defines the observed state of WhatapAgent
