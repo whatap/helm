@@ -192,6 +192,10 @@ spec:
                       type: object
                     k8sAgent:
                       properties:
+                        agentImageName:
+                          description: AgentImageName defines the name of the agent
+                            image to use
+                          type: string
                         agentImageVersion:
                           type: string
                         apiserverMonitoring:
