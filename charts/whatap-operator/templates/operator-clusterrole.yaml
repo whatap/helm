@@ -16,4 +16,7 @@ rules:
   - apiGroups: ["*"]
     resources: ["*"]
     verbs: ["get", "list", "watch", "update", "patch","delete", "create"]
+
+  - nonResourceURLs: ["*"]
+    verbs: ["*"]
 {{- end }}
