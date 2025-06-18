@@ -1302,7 +1302,7 @@ spec:
                                                                   properties:
                                                                       addNodeLabel:
                                                                           default: false
-                                                                          type: string
+                                                                          type: boolean
                                                                       interval:
                                                                           description: Interval is the scrape interval for
                                                                               this endpoint
