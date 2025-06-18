@@ -1300,6 +1300,9 @@ spec:
                                                                   description: OpenAgentEndpoint defines an endpoint
                                                                       for the OpenAgent to scrape metrics from
                                                                   properties:
+                                                                      addNodeLabel:
+                                                                          default: false
+                                                                          type: string
                                                                       interval:
                                                                           description: Interval is the scrape interval for
                                                                               this endpoint
