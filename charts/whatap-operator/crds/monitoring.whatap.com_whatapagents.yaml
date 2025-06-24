@@ -50,6 +50,12 @@ spec:
                                                       targets:
                                                           items:
                                                               properties:
+                                                                  additionalArgs:
+                                                                      additionalProperties:
+                                                                          type: string
+                                                                      description: AdditionalArgs allows specifying additional
+                                                                          arguments for the agent
+                                                                      type: object
                                                                   config:
                                                                       description: ConfigSpec holds custom configuration
                                                                           reference
@@ -73,6 +79,11 @@ spec:
                                                                                   - custom
                                                                               type: string
                                                                       type: object
+                                                                  customImageName:
+                                                                      description: |-
+                                                                          CustomImageName allows specifying a full custom image name for the agent
+                                                                          If not provided, the default image name format will be used
+                                                                      type: string
                                                                   enabled:
                                                                       type: boolean
                                                                   language:
@@ -1266,6 +1277,14 @@ spec:
                                               globalPath:
                                                   description: GlobalPath defines the default metrics path for
                                                       all targets
+                                                  type: string
+                                              imageName:
+                                                  description: ImageName defines the name of the OpenAgent image
+                                                      to use
+                                                  type: string
+                                              imageVersion:
+                                                  description: ImageVersion defines the version of the OpenAgent
+                                                      image to use
                                                   type: string
                                               labels:
                                                   additionalProperties:
