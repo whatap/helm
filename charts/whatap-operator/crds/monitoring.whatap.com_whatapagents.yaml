@@ -1130,12 +1130,9 @@ spec:
                                                       - enabled
                                                   type: object
                                           required:
-                                              - apiserverMonitoring
-                                              - etcdMonitoring
                                               - gpuMonitoring
                                               - masterAgent
                                               - nodeAgent
-                                              - schedulerMonitoring
                                           type: object
                                       openAgent:
                                           description: OpenAgentSpec defines the openAgent enablement and
