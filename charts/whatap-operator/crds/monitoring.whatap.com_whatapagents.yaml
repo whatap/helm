@@ -189,17 +189,12 @@ spec:
                                                                           type: string
                                                                       type: object
                                                               required:
-                                                                  - config
                                                                   - enabled
                                                                   - language
                                                                   - name
-                                                                  - namespaceSelector
-                                                                  - podSelector
                                                                   - whatapApmVersions
                                                               type: object
                                                           type: array
-                                                  required:
-                                                      - targets
                                                   type: object
                                           type: object
                                       k8sAgent:
