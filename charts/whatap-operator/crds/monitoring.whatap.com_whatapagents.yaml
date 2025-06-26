@@ -48,7 +48,7 @@ spec:
                                                   description: InstrumentationSpec holds instrumentation targets
                                                   properties:
                                                       enabled:
-                                                          default: false
+                                                          default: true
                                                           type: boolean
                                                       targets:
                                                           items:
