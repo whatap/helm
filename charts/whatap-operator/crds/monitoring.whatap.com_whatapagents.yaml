@@ -1263,14 +1263,6 @@ spec:
                                                           - name
                                                       type: object
                                                   type: array
-                                              globalInterval:
-                                                  description: GlobalInterval defines the default scrape interval
-                                                      for all targets
-                                                  type: string
-                                              globalPath:
-                                                  description: GlobalPath defines the default metrics path for
-                                                      all targets
-                                                  type: string
                                               imageName:
                                                   description: ImageName defines the name of the OpenAgent image
                                                       to use
@@ -1315,17 +1307,52 @@ spec:
                                                                       addNodeLabel:
                                                                           default: false
                                                                           type: boolean
+                                                                      address:
+                                                                          description: Address is the address to scrape
+                                                                              metrics from (for StaticEndpoints)
+                                                                          type: string
                                                                       interval:
                                                                           description: Interval is the scrape interval for
                                                                               this endpoint
                                                                           type: string
+                                                                      metricRelabelConfigs:
+                                                                          description: MetricRelabelConfigs defines the
+                                                                              metric relabeling configurations for this endpoint
+                                                                          items:
+                                                                              description: MetricRelabelConfig defines a metric
+                                                                                  relabeling configuration
+                                                                              properties:
+                                                                                  action:
+                                                                                      description: Action is the relabeling action
+                                                                                          to perform
+                                                                                      type: string
+                                                                                  regex:
+                                                                                      description: Regex is the regular expression
+                                                                                          to match against the source labels
+                                                                                      type: string
+                                                                                  replacement:
+                                                                                      description: Replacement is the replacement
+                                                                                          value for the target label
+                                                                                      type: string
+                                                                                  source_labels:
+                                                                                      description: SourceLabels is the list of
+                                                                                          source labels to use in the relabeling
+                                                                                      items:
+                                                                                          type: string
+                                                                                      type: array
+                                                                                  target_label:
+                                                                                      description: TargetLabel is the label to
+                                                                                          set in the relabeling
+                                                                                      type: string
+                                                                              type: object
+                                                                          type: array
                                                                       path:
                                                                           description: Path is the path to scrape metrics
                                                                               from
                                                                           type: string
                                                                       port:
                                                                           description: Port is the port to scrape metrics
-                                                                              from
+                                                                              from (for PodMonitor/ServiceMonitor)
                                                                           type: string
                                                                       scheme:
                                                                           description: Scheme is the HTTP scheme to use
@@ -1340,39 +1367,6 @@ spec:
                                                                                       certificate validation
                                                                                   type: boolean
                                                                           type: object
-                                                                  required:
-                                                                      - port
-                                                                  type: object
-                                                              type: array
-                                                          metricRelabelConfigs:
-                                                              description: MetricRelabelConfigs defines the metric
-                                                                  relabeling configurations
-                                                              items:
-                                                                  description: MetricRelabelConfig defines a metric
-                                                                      relabeling configuration
-                                                                  properties:
-                                                                      action:
-                                                                          description: Action is the relabeling action to
-                                                                              perform
-                                                                          type: string
-                                                                      regex:
-                                                                          description: Regex is the regular expression to
-                                                                              match against the source labels
-                                                                          type: string
-                                                                      replacement:
-                                                                          description: Replacement is the replacement value
-                                                                              for the target label
-                                                                          type: string
-                                                                      source_labels:
-                                                                          description: SourceLabels is the list of source
-                                                                              labels to use in the relabeling
-                                                                          items:
-                                                                              type: string
-                                                                          type: array
-                                                                      target_label:
-                                                                          description: TargetLabel is the label to set in
-                                                                              the relabeling
-                                                                          type: string
                                                                   type: object
                                                               type: array
                                                           namespaceSelector:
