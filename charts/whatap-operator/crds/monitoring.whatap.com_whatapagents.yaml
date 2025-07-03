@@ -1280,6 +1280,15 @@ spec:
                                                                       More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
                                                                   type: object
                                                           type: object
+                                                      runtime:
+                                                          default: containerd
+                                                          description: Runtime specifies the container runtime (containerd,
+                                                              docker, crio)
+                                                          enum:
+                                                              - containerd
+                                                              - docker
+                                                              - crio
+                                                          type: string
                                                       tolerations:
                                                           description: Tolerations to be added to the NodeAgent
                                                               pod
