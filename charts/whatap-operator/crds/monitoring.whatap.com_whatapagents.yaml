@@ -204,17 +204,34 @@ spec:
                                                       image to use
                                                   type: string
                                               agentImageVersion:
+                                                  description: AgentImageVersion defines the version of the
+                                                      agent image to use
                                                   type: string
                                               apiserverMonitoring:
                                                   properties:
+                                                      customImageFullName:
+                                                          description: |-
+                                                              CustomImageFullName allows specifying a full custom image name (including repository and tag)
+                                                              If not provided, the default image will be used
+                                                          type: string
                                                       enabled:
                                                           default: false
                                                           type: boolean
                                                   required:
                                                       - enabled
                                                   type: object
+                                              customAgentImageFullName:
+                                                  description: |-
+                                                      CustomAgentImageFullName allows specifying a full custom image name (including repository and tag)
+                                                      If provided, this takes precedence over AgentImageName and AgentImageVersion
+                                                  type: string
                                               etcdMonitoring:
                                                   properties:
+                                                      customImageFullName:
+                                                          description: |-
+                                                              CustomImageFullName allows specifying a full custom image name (including repository and tag)
+                                                              If not provided, the default image will be used
+                                                          type: string
                                                       enabled:
                                                           default: false
                                                           type: boolean
@@ -223,6 +240,11 @@ spec:
                                                   type: object
                                               gpuMonitoring:
                                                   properties:
+                                                      customImageFullName:
+                                                          description: |-
+                                                              CustomImageFullName allows specifying a full custom image name (including repository and tag)
+                                                              If not provided, the default image will be used
+                                                          type: string
                                                       enabled:
                                                           default: false
                                                           type: boolean
@@ -497,6 +519,7 @@ spec:
                                                               image:
                                                                   description: |-
                                                                       Image defines the container image to use
+                                                                      This can be a full image name (including repository and tag)
                                                                       If not provided, the default image will be used
                                                                   type: string
                                                               resources:
@@ -947,6 +970,7 @@ spec:
                                                               image:
                                                                   description: |-
                                                                       Image defines the container image to use
+                                                                      This can be a full image name (including repository and tag)
                                                                       If not provided, the default image will be used
                                                                   type: string
                                                               resources:
@@ -1143,6 +1167,7 @@ spec:
                                                               image:
                                                                   description: |-
                                                                       Image defines the container image to use
+                                                                      This can be a full image name (including repository and tag)
                                                                       If not provided, the default image will be used
                                                                   type: string
                                                               resources:
@@ -1334,6 +1359,11 @@ spec:
                                                   type: object
                                               schedulerMonitoring:
                                                   properties:
+                                                      customImageFullName:
+                                                          description: |-
+                                                              CustomImageFullName allows specifying a full custom image name (including repository and tag)
+                                                              If not provided, the default image will be used
+                                                          type: string
                                                       enabled:
                                                           default: false
                                                           type: boolean
@@ -1354,6 +1384,11 @@ spec:
                                                       type: string
                                                   description: Annotations to be added to the OpenAgent deployment
                                                   type: object
+                                              customImageFullName:
+                                                  description: |-
+                                                      CustomImageFullName allows specifying a full custom image name (including repository and tag)
+                                                      If provided, this takes precedence over ImageName and ImageVersion
+                                                  type: string
                                               enabled:
                                                   default: false
                                                   type: boolean
