@@ -39,6 +39,7 @@ data:
 
     # Utilization
     DCGM_FI_DEV_GPU_UTIL,      gauge, GPU utilization (in %).                     # code 203
+    DCGM_FI_DEV_WEIGHTED_GPU_UTIL, gauge, Weighted GPU utilization for MIG and non-MIG devices (ratio 0.0-1.0). # code 9003
     #DCGM_FI_DEV_MEM_COPY_UTIL, gauge, Memory copy engine utilization (in %).      # code 204
     #DCGM_FI_DEV_ENC_UTIL,      gauge, Encoder utilization (in %).                 # code 206
     #DCGM_FI_DEV_DEC_UTIL,      gauge, Decoder utilization (in %).                 # code 207

@@ -82,9 +82,9 @@ spec:
                                                                                   - custom
                                                                               type: string
                                                                       type: object
-                                                                  customImageName:
+                                                                  customImageFullName:
                                                                       description: |-
-                                                                          CustomImageName allows specifying a full custom image name for the agent
+                                                                          CustomImageFullName allows specifying a full custom image name for the agent
                                                                           If not provided, the default image name format will be used
                                                                       type: string
                                                                   enabled:
