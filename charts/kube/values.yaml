@@ -112,8 +112,7 @@ deploymentOpen:
   containers:
     openAgent:
       name: whatap-open-agent
-      image: "whatap/kube_mon"
-      port: 6600
+      image: "public.ecr.aws/whatap/open_agent:latest"
       resources:
         requests:
           memory: "300Mi"

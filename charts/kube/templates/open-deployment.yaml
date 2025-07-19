@@ -26,11 +26,11 @@ spec:
       {{- end }}
       tolerations:
       {{- if .Values.deploymentOpen.tolerations}}
-      {{- toYaml .Values.deploymentOpen.tolerations | nindent 8 }}
+      {{ toYaml .Values.deploymentOpen.tolerations | nindent 8 }}
       {{- end }}
       affinity:
       {{- if .Values.deploymentOpen.affinity }}
-      {{- toYaml .Values.deploymentOpen.affinity | nindent 8 }}
+      {{ toYaml .Values.deploymentOpen.affinity | nindent 8 }}
       {{- end }}
       serviceAccountName: whatap-open-agent-sa
       volumes:
@@ -40,9 +40,30 @@ spec:
         - name: logs-volume
           emptyDir: {}
       containers:
-        - name: whatap-open-agent
-          image: public.ecr.aws/whatap/open_agent:latest
+        - name: {{ .Values.deploymentOpen.containers.openAgent.name }}
+          image: {{ .Values.deploymentOpen.containers.openAgent.image }}
           imagePullPolicy: Always
+          {{- if .Values.deploymentOpen.containers.openAgent.resources }}
+          resources:
+            {{- if .Values.deploymentOpen.containers.openAgent.resources.requests }}
+            requests:
+              {{- if .Values.deploymentOpen.containers.openAgent.resources.requests.memory }}
+              memory: {{ .Values.deploymentOpen.containers.openAgent.resources.requests.memory }}
+              {{- end }}
+              {{- if .Values.deploymentOpen.containers.openAgent.resources.requests.cpu }}
+              cpu: {{ .Values.deploymentOpen.containers.openAgent.resources.requests.cpu }}
+              {{- end }}
+            {{- end }}
+            {{- if .Values.deploymentOpen.containers.openAgent.resources.limits }}
+            limits:
+              {{- if .Values.deploymentOpen.containers.openAgent.resources.limits.memory }}
+              memory: {{ .Values.deploymentOpen.containers.openAgent.resources.limits.memory }}
+              {{- end }}
+              {{- if .Values.deploymentOpen.containers.openAgent.resources.limits.cpu }}
+              cpu: {{ .Values.deploymentOpen.containers.openAgent.resources.limits.cpu }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
           env:
             - name: WHATAP_LICENSE
               valueFrom:
@@ -59,6 +80,12 @@ spec:
                 secretKeyRef:
                   name: whatap-credentials
                   key: WHATAP_PORT
+            {{- if .Values.deploymentOpen.containers.openAgent.envs }}
+            {{- range $key, $value := .Values.deploymentOpen.containers.openAgent.envs }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
           volumeMounts:
             - name: config-volume
               mountPath: /app/scrape_config.yaml
