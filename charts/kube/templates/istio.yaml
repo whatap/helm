@@ -5,7 +5,7 @@ metadata:
   name: "whatap-external"
 spec:
   addresses:
-    - "15.165.146.117"
+    - {{ .Values.whatap.host | quote }}
   hosts:
     - "whatap-proxy1"
   ports:

@@ -1,0 +1,28 @@
+{{ if .Values.deploymentOpen.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: whatap-open-agent-role
+rules:
+- apiGroups: ["*"]
+  resources: ["pods", "services", "endpoints", "namespaces"]
+  verbs: ["get", "list", "watch"]
+- nonResourceURLs: [ "/metrics" ]
+  verbs: ["*"]
+- apiGroups:
+  - ""
+  resources:
+  - "pods/exec"
+  verbs:
+  - "create"
+- apiGroups:
+  - ""
+  resources:
+  - "configmaps"
+  verbs:
+  - "*"
+- nonResourceURLs:
+  - "/metrics"
+  verbs:
+  - "*"
+{{ end }}

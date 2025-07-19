@@ -1,0 +1,120 @@
+{{ if .Values.deploymentOpen.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: whatap-open-agent-config
+  namespace: {{ .Release.Namespace }}
+data:
+  scrape_config.yaml: |
+    #configuration
+    #CR format configuration
+    features:
+      openAgent:
+        enabled: {{ .Values.deploymentOpen.config.features.openAgent.enabled | default true }}
+        targets:
+{{- range .Values.deploymentOpen.config.features.openAgent.targets }}
+          - targetName: {{ .targetName }}
+            enabled: {{ .enabled | default true }}
+            type: {{ .type }}
+{{- if or (eq .type "PodMonitor") (eq .type "ServiceMonitor") (eq .type "staticEndpoints")}}
+            namespaceSelector:
+{{- if .namespaceSelector.matchNames }}
+              matchNames:
+{{- range .namespaceSelector.matchNames }}
+                - {{ . | quote }}
+{{- end }}
+{{- end }}
+{{- if .namespaceSelector.matchLabels }}
+              matchLabels:
+{{- range $key, $value := .namespaceSelector.matchLabels }}
+                {{ $key }}: {{ $value | quote }}
+{{- end }}
+{{- end }}
+            selector:
+              matchLabels:
+{{- range $key, $value := .selector.matchLabels }}
+                {{ $key }}: {{ $value | quote }}
+{{- end }}
+{{- end }}
+            endpoints:
+{{- range .endpoints }}
+{{- if eq $.type "StaticEndpoints" }}
+            - address: {{ .address | quote }}
+              scheme: {{ .scheme | quote }}
+              path: {{ .path | quote }}
+              interval: {{ .interval | quote }}
+              timeout: {{ .timeout | default "30s" | quote }}
+              addNodeLabel: {{ .addNodeLabel | default true }}
+{{- else }}
+            - port: {{ .port | quote }}
+              path: {{ .path | quote }}
+              interval: {{ .interval | quote }}
+              scheme: {{ .scheme | quote }}
+              timeout: {{ .timeout | default "30s" | quote }}
+              addNodeLabel: {{ .addNodeLabel | default true }}
+{{- end }}
+{{- if .metricRelabelConfigs }}
+              metricRelabelConfigs:
+{{- range .metricRelabelConfigs }}
+              - target_label: {{ .target_label }}
+                replacement: {{ .replacement | quote }}
+                action: {{ .action }}
+{{- if .source_labels }}
+              - source_labels: [{{ .source_labels | join ", " }}]
+{{- if .regex }}
+                regex: {{ .regex | quote }}
+{{- end }}
+                action: {{ .action }}
+{{- if eq .action "replace" }}
+{{- if .target_label }}
+                target_label: {{ .target_label }}
+{{- end }}
+{{- if .replacement }}
+                replacement: {{ .replacement | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if .Values.addon.gpu.enabled }}
+          # Auto-generated dcgm-exporter target when GPU is enabled
+          - targetName: dcgm-exporter-auto
+            enabled: true
+            type: PodMonitor
+            namespaceSelector:
+              matchNames:
+                - {{ .Release.Namespace | quote }}
+            selector:
+              matchLabels:
+                name: "whatap-node-agent"
+            endpoints:
+            - port: "9400"
+              path: "/metrics"
+              interval: "30s"
+              scheme: "http"
+              timeout: "30s"
+              addNodeLabel: true
+              metricRelabelConfigs:
+              - target_label: wtp_src
+                replacement: "true"
+                action: replace
+              - source_labels: [__name__]
+                regex: "DCGM.*"
+                action: keep
+            - port: "9400"
+              path: "/metrics/process"
+              interval: "30s"
+              scheme: "http"
+              timeout: "30s"
+              addNodeLabel: true
+              metricRelabelConfigs:
+              - target_label: wtp_src
+                replacement: "true"
+                action: replace
+              - source_labels: [__name__]
+                regex: "DCGM.*"
+                action: keep
+{{- end }}
+{{ end }}

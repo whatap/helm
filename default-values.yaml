@@ -33,19 +33,6 @@ addon:
 imagePullSecret:
   name: #registryKey
 containerRuntime: "docker" # Options: "docker", "containerd", "crio"
-daemonSetNpm:
-  name: whatap-npm-agent
-  label: whatap-npm-agent
-  containers:
-    npmAgent:
-      name: whatap-npm-agent
-      image: "whatap/k8s_npm:latest"
-      requests:
-        memory: "300Mi"
-        cpu: "200m"
-      limits:
-        memory: "350Mi"
-        cpu: "200m"
 daemonSet:
   name: whatap-node-agent
   label: whatap-node-agent

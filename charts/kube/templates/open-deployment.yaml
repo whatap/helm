@@ -1,0 +1,68 @@
+{{ if .Values.deploymentOpen.enabled }}
+{{- if .Values.k8sOldVersion }}
+apiVersion: extensions/v1beta1
+{{- else }}
+apiVersion: apps/v1
+{{end}}
+kind: Deployment
+metadata:
+  name: {{ .Values.deploymentOpen.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.deploymentOpen.replicas }}
+  {{- if not .Values.k8sOldVersion }}
+  selector:
+    matchLabels:
+      name: {{ .Values.deploymentOpen.label }}
+  {{end}}
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.deploymentOpen.label }}
+    spec:
+      {{- if .Values.imagePullSecret.name }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret.name }}
+      {{- end }}
+      tolerations:
+      {{- if .Values.deploymentOpen.tolerations}}
+      {{- toYaml .Values.deploymentOpen.tolerations | nindent 8 }}
+      {{- end }}
+      affinity:
+      {{- if .Values.deploymentOpen.affinity }}
+      {{- toYaml .Values.deploymentOpen.affinity | nindent 8 }}
+      {{- end }}
+      serviceAccountName: whatap-open-agent-sa
+      volumes:
+        - name: config-volume
+          configMap:
+            name: whatap-open-agent-config
+        - name: logs-volume
+          emptyDir: {}
+      containers:
+        - name: whatap-open-agent
+          image: public.ecr.aws/whatap/open_agent:latest
+          imagePullPolicy: Always
+          env:
+            - name: WHATAP_LICENSE
+              valueFrom:
+                secretKeyRef:
+                  name: whatap-credentials
+                  key: WHATAP_LICENSE
+            - name: WHATAP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: whatap-credentials
+                  key: WHATAP_HOST
+            - name: WHATAP_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: whatap-credentials
+                  key: WHATAP_PORT
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/scrape_config.yaml
+              subPath: scrape_config.yaml
+            - name: logs-volume
+              mountPath: /app/logs
+{{ end }}
