@@ -44,7 +44,7 @@ spec:
           {{- if .Values.addon.gpu.image }}
           image: {{ .Values.addon.gpu.image }}
           {{- else }}
-          image: "nvcr.io/nvidia/k8s/dcgm-exporter:4.2.0-4.1.0-ubuntu22.04"
+          image: "whatap/dcgm-exporter:latest"
           {{- end }}
           env:
             - name: "DCGM_EXPORTER_LISTEN"
