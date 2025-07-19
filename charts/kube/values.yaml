@@ -114,43 +114,6 @@ deploymentOpen:
     features:
       openAgent:
         enabled: false
-        targets:
-          - targetName: dcgm-exporter
-            enabled: true
-            type: PodMonitor
-            namespaceSelector:
-              matchNames:
-                - "whatap-monitoring"
-            selector:
-              matchLabels:
-                name: whatap-node-agent
-            endpoints:
-            - port: "9400"
-              path: "/metrics"
-              interval: "30s"
-              scheme: "http"
-              timeout: "30s"
-              addNodeLabel: true
-              metricRelabelConfigs:
-              - target_label: wtp_src
-                replacement: "true"
-                action: replace
-              - source_labels: [__name__]
-                regex: "DCGM.*"
-                action: keep
-            - port: "9400"
-              path: "/metrics/process"
-              interval: "30s"
-              scheme: "http"
-              timeout: "30s"
-              addNodeLabel: true
-              metricRelabelConfigs:
-              - target_label: wtp_src
-                replacement: "true"
-                action: replace
-              - source_labels: [__name__]
-                regex: "DCGM.*"
-                action: keep
 deployment:
   enabled: true
   name: whatap-master-agent
