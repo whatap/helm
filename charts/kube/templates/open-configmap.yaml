@@ -16,7 +16,7 @@ data:
           - targetName: {{ .targetName }}
             enabled: {{ .enabled | default true }}
             type: {{ .type }}
-{{- if or (eq .type "PodMonitor") (eq .type "ServiceMonitor") (eq .type "staticEndpoints")}}
+{{- if or (eq .type "PodMonitor") (eq .type "ServiceMonitor")}}
             namespaceSelector:
 {{- if .namespaceSelector.matchNames }}
               matchNames:
@@ -52,6 +52,24 @@ data:
               scheme: {{ .scheme | quote }}
               timeout: {{ .timeout | default "30s" | quote }}
               addNodeLabel: {{ .addNodeLabel | default true }}
+{{- if .tlsConfig }}
+              tlsConfig:
+{{- if .tlsConfig.insecureSkipVerify }}
+                insecureSkipVerify: {{ .tlsConfig.insecureSkipVerify }}
+{{- end }}
+{{- if .tlsConfig.caFile }}
+                caFile: {{ .tlsConfig.caFile | quote }}
+{{- end }}
+{{- if .tlsConfig.certFile }}
+                certFile: {{ .tlsConfig.certFile | quote }}
+{{- end }}
+{{- if .tlsConfig.keyFile }}
+                keyFile: {{ .tlsConfig.keyFile | quote }}
+{{- end }}
+{{- if .tlsConfig.serverName }}
+                serverName: {{ .tlsConfig.serverName | quote }}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- if .metricRelabelConfigs }}
               metricRelabelConfigs:

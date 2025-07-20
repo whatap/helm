@@ -114,6 +114,22 @@ deploymentOpen:
     features:
       openAgent:
         enabled: false
+        targets:
+          - targetName: "kube-apiserver"
+            type: "ServiceMonitor"
+            namespaceSelector:
+              matchNames:
+                - "default"
+            selector:
+              component: "apiserver"
+              provider: "kubernetes"
+            endpoints:
+              - port: "https"
+                path: "/metrics"
+                interval: "30s"
+                scheme: "https"
+                tlsConfig:
+                  insecureSkipVerify: true
 deployment:
   enabled: true
   name: whatap-master-agent
