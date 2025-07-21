@@ -5,7 +5,7 @@ metadata:
   name: whatap-open-agent-role
 rules:
 - apiGroups: ["*"]
-  resources: ["pods", "services", "endpoints", "namespaces"]
+  resources: ["pods", "services", "endpoints", "namespaces","secrets"]
   verbs: ["get", "list", "watch"]
 - nonResourceURLs: [ "/metrics" ]
   verbs: ["*"]
