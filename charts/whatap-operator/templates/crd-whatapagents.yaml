@@ -1389,6 +1389,12 @@ spec:
                             CustomImageFullName allows specifying a full custom image name (including repository and tag)
                             If provided, this takes precedence over ImageName and ImageVersion
                           type: string
+                        disableForeground:
+                          default: false
+                          description: |-
+                            DisableForeground disables foreground mode for the OpenAgent
+                            When set to true, the agent will run in background mode
+                          type: boolean
                         enabled:
                           default: false
                           type: boolean
