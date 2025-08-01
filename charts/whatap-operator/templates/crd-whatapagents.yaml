@@ -1633,6 +1633,14 @@ spec:
                                             type: string
                                         type: object
                                       type: array
+                                    params:
+                                      additionalProperties:
+                                        items:
+                                          type: string
+                                        type: array
+                                      description: Params defines HTTP URL parameters
+                                        for the endpoint (similar to Prometheus params)
+                                      type: object
                                     path:
                                       description: Path is the path to scrape metrics
                                         from
