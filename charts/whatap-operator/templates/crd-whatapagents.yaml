@@ -313,7 +313,6 @@ spec:
                                   - enabled
                                   - language
                                   - name
-                                  - whatapApmVersions
                                 type: object
                               type: array
                           type: object
