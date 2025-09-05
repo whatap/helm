@@ -3,3 +3,10 @@ image:
   repository: public.ecr.aws/whatap/whatap-operator
   tag: latest
   pullPolicy: Always
+
+credentials:
+  create: false
+  # The secret name is fixed to 'whatap-credentials'
+  license: "" # <license-key>
+  host: ""    # <whatap-server-host>
+  port: 6600   # <whatap-server-port>
