@@ -13,6 +13,10 @@ spec:
       labels:
         app.kubernetes.io/name: "whatap-operator"
     spec:
+      {{- if .Values.imagePullSecret.name }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret.name }}
+      {{- end }}
       serviceAccountName: whatap-operator
       containers:
         - name: operator

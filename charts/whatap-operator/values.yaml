@@ -4,6 +4,9 @@ image:
   tag: latest
   pullPolicy: Always
 
+imagePullSecret:
+  name: # registryKey
+
 credentials:
   create: false
   # The secret name is fixed to 'whatap-credentials'
