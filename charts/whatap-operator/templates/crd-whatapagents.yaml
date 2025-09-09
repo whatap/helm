@@ -50,6 +50,20 @@ spec:
                             enabled:
                               default: true
                               type: boolean
+                            initContainerSecurity:
+                              description: Controls security context of injected initContainers.
+                                If unset, defaults apply.
+                              properties:
+                                runAsNonRoot:
+                                  description: RunAsNonRoot indicates that the container
+                                    must run as a non-root user
+                                  type: boolean
+                                runAsUser:
+                                  description: RunAsUser specifies the UID to run the
+                                    container process with
+                                  format: int64
+                                  type: integer
+                              type: object
                             targets:
                               items:
                                 properties:
@@ -210,6 +224,21 @@ spec:
                                         - name
                                       type: object
                                     type: array
+                                  initContainerSecurity:
+                                    description: Controls security context of the injected
+                                      initContainer for this target (overrides instrumentation-level
+                                      settings)
+                                    properties:
+                                      runAsNonRoot:
+                                        description: RunAsNonRoot indicates that the
+                                          container must run as a non-root user
+                                        type: boolean
+                                      runAsUser:
+                                        description: RunAsUser specifies the UID to
+                                          run the container process with
+                                        format: int64
+                                        type: integer
+                                    type: object
                                   language:
                                     type: string
                                   name:
