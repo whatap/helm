@@ -4,8 +4,16 @@ image:
   tag: latest
   pullPolicy: Always
 
+# Image pull secret for private registries
 imagePullSecret:
   name: # registryKey
+
+# Pod scheduling and priority options for the operator
+priorityClassName: ""
+nodeName: ""
+nodeSelector: {}
+affinity: {}
+tolerations: []
 
 credentials:
   create: false
