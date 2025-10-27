@@ -91,9 +91,14 @@ spec:
                                           - custom
                                         type: string
                                     type: object
+                                  customImageFullName:
+                                    description: |-
+                                      CustomImageFullName allows specifying a full custom image name (including repository and tag) for the APM init image
+                                      If provided, this takes precedence over CustomImageName and the default image format
+                                    type: string
                                   customImageName:
                                     description: |-
-                                      CustomImageName allows specifying a full custom image name for the agent
+                                      CustomImageName allows specifying a full custom image name for the agent (DEPRECATED - use customImageFullName)
                                       If not provided, the default image name format will be used
                                     type: string
                                   enabled:
