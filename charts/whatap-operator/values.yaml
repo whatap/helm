@@ -21,3 +21,4 @@ credentials:
   license: "" # <license-key>
   host: ""    # <whatap-server-host>
   port: 6600   # <whatap-server-port>
+env:

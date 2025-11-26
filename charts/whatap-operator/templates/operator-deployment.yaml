@@ -71,6 +71,9 @@ spec:
                 secretKeyRef:
                   name: whatap-credentials
                   key: WHATAP_PORT
+            {{- if .Values.env }}
+{{ toYaml .Values.env | indent 12 }}
+            {{- end }}
           volumeMounts:
             - name: webhook-certs
               mountPath: /etc/webhook/certs
