@@ -46,11 +46,11 @@ spec:
             - containerPort: 9443
           resources:
             limits:
-              cpu: 200m
-              memory: 256Mi
+              cpu: 1m
+              memory: 1000Mi
             requests:
-              cpu: 100m
-              memory: 128Mi
+              cpu: 300m
+              memory: 256Mi
           env:
             - name: WHATAP_DEFAULT_NAMESPACE
               valueFrom:
