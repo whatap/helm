@@ -26,7 +26,7 @@ addon:
     enabled: false
   gpu:
     enabled: false
-    image: whatap/dcgm-exporter:latest
+    image: public.ecr.aws/whatap/dcgm-exporter:4.4.2-4.7.05-ubuntu22.04
   apiserver_monitoring:
     enabled: false # Set to true to use apiserver_monitoring_dashboard(default false)
     client_tls_verify: true # Set to false to skip insecure-tls-verify(default true)
