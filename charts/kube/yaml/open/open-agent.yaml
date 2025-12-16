@@ -1,0 +1,167 @@
+# Whatap Open Agent standalone manifests
+# 네임스페이스는 필요에 따라 조정하세요. 예시로 whatap-monitoring을 사용합니다.
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: whatap-monitoring
+
+---
+# Whatap 접속 정보 (라이센스/호스트/포트)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: whatap-credentials
+  namespace: whatap-monitoring
+type: Opaque
+stringData:
+  WHATAP_LICENSE: "<YOUR_LICENSE>"
+  WHATAP_HOST: "<WHATAP_HOST>"
+  WHATAP_PORT: "6600"
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: whatap-open-agent-sa
+  namespace: whatap-monitoring
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: whatap-open-agent-role
+rules:
+  - apiGroups: ["*"]
+    resources: ["pods", "services", "endpoints", "endpointslices", "namespaces", "secrets"]
+    verbs: ["get", "list", "watch"]
+  - nonResourceURLs: ["/metrics"]
+    verbs: ["*"]
+  - apiGroups: [""]
+    resources: ["pods/exec"]
+    verbs: ["create"]
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["*"]
+  - nonResourceURLs: ["/metrics"]
+    verbs: ["*"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: whatap-open-agent-role-binding
+subjects:
+  - kind: ServiceAccount
+    name: whatap-open-agent-sa
+    namespace: whatap-monitoring
+roleRef:
+  kind: ClusterRole
+  name: whatap-open-agent-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: whatap-open-agent-config
+  namespace: whatap-monitoring
+data:
+  scrape_config.yaml: |
+    features:
+      openAgent:
+        enabled: true
+        globalInterval: "60s"
+        globalPath: "/metrics"
+        targets:
+          - targetName: kube-apiserver
+            type: ServiceMonitor
+            namespaceSelector:
+              matchNames:
+                - "default"  # API 서버 서비스가 있는 네임스페이스로 변경
+            selector:
+              matchLabels:
+                component: apiserver
+                provider: kubernetes
+            endpoints:
+              - port: "https"
+                path: "/metrics"
+                interval: "30s"
+                scheme: "https"
+                timeout: "30s"
+                tlsConfig:
+                  insecureSkipVerify: true
+                metricRelabelConfigs:
+                  - source_labels: [__name__]
+                    regex: "apiserver_request_total"
+                    action: keep
+                  - source_labels: [verb]
+                    target_label: http_verb
+                    replacement: "${1}"
+                    action: replace
+                  - target_label: metric_src
+                    replacement: "whatap-open-agent"
+                    action: replace
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whatap-open-agent
+  namespace: whatap-monitoring
+  labels:
+    name: whatap-open-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: whatap-open-agent
+  template:
+    metadata:
+      labels:
+        name: whatap-open-agent
+    spec:
+      serviceAccountName: whatap-open-agent-sa
+      volumes:
+        - name: config-volume
+          configMap:
+            name: whatap-open-agent-config
+        - name: logs-volume
+          emptyDir: {}
+      containers:
+        - name: whatap-open-agent
+          image: public.ecr.aws/whatap/open_agent:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "100m"
+            limits:
+              memory: "1000Mi"
+              cpu: "1000m"
+          env:
+            - name: WHATAP_LICENSE
+              valueFrom:
+                secretKeyRef:
+                  name: whatap-credentials
+                  key: WHATAP_LICENSE
+            - name: WHATAP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: whatap-credentials
+                  key: WHATAP_HOST
+            - name: WHATAP_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: whatap-credentials
+                  key: WHATAP_PORT
+            - name: debug
+              value: "false"
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/scrape_config.yaml
+              subPath: scrape_config.yaml
+            - name: logs-volume
+              mountPath: /app/logs
+          # 필요 시 컨테이너/노드 톨러레이션, affinity 등을 추가하십시오.

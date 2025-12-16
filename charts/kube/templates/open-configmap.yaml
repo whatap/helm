@@ -83,7 +83,7 @@ data:
               {{- $interval := default $open.globalInterval $ep.interval }}
               {{- $isStatic := eq $target.type "StaticEndpoints" }}
               {{- $endpointValue := ternary $ep.address $ep.port $isStatic }}
-              - {{- if $isStatic }}address{{ else }}port{{ end }}: {{ $endpointValue | quote }}
+              - {{ if $isStatic }}address{{ else }}port{{ end }}: {{ $endpointValue | quote }}
                 {{- if $path }}
                 path: {{ $path | quote }}
                 {{- end }}
