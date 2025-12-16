@@ -6,133 +6,178 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   scrape_config.yaml: |
+    {{- $root := . }}
+    {{- $open := .Values.deploymentOpen.config.features.openAgent }}
     #configuration
     #CR format configuration
     features:
       openAgent:
-        enabled: {{ .Values.deploymentOpen.config.features.openAgent.enabled | default true }}
+        enabled: {{ $open.enabled | default true }}
+        {{- with $open.globalInterval }}
+        globalInterval: {{ . | quote }}
+        {{- end }}
+        {{- with $open.globalPath }}
+        globalPath: {{ . | quote }}
+        {{- end }}
         targets:
-{{- range .Values.deploymentOpen.config.features.openAgent.targets }}
-          - targetName: {{ .targetName }}
-            enabled: {{ .enabled | default true }}
-            type: {{ .type }}
-{{- if or (eq .type "PodMonitor") (eq .type "ServiceMonitor")}}
+        {{- range $target := $open.targets }}
+          - targetName: {{ $target.targetName }}
+            {{- if hasKey $target "enabled" }}
+            enabled: {{ default true $target.enabled }}
+            {{- end }}
+            type: {{ $target.type }}
+            {{- if and $target.namespaceSelector (or (eq $target.type "PodMonitor") (eq $target.type "ServiceMonitor")) }}
             namespaceSelector:
-{{- if .namespaceSelector.matchNames }}
+              {{- with $target.namespaceSelector.matchNames }}
               matchNames:
-{{- range .namespaceSelector.matchNames }}
+              {{- range . }}
                 - {{ . | quote }}
-{{- end }}
-{{- end }}
-{{- if .namespaceSelector.matchLabels }}
+              {{- end }}
+              {{- end }}
+              {{- with $target.namespaceSelector.matchLabels }}
               matchLabels:
-{{- range $key, $value := .namespaceSelector.matchLabels }}
+              {{- range $key, $value := . }}
                 {{ $key }}: {{ $value | quote }}
-{{- end }}
-{{- end }}
+              {{- end }}
+              {{- end }}
+              {{- with $target.namespaceSelector.matchExpressions }}
+              matchExpressions:
+              {{- range . }}
+                - key: {{ .key }}
+                  operator: {{ .operator }}
+                  {{- if .values }}
+                  values:
+                  {{- range .values }}
+                    - {{ . | quote }}
+                  {{- end }}
+                  {{- end }}
+              {{- end }}
+              {{- end }}
+            {{- end }}
+            {{- if $target.selector }}
             selector:
+              {{- with $target.selector.matchLabels }}
               matchLabels:
-{{- range $key, $value := .selector.matchLabels }}
+              {{- range $key, $value := . }}
                 {{ $key }}: {{ $value | quote }}
-{{- end }}
-{{- end }}
+              {{- end }}
+              {{- end }}
+              {{- with $target.selector.matchExpressions }}
+              matchExpressions:
+              {{- range . }}
+                - key: {{ .key }}
+                  operator: {{ .operator }}
+                  {{- if .values }}
+                  values:
+                  {{- range .values }}
+                    - {{ . | quote }}
+                  {{- end }}
+                  {{- end }}
+              {{- end }}
+              {{- end }}
+            {{- end }}
+            {{- if $target.endpoints }}
             endpoints:
-{{- range .endpoints }}
-{{- if eq $.type "StaticEndpoints" }}
-            - address: {{ .address | quote }}
-              scheme: {{ .scheme | quote }}
-              path: {{ .path | quote }}
-              interval: {{ .interval | quote }}
-              timeout: {{ .timeout | default "30s" | quote }}
-              addNodeLabel: {{ .addNodeLabel | default true }}
-{{- else }}
-            - port: {{ .port | quote }}
-              path: {{ .path | quote }}
-              interval: {{ .interval | quote }}
-              scheme: {{ .scheme | quote }}
-              timeout: {{ .timeout | default "30s" | quote }}
-              addNodeLabel: {{ .addNodeLabel | default true }}
-{{- if .tlsConfig }}
-              tlsConfig:
-{{- if .tlsConfig.insecureSkipVerify }}
-                insecureSkipVerify: {{ .tlsConfig.insecureSkipVerify }}
-{{- end }}
-{{- if .tlsConfig.caFile }}
-                caFile: {{ .tlsConfig.caFile | quote }}
-{{- end }}
-{{- if .tlsConfig.certFile }}
-                certFile: {{ .tlsConfig.certFile | quote }}
-{{- end }}
-{{- if .tlsConfig.keyFile }}
-                keyFile: {{ .tlsConfig.keyFile | quote }}
-{{- end }}
-{{- if .tlsConfig.serverName }}
-                serverName: {{ .tlsConfig.serverName | quote }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- if .metricRelabelConfigs }}
-              metricRelabelConfigs:
-{{- range .metricRelabelConfigs }}
-              - target_label: {{ .target_label }}
-                replacement: {{ .replacement | quote }}
-                action: {{ .action }}
-{{- if .source_labels }}
-              - source_labels: [{{ .source_labels | join ", " }}]
-{{- if .regex }}
-                regex: {{ .regex | quote }}
-{{- end }}
-                action: {{ .action }}
-{{- if eq .action "replace" }}
-{{- if .target_label }}
-                target_label: {{ .target_label }}
-{{- end }}
-{{- if .replacement }}
-                replacement: {{ .replacement | quote }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- if .Values.addon.gpu.enabled }}
+              {{- range $ep := $target.endpoints }}
+              {{- $path := default $open.globalPath $ep.path }}
+              {{- $interval := default $open.globalInterval $ep.interval }}
+              {{- $isStatic := eq $target.type "StaticEndpoints" }}
+              {{- $endpointValue := ternary $ep.address $ep.port $isStatic }}
+              - {{- if $isStatic }}address{{ else }}port{{ end }}: {{ $endpointValue | quote }}
+                {{- if $path }}
+                path: {{ $path | quote }}
+                {{- end }}
+                {{- if $interval }}
+                interval: {{ $interval | quote }}
+                {{- end }}
+                {{- if $ep.scheme }}
+                scheme: {{ $ep.scheme | quote }}
+                {{- end }}
+                timeout: {{ default "30s" $ep.timeout | quote }}
+                {{- if hasKey $ep "addNodeLabel" }}
+                addNodeLabel: {{ default false $ep.addNodeLabel }}
+                {{- end }}
+                {{- with $ep.tlsConfig }}
+                tlsConfig:
+                  {{- if hasKey . "insecureSkipVerify" }}
+                  insecureSkipVerify: {{ default false .insecureSkipVerify }}
+                  {{- end }}
+                  {{- if .caFile }}
+                  caFile: {{ .caFile | quote }}
+                  {{- end }}
+                  {{- if .certFile }}
+                  certFile: {{ .certFile | quote }}
+                  {{- end }}
+                  {{- if .keyFile }}
+                  keyFile: {{ .keyFile | quote }}
+                  {{- end }}
+                  {{- if .serverName }}
+                  serverName: {{ .serverName | quote }}
+                  {{- end }}
+                {{- end }}
+                {{- with $ep.metricRelabelConfigs }}
+                metricRelabelConfigs:
+                  {{- range $m := . }}
+                  - {{- if $m.source_labels }}
+                    source_labels: [{{ join ", " $m.source_labels }}]
+                    {{- end }}
+                    {{- if $m.separator }}
+                    separator: {{ $m.separator | quote }}
+                    {{- end }}
+                    {{- if $m.target_label }}
+                    target_label: {{ $m.target_label | quote }}
+                    {{- end }}
+                    {{- if $m.regex }}
+                    regex: {{ $m.regex | quote }}
+                    {{- end }}
+                    {{- if $m.replacement }}
+                    replacement: {{ $m.replacement | quote }}
+                    {{- end }}
+                    {{- if $m.action }}
+                    action: {{ $m.action }}
+                    {{- end }}
+                  {{- end }}
+                {{- end }}
+              {{- end }}
+            {{- end }}
+        {{- end }}
+        {{- if $root.Values.addon.gpu.enabled }}
           # Auto-generated dcgm-exporter target when GPU is enabled
           - targetName: dcgm-exporter-auto
             enabled: true
             type: PodMonitor
             namespaceSelector:
               matchNames:
-                - {{ .Release.Namespace | quote }}
+                - {{ $root.Release.Namespace | quote }}
             selector:
               matchLabels:
                 name: "whatap-node-agent"
             endpoints:
-            - port: "9400"
-              path: "/metrics"
-              interval: "30s"
-              scheme: "http"
-              timeout: "30s"
-              addNodeLabel: true
-              metricRelabelConfigs:
-              - target_label: wtp_src
-                replacement: "true"
-                action: replace
-              - source_labels: [__name__]
-                regex: "DCGM.*"
-                action: keep
-            - port: "9400"
-              path: "/metrics/process"
-              interval: "30s"
-              scheme: "http"
-              timeout: "30s"
-              addNodeLabel: true
-              metricRelabelConfigs:
-              - target_label: wtp_src
-                replacement: "true"
-                action: replace
-              - source_labels: [__name__]
-                regex: "DCGM.*"
-                action: keep
-{{- end }}
+              - port: "9400"
+                path: "/metrics"
+                interval: "30s"
+                scheme: "http"
+                timeout: "30s"
+                addNodeLabel: true
+                metricRelabelConfigs:
+                  - target_label: wtp_src
+                    replacement: "true"
+                    action: replace
+                  - source_labels: [__name__]
+                    regex: "DCGM.*"
+                    action: keep
+              - port: "9400"
+                path: "/metrics/process"
+                interval: "30s"
+                scheme: "http"
+                timeout: "30s"
+                addNodeLabel: true
+                metricRelabelConfigs:
+                  - target_label: wtp_src
+                    replacement: "true"
+                    action: replace
+                  - source_labels: [__name__]
+                    regex: "DCGM.*"
+                    action: keep
+        {{- end }}
 {{ end }}

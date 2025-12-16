@@ -105,8 +105,8 @@ deploymentOpen:
           memory: "300Mi"
           cpu: "100m"
         limits:
-          memory: "350Mi"
-          cpu: "200m"
+          memory: "1000Mi"
+          cpu: "1000m"
       envs:
         debug: false
   config:
@@ -114,22 +114,63 @@ deploymentOpen:
     features:
       openAgent:
         enabled: false
+        globalInterval: "60s"
+        globalPath: "/metrics"
         targets:
           - targetName: "kube-apiserver"
             type: "ServiceMonitor"
+            enabled: true
             namespaceSelector:
               matchNames:
                 - "default"
+              matchLabels: {}
+              matchExpressions: []
             selector:
-              component: "apiserver"
-              provider: "kubernetes"
+              matchLabels:
+                component: "apiserver"
+                provider: "kubernetes"
+              matchExpressions: []
             endpoints:
               - port: "https"
                 path: "/metrics"
                 interval: "30s"
                 scheme: "https"
+                timeout: "30s"
+                addNodeLabel: false
                 tlsConfig:
                   insecureSkipVerify: true
+                  caFile: ""
+                  certFile: ""
+                  keyFile: ""
+                  serverName: ""
+                metricRelabelConfigs:
+                  - source_labels: [__name__]
+                    regex: "apiserver_request_total"
+                    action: keep
+                  - source_labels: [verb]
+                    target_label: http_verb
+                    replacement: "${1}"
+                    action: replace
+                  - target_label: metric_src
+                    replacement: "whatap-open-agent"
+                    action: replace
+          - targetName: "metric-exporter"
+            type: "StaticEndpoints"
+            enabled: false
+            endpoints:
+              - address: "192.168.1.100:9100"
+                path: "/metrics"
+                scheme: "http"
+                interval: "60s"
+                timeout: "30s"
+                metricRelabelConfigs:
+                  - source_labels: [__name__]
+                    regex: "node_(cpu|memory).*"
+                    action: keep
+                  - source_labels: [instance]
+                    target_label: server
+                    replacement: "${1}"
+                    action: replace
 deployment:
   enabled: true
   name: whatap-master-agent
