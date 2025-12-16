@@ -1,0 +1,109 @@
+#whatap:
+#  license: "x41pl22ek7jhv-z43cebasdv4il7-z62p3l35fj5502"
+#  host: "15.165.146.117"
+#  port: "6600"
+#collect_custom_resources: true
+#containerRuntime: "containerd"
+#deployment:
+#  containers:
+#    controlPlaneHelper:
+#      enabled: false
+#      image: "whatap/kube_mon:1.8.8"
+#      name: "whatap-control-plane-helper"
+#      port: 9496
+#      resources:
+#        limits:
+#          cpu: "200m"
+#          memory: "350Mi"
+#        requests:
+#          cpu: "100m"
+#          memory: "300Mi"
+#    masterAgent:
+#      image: "whatap/kube_mon:1.8.8"
+#      name: "whatap-master-agent"
+#      port: 6600
+#      resources:
+#        limits:
+#          cpu: "200m"
+#          memory: "350Mi"
+#        requests:
+#          cpu: "100m"
+#          memory: "300Mi"
+#  label: "whatap-master-agent"
+#  name: "whatap-master-agent"
+#  replicas: 1
+#
+#daemonSet:
+#  containers:
+#    nodeAgent:
+#      image: "whatap/kube_mon:1.8.8"
+#      limits:
+#        cpu: "200m"
+#        memory: "350Mi"
+#      name: "whatap-node-agent"
+#      requests:
+#        cpu: "100m"
+#        memory: "300Mi"
+#    nodeHelper:
+#      image: "whatap/kube_mon:1.8.8"
+#      limits:
+#        cpu: "200m"
+#        memory: "350Mi"
+#      name: "whatap-node-helper"
+#      requests:
+#        cpu: "100m"
+#        memory: "100Mi"
+#  initContainers:
+#    nodeDebugger:
+#      enabled: false
+#      image: "whatap/kube_mon:1.8.8"
+#      name: "whatap-node-debug"
+#  label: "whatap-node-agent"
+#  name: "whatap-node-agent"
+#
+#clusterrole:
+#  extraResources:
+#    - "*"
+
+#####Open Agent
+deploymentOpen:
+  enabled: true
+  containers:
+    openAgent:
+      image: "public.ecr.aws/whatap/open_agent:latest"
+  config:
+    features:
+      openAgent:
+        enabled: true
+        #globalInterval: "60s"
+        #globalPath: "/metrics"
+        targets:
+          - targetName: "kube-apiserver"
+            type: "ServiceMonitor"
+            enabled: true
+            namespaceSelector:
+              matchNames:
+                - "default"   # 클러스터 기본 레이블에 맞게 조정
+            selector:
+              matchLabels:
+                component: "apiserver"
+                provider: "kubernetes"
+            endpoints:
+              - port: "https"
+                path: "/metrics"
+                interval: "30s"
+                scheme: "https"
+                timeout: "30s"
+                tlsConfig:
+                  insecureSkipVerify: true   # 자체서명 인증서일 때 편의용, 보안 필요시 false + CA 지정
+                metricRelabelConfigs:
+                  - source_labels: [__name__]
+                    regex: "apiserver_request_total"
+                    action: keep
+                  - source_labels: [verb]
+                    target_label: http_verb
+                    replacement: "${1}"
+                    action: replace
+                  - target_label: metric_src
+                    replacement: "whatap-open-agent"
+                    action: replace

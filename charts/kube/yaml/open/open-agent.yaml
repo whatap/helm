@@ -9,6 +9,8 @@ metadata:
 
 ---
 # Whatap 접속 정보 (라이센스/호스트/포트)
+# 이미 동일한 이름의 Secret을 별도로 만들어 두었다면 이 Secret 블록을 삭제하고,
+# 아래 Deployment의 secretKeyRef.name을 기존 Secret 이름과 맞추면 됩니다.
 apiVersion: v1
 kind: Secret
 metadata:

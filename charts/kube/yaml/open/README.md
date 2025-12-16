@@ -15,6 +15,7 @@
    - `open-agent.yaml`을 열어 다음을 환경에 맞게 수정합니다.
      - `Namespace` 이름(기본: `whatap-monitoring`). 이미 존재하는 네임스페이스를 쓰려면 Namespace 리소스 블록을 삭제하거나 이름을 변경하세요.
      - Secret `whatap-credentials`의 `WHATAP_LICENSE`, `WHATAP_HOST`, `WHATAP_PORT` 값을 실제 값으로 입력합니다.
+       - 이미 동일한 이름의 Secret을 갖고 있다면 `open-agent.yaml`의 Secret 리소스 블록을 삭제하고, Deployment의 `secretKeyRef.name`을 기존 시크릿 이름과 동일하게 두면 됩니다.
      - ConfigMap `scrape_config.yaml` 내 `targets`를 수집 대상에 맞게 조정합니다.
        - 기본은 kube-apiserver 수집(ServiceMonitor 방식, namespaceSelector/selector/endpoint를 환경에 맞게 변경).
        - TLS 검증을 켜려면 `tlsConfig.insecureSkipVerify: false`로 두고 필요한 경우 CA/클라이언트 인증서를 추가하십시오.

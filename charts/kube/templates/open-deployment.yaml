@@ -41,6 +41,7 @@ spec:
           emptyDir: {}
       containers:
         - name: {{ .Values.deploymentOpen.containers.openAgent.name }}
+          {{- $secretName := default "whatap-credentials" .Values.whatap.existingSecretName }}
           image: {{ .Values.deploymentOpen.containers.openAgent.image }}
           imagePullPolicy: Always
           {{- if .Values.deploymentOpen.containers.openAgent.resources }}
@@ -68,17 +69,17 @@ spec:
             - name: WHATAP_LICENSE
               valueFrom:
                 secretKeyRef:
-                  name: whatap-credentials
+                  name: {{ $secretName }}
                   key: WHATAP_LICENSE
             - name: WHATAP_HOST
               valueFrom:
                 secretKeyRef:
-                  name: whatap-credentials
+                  name: {{ $secretName }}
                   key: WHATAP_HOST
             - name: WHATAP_PORT
               valueFrom:
                 secretKeyRef:
-                  name: whatap-credentials
+                  name: {{ $secretName }}
                   key: WHATAP_PORT
             {{- if .Values.deploymentOpen.containers.openAgent.envs }}
             {{- range $key, $value := .Values.deploymentOpen.containers.openAgent.envs }}

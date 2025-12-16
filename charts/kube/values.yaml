@@ -2,6 +2,8 @@ whatap:
   license: # <license-key>
   host: # <whatap-server-host>
   port: # <whatap-server-port>
+  createSecret: true
+  existingSecretName: ""
 
 hostNetworkEnabled: false
 # whatapResourceAlreadyExist: false
