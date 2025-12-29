@@ -28,7 +28,7 @@ addon:
     enabled: false
   gpu:
     enabled: false
-    image: public.ecr.aws/whatap/dcgm-exporter:4.4.2-4.7.05-ubuntu22.04
+    image: public.ecr.aws/whatap/dcgm-exporter:4.4.2-4.7.06-ubuntu22.04
   apiserver_monitoring:
     enabled: false # Set to true to use apiserver_monitoring_dashboard(default false)
     client_tls_verify: true # Set to false to skip insecure-tls-verify(default true)
@@ -42,6 +42,8 @@ addon:
 imagePullSecret:
   name: #registryKey
 containerRuntime: #"docker" # Options: "docker", "containerd", "crio"
+
+#whatap-node-agent
 daemonSet:
   enabled: true
   name: whatap-node-agent
@@ -56,11 +58,11 @@ daemonSet:
     nodeDebugger:
       enabled: true  # Set to false to disable the whatap-node-debug initContainer
       name: whatap-node-debug
-      image: "whatap/kube_mon"
+      image: "whatap/kube_mon:1.8.9"
   containers:
     nodeHelper:
       name: whatap-node-helper
-      image: "whatap/kube_mon"
+      image: "whatap/kube_mon:1.8.9"
       requests:
         memory: "100Mi"
         cpu: "100m"
@@ -74,7 +76,7 @@ daemonSet:
         debug: false
     nodeAgent:
       name: whatap-node-agent
-      image: "whatap/kube_mon"
+      image: "whatap/kube_mon:1.8.9"
       requests:
         memory: "300Mi"
         cpu: "100m"
@@ -87,6 +89,50 @@ daemonSet:
         collect_kube_node_process_metric_enabled: false
         debug: false
         count_interval: 5000
+
+#whatap-master-agent
+deployment:
+  enabled: true
+  name: whatap-master-agent
+  label: whatap-master-agent
+  replicas: 1
+  tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
+  affinity: {}
+  containers:
+    controlPlaneHelper:
+      enabled: true  # Set to false to disable the whatap-control-plane-helper container
+      debug: false
+      name: whatap-control-plane-helper
+      image: "whatap/kube_mon:1.8.9"
+      port: 9496
+      resources:
+        requests:
+          memory: "500Mi"
+          cpu: "500m"
+        limits:
+          memory: "500Mi"
+          cpu: "500m"
+    masterAgent:
+      name: whatap-master-agent
+      image: "whatap/kube_mon:1.8.9"
+      port: 6600
+      resources:
+        requests:
+          memory: "300Mi"
+          cpu: "100m"
+        limits:
+          memory: "350Mi"
+          cpu: "200m"
+      envs:
+        collect_workload: false
+        collect_deployment: false
+        debug: false
+
+#whatap-open-agent
 deploymentOpen:
   enabled: false
   name: whatap-open-agent
@@ -101,7 +147,7 @@ deploymentOpen:
   containers:
     openAgent:
       name: whatap-open-agent
-      image: "public.ecr.aws/whatap/open_agent:latest"
+      image: "public.ecr.aws/whatap/open_agent:1.5.1"
       resources:
         requests:
           memory: "300Mi"
@@ -173,47 +219,9 @@ deploymentOpen:
                     target_label: server
                     replacement: "${1}"
                     action: replace
-deployment:
-  enabled: true
-  name: whatap-master-agent
-  label: whatap-master-agent
-  replicas: 1
-  tolerations:
-    - key: node-role.kubernetes.io/master
-      effect: NoSchedule
-    - key: node-role.kubernetes.io/control-plane
-      effect: NoSchedule
-  affinity: {}
-  containers:
-    controlPlaneHelper:
-      enabled: true  # Set to false to disable the whatap-control-plane-helper container
-      debug: false
-      name: whatap-control-plane-helper
-      image: whatap/kube_mon
-      port: 9496
-      resources:
-        requests:
-          memory: "500Mi"
-          cpu: "500m"
-        limits:
-          memory: "500Mi"
-          cpu: "500m"
-    masterAgent:
-      name: whatap-master-agent
-      image: "whatap/kube_mon"
-      port: 6600
-      resources:
-        requests:
-          memory: "300Mi"
-          cpu: "100m"
-        limits:
-          memory: "350Mi"
-          cpu: "200m"
-      envs:
-        collect_workload: false
-        collect_deployment: false
-        debug: false
-
 clusterrole:
   extraResources:
   #- "samplecrds"
+
+
+# 시나리오 1: 항상 실행 중인 'API 서버' (동적 부하 테스트용)
