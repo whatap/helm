@@ -3184,6 +3184,11 @@ spec:
                                   - name
                                 type: object
                               type: array
+                            hostNetwork:
+                              default: true
+                              description: HostNetwork enables host networking for the
+                                Node Agent pod
+                              type: boolean
                             imagePullSecrets:
                               description: ImagePullSecrets to use for NodeAgent pod
                                 (overrides global if set)
