@@ -5397,6 +5397,47 @@ spec:
                                       description: Address is the address to scrape
                                         metrics from (for StaticEndpoints)
                                       type: string
+                                    basicAuth:
+                                      description: BasicAuth defines the HTTP Basic
+                                        Auth configuration for the endpoint
+                                      properties:
+                                        password:
+                                          description: Password configuration via Kubernetes
+                                            Secret
+                                          properties:
+                                            key:
+                                              description: Key within the secret
+                                              type: string
+                                            name:
+                                              description: Name of the secret
+                                              type: string
+                                            namespace:
+                                              description: Namespace of the secret (optional,
+                                                defaults to agent's namespace)
+                                              type: string
+                                          required:
+                                            - key
+                                            - name
+                                          type: object
+                                        username:
+                                          description: Username configuration via Kubernetes
+                                            Secret
+                                          properties:
+                                            key:
+                                              description: Key within the secret
+                                              type: string
+                                            name:
+                                              description: Name of the secret
+                                              type: string
+                                            namespace:
+                                              description: Namespace of the secret (optional,
+                                                defaults to agent's namespace)
+                                              type: string
+                                          required:
+                                            - key
+                                            - name
+                                          type: object
+                                      type: object
                                     interval:
                                       description: Interval is the scrape interval for
                                         this endpoint
@@ -5470,6 +5511,10 @@ spec:
                                             name:
                                               description: Name of the secret
                                               type: string
+                                            namespace:
+                                              description: Namespace of the secret (optional,
+                                                defaults to agent's namespace)
+                                              type: string
                                           required:
                                             - key
                                             - name
@@ -5487,6 +5532,10 @@ spec:
                                               type: string
                                             name:
                                               description: Name of the secret
+                                              type: string
+                                            namespace:
+                                              description: Namespace of the secret (optional,
+                                                defaults to agent's namespace)
                                               type: string
                                           required:
                                             - key
@@ -5509,6 +5558,10 @@ spec:
                                               type: string
                                             name:
                                               description: Name of the secret
+                                              type: string
+                                            namespace:
+                                              description: Namespace of the secret (optional,
+                                                defaults to agent's namespace)
                                               type: string
                                           required:
                                             - key
