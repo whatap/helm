@@ -5453,6 +5453,11 @@ spec:
                                             description: Action is the relabeling action
                                               to perform
                                             type: string
+                                          modulus:
+                                            description: Modulus is the modulus for
+                                              hashmod action
+                                            format: int64
+                                            type: integer
                                           regex:
                                             description: Regex is the regular expression
                                               to match against the source labels
@@ -5460,6 +5465,10 @@ spec:
                                           replacement:
                                             description: Replacement is the replacement
                                               value for the target label
+                                            type: string
+                                          separator:
+                                            description: 'Separator is the string between
+                                            concatenated source labels (default: ";")'
                                             type: string
                                           source_labels:
                                             description: SourceLabels is the list of
@@ -5624,6 +5633,46 @@ spec:
                                       type: string
                                     type: array
                                 type: object
+                              relabelConfigs:
+                                description: RelabelConfigs defines the relabeling configurations
+                                  for this target
+                                items:
+                                  description: MetricRelabelConfig defines a metric
+                                    relabeling configuration
+                                  properties:
+                                    action:
+                                      description: Action is the relabeling action to
+                                        perform
+                                      type: string
+                                    modulus:
+                                      description: Modulus is the modulus for hashmod
+                                        action
+                                      format: int64
+                                      type: integer
+                                    regex:
+                                      description: Regex is the regular expression to
+                                        match against the source labels
+                                      type: string
+                                    replacement:
+                                      description: Replacement is the replacement value
+                                        for the target label
+                                      type: string
+                                    separator:
+                                      description: 'Separator is the string between
+                                      concatenated source labels (default: ";")'
+                                      type: string
+                                    source_labels:
+                                      description: SourceLabels is the list of source
+                                        labels to use in the relabeling
+                                      items:
+                                        type: string
+                                      type: array
+                                    target_label:
+                                      description: TargetLabel is the label to set in
+                                        the relabeling
+                                      type: string
+                                  type: object
+                                type: array
                               selector:
                                 description: Selector selects the targets to scrape
                                 properties:
