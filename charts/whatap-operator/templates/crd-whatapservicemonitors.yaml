@@ -1,0 +1,379 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.16.1
+  name: whatapservicemonitors.monitoring.whatap.com
+spec:
+  group: monitoring.whatap.com
+  names:
+    kind: WhatapServiceMonitor
+    listKind: WhatapServiceMonitorList
+    plural: whatapservicemonitors
+    singular: whatapservicemonitor
+  scope: Namespaced
+  versions:
+  - name: v2alpha1
+    schema:
+      openAPIV3Schema:
+        description: WhatapServiceMonitor is the Schema for the whatapservicemonitors
+          API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: WhatapServiceMonitorSpec defines the desired state of WhatapServiceMonitor
+            properties:
+              endpoints:
+                description: Endpoints defines the endpoints to scrape metrics from
+                items:
+                  description: OpenAgentEndpoint defines an endpoint for the OpenAgent
+                    to scrape metrics from
+                  properties:
+                    addNodeLabel:
+                      default: false
+                      type: boolean
+                    address:
+                      description: Address is the address to scrape metrics from (for
+                        StaticEndpoints)
+                      type: string
+                    basicAuth:
+                      description: BasicAuth defines the HTTP Basic Auth configuration
+                        for the endpoint
+                      properties:
+                        password:
+                          description: Password configuration via Kubernetes Secret
+                          properties:
+                            key:
+                              description: Key within the secret
+                              type: string
+                            name:
+                              description: Name of the secret
+                              type: string
+                            namespace:
+                              description: Namespace of the secret (optional, defaults
+                                to agent's namespace)
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        username:
+                          description: Username configuration via Kubernetes Secret
+                          properties:
+                            key:
+                              description: Key within the secret
+                              type: string
+                            name:
+                              description: Name of the secret
+                              type: string
+                            namespace:
+                              description: Namespace of the secret (optional, defaults
+                                to agent's namespace)
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                      type: object
+                    interval:
+                      description: Interval is the scrape interval for this endpoint
+                      type: string
+                    metricRelabelConfigs:
+                      description: MetricRelabelConfigs defines the metric relabeling
+                        configurations for this endpoint
+                      items:
+                        description: MetricRelabelConfig defines a metric relabeling
+                          configuration
+                        properties:
+                          action:
+                            description: Action is the relabeling action to perform
+                            type: string
+                          modulus:
+                            description: Modulus is the modulus for hashmod action
+                            format: int64
+                            type: integer
+                          regex:
+                            description: Regex is the regular expression to match
+                              against the source labels
+                            type: string
+                          replacement:
+                            description: Replacement is the replacement value for
+                              the target label
+                            type: string
+                          separator:
+                            description: 'Separator is the string between concatenated
+                              source labels (default: ";")'
+                            type: string
+                          source_labels:
+                            description: SourceLabels is the list of source labels
+                              to use in the relabeling
+                            items:
+                              type: string
+                            type: array
+                          target_label:
+                            description: TargetLabel is the label to set in the relabeling
+                            type: string
+                        type: object
+                      type: array
+                    params:
+                      additionalProperties:
+                        items:
+                          type: string
+                        type: array
+                      description: Params defines HTTP URL parameters for the endpoint
+                        (similar to Prometheus params)
+                      type: object
+                    path:
+                      description: Path is the path to scrape metrics from
+                      type: string
+                    port:
+                      description: Port is the port to scrape metrics from (for PodMonitor/ServiceMonitor)
+                      type: string
+                    scheme:
+                      description: Scheme is the HTTP scheme to use for scraping (http
+                        or https)
+                      type: string
+                    tlsConfig:
+                      description: TLSConfig defines the TLS configuration for the
+                        endpoint
+                      properties:
+                        caFile:
+                          description: CA certificate file path (alternative to CASecret)
+                          type: string
+                        caSecret:
+                          description: CA certificate configuration via Kubernetes
+                            Secret
+                          properties:
+                            key:
+                              description: Key within the secret
+                              type: string
+                            name:
+                              description: Name of the secret
+                              type: string
+                            namespace:
+                              description: Namespace of the secret (optional, defaults
+                                to agent's namespace)
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        certFile:
+                          description: Client certificate file path (alternative to
+                            CertSecret)
+                          type: string
+                        certSecret:
+                          description: Client certificate configuration via Kubernetes
+                            Secret
+                          properties:
+                            key:
+                              description: Key within the secret
+                              type: string
+                            name:
+                              description: Name of the secret
+                              type: string
+                            namespace:
+                              description: Namespace of the secret (optional, defaults
+                                to agent's namespace)
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        insecureSkipVerify:
+                          description: InsecureSkipVerify disables target certificate
+                            validation
+                          type: boolean
+                        keyFile:
+                          description: Client private key file path (alternative to
+                            KeySecret)
+                          type: string
+                        keySecret:
+                          description: Client private key configuration via Kubernetes
+                            Secret
+                          properties:
+                            key:
+                              description: Key within the secret
+                              type: string
+                            name:
+                              description: Name of the secret
+                              type: string
+                            namespace:
+                              description: Namespace of the secret (optional, defaults
+                                to agent's namespace)
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        serverName:
+                          description: ServerName extension to indicate the name of
+                            the server
+                          type: string
+                      type: object
+                  type: object
+                type: array
+              jobLabel:
+                description: JobLabel is the label to use as the job name. If not
+                  specified, the CR name is used.
+                type: string
+              namespaceSelector:
+                description: NamespaceSelector to select namespaces
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: |-
+                        A label selector requirement is a selector that contains values, a key, and an operator that
+                        relates the key and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: |-
+                            operator represents a key's relationship to a set of values.
+                            Valid operators are In, NotIn, Exists and DoesNotExist.
+                          type: string
+                        values:
+                          description: |-
+                            values is an array of string values. If the operator is In or NotIn,
+                            the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                            the values array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                      map is equivalent to an element of matchExpressions, whose key field is "key", the
+                      operator is "In", and the values array contains only "value". The requirements are ANDed.
+                    type: object
+                  matchNames:
+                    description: matchNames is a list of namespace names to include
+                    items:
+                      type: string
+                    type: array
+                type: object
+              relabelConfigs:
+                description: RelabelConfigs defines the relabeling configurations
+                  for this target
+                items:
+                  description: MetricRelabelConfig defines a metric relabeling configuration
+                  properties:
+                    action:
+                      description: Action is the relabeling action to perform
+                      type: string
+                    modulus:
+                      description: Modulus is the modulus for hashmod action
+                      format: int64
+                      type: integer
+                    regex:
+                      description: Regex is the regular expression to match against
+                        the source labels
+                      type: string
+                    replacement:
+                      description: Replacement is the replacement value for the target
+                        label
+                      type: string
+                    separator:
+                      description: 'Separator is the string between concatenated source
+                        labels (default: ";")'
+                      type: string
+                    source_labels:
+                      description: SourceLabels is the list of source labels to use
+                        in the relabeling
+                      items:
+                        type: string
+                      type: array
+                    target_label:
+                      description: TargetLabel is the label to set in the relabeling
+                      type: string
+                  type: object
+                type: array
+              selector:
+                description: Selector selects the services to be monitored
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: |-
+                        A label selector requirement is a selector that contains values, a key, and an operator that
+                        relates the key and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: |-
+                            operator represents a key's relationship to a set of values.
+                            Valid operators are In, NotIn, Exists and DoesNotExist.
+                          type: string
+                        values:
+                          description: |-
+                            values is an array of string values. If the operator is In or NotIn,
+                            the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                            the values array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                          x-kubernetes-list-type: atomic
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                    x-kubernetes-list-type: atomic
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                      map is equivalent to an element of matchExpressions, whose key field is "key", the
+                      operator is "In", and the values array contains only "value". The requirements are ANDed.
+                    type: object
+                type: object
+                x-kubernetes-map-type: atomic
+            required:
+            - endpoints
+            - selector
+            type: object
+          status:
+            description: WhatapServiceMonitorStatus defines the observed state of
+              WhatapServiceMonitor
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
