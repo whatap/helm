@@ -8,14 +8,14 @@ data:
     # Static configuration information
     DCGM_FI_DRIVER_VERSION, label, Driver Version.                           # code 1
     DCGM_FI_NVML_VERSION,   label, NVML Version.                               # code 2
-    DCGM_FI_DEV_NAME,       label, Device Name.                               # code 50, required
+    DCGM_FI_DEV_NAME,       label, Device Name.                               # code 50
     DCGM_FI_DEV_SERIAL,     label, Device Serial Number.                      # code 53
-    DCGM_FI_DEV_UUID,       label, Device UUID.                               # code 54, required
+    DCGM_FI_DEV_UUID,       label, Device UUID.                               # code 54
     DCGM_FI_DEV_COMPUTE_MODE,      label, Compute mode of the device.          # code 65
     DCGM_FI_DEV_PERSISTENCE_MODE,  label, Persistence mode status.           # code 66
     DCGM_FI_DEV_VIRTUAL_MODE,      label, Virtual mode status               # code 500
-    DCGM_FI_DEV_MIG_MODE,          label, MIG mode status.                     # code 67, required
-    DCGM_FI_DEV_MIG_MAX_SLICES,    label, Maximum MIG slices available.          # code 69, required
+    DCGM_FI_DEV_MIG_MODE,          label, MIG mode status.                     # code 67
+    DCGM_FI_DEV_MIG_MAX_SLICES,    label, Maximum MIG slices available.          # code 69
     DCGM_FI_DEV_MIG_GI_INFO,       label, MIG Graphics Instance information.   # code 76
     DCGM_FI_DEV_MIG_CI_INFO,       label, MIG Compute Instance information.    # code 77
 
@@ -28,7 +28,7 @@ data:
 
     # Power
     #DCGM_FI_DEV_ENFORCED_POWER_LIMIT, gauge, Enforced power limit (in W).            # code 164
-    DCGM_FI_DEV_POWER_USAGE,              gauge, Power usage (in W).                # code 155, required
+    DCGM_FI_DEV_POWER_USAGE,              gauge, Power usage (in W).                # code 155
     DCGM_FI_DEV_TOTAL_ENERGY_CONSUMPTION,  counter, Total energy consumption since boot (in mJ).
 
     # Performance state & Fan
@@ -36,11 +36,11 @@ data:
     DCGM_FI_DEV_FAN_SPEED,   gauge, GPU fan speed (in RPM).                       # code 191
 
     # Temperature
-    DCGM_FI_DEV_GPU_TEMP,    gauge, GPU temperature (in C).                       # code 150, required
+    DCGM_FI_DEV_GPU_TEMP,    gauge, GPU temperature (in C).                       # code 150
     DCGM_FI_DEV_MEMORY_TEMP, gauge, Memory temperature (in C).
 
     # Utilization
-    DCGM_FI_DEV_GPU_UTIL,      gauge, GPU utilization (in %).                     # code 203, required
+    DCGM_FI_DEV_GPU_UTIL,      gauge, GPU utilization (in %).                     # code 203
     #DCGM_FI_DEV_WEIGHTED_GPU_UTIL, gauge, Weighted GPU utilization for MIG and non-MIG devices (ratio 0.0-1.0). # code 9003
     DCGM_FI_DEV_MEM_COPY_UTIL, gauge, Memory copy engine utilization (in %).      # code 204
     DCGM_FI_DEV_ENC_UTIL,      gauge, Encoder utilization (in %).                 # code 206
@@ -56,11 +56,11 @@ data:
     DCGM_FI_PROF_NVLINK_RX_BYTES, counter, Total NVLink received bytes.               # code 1012
 
     # Framebuffer (FB) Memory
-    DCGM_FI_DEV_FB_TOTAL,        gauge, Total framebuffer memory (in MiB).          # code 250, required
-    DCGM_FI_DEV_FB_FREE,         gauge, Free framebuffer memory (in MiB).           # code 251, required
-    DCGM_FI_DEV_FB_USED,         gauge, Used framebuffer memory (in MiB).           # code 252, required
+    DCGM_FI_DEV_FB_TOTAL,        gauge, Total framebuffer memory (in MiB).          # code 250
+    DCGM_FI_DEV_FB_FREE,         gauge, Free framebuffer memory (in MiB).           # code 251
+    DCGM_FI_DEV_FB_USED,         gauge, Used framebuffer memory (in MiB).           # code 252
     DCGM_FI_DEV_FB_RESERVED,     gauge, Reserved framebuffer memory (in MiB).       # code 253
-    DCGM_FI_DEV_FB_USED_PERCENT, gauge, Percentage of framebuffer memory used (in %). # code 254, required
+    DCGM_FI_DEV_FB_USED_PERCENT, gauge, Percentage of framebuffer memory used (in %). # code 254
 
     # BAR1 Memory
     DCGM_FI_DEV_BAR1_TOTAL,      gauge, Total BAR1 memory (in MiB).                 # code 90
@@ -83,8 +83,8 @@ data:
     DCGM_FI_DEV_RELIABILITY_VIOLATION, counter, Throttling duration due to reliability constraints (in us).
 
     # DCP (Dynamic Compute Partitioning) / Performance Metrics
-    DCGM_FI_PROF_GR_ENGINE_ACTIVE,   gauge, Ratio of time the graphics engine is active.  # code 1001, required
-    DCGM_FI_PROF_SM_ACTIVE,          gauge, Ratio of cycles with at least one warp active.  # code 1002, required
+    DCGM_FI_PROF_GR_ENGINE_ACTIVE,   gauge, Ratio of time the graphics engine is active.  # code 1001
+    DCGM_FI_PROF_SM_ACTIVE,          gauge, Ratio of cycles with at least one warp active.  # code 1002
     DCGM_FI_PROF_SM_OCCUPANCY,       gauge, SM occupancy ratio (resident warps per SM).    # code 1003
     DCGM_FI_PROF_PIPE_TENSOR_ACTIVE, gauge, Ratio of cycles the tensor (HMMA) pipe is active.   # code 1004
     DCGM_FI_PROF_DRAM_ACTIVE,        gauge, Ratio of cycles the memory interface is active.   # code 1005
