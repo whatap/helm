@@ -1351,6 +1351,10 @@ spec:
                                       x-kubernetes-list-type: atomic
                                   type: object
                               type: object
+                            clusterName:
+                              description: ClusterName specifies the cluster name to
+                                be added as a label to the GPU metrics.
+                              type: string
                             customImageFullName:
                               description: |-
                                 CustomImageFullName allows specifying a full custom image name (including repository and tag)
