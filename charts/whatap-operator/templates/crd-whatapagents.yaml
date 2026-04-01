@@ -1586,6 +1586,67 @@ spec:
                                     type: string
                                 type: object
                               type: array
+                            resources:
+                              description: Resources defines the resource requirements
+                                (requests/limits) for the dcgm-exporter container
+                              properties:
+                                claims:
+                                  description: |-
+                                    Claims lists the names of resources, defined in spec.resourceClaims,
+                                    that are used by this container.
+                                    
+                                    This is an alpha field and requires enabling the
+                                    DynamicResourceAllocation feature gate.
+                                    
+                                    This field is immutable. It can only be set for containers.
+                                  items:
+                                    description: ResourceClaim references one entry
+                                      in PodSpec.ResourceClaims.
+                                    properties:
+                                      name:
+                                        description: |-
+                                          Name must match the name of one entry in pod.spec.resourceClaims of
+                                          the Pod where this field is used. It makes that resource available
+                                          inside a container.
+                                        type: string
+                                      request:
+                                        description: |-
+                                          Request is the name chosen for a request in the referenced claim.
+                                          If empty, everything from the claim is made available, otherwise
+                                          only the result of this request.
+                                        type: string
+                                    required:
+                                      - name
+                                    type: object
+                                  type: array
+                                  x-kubernetes-list-map-keys:
+                                    - name
+                                  x-kubernetes-list-type: map
+                                limits:
+                                  additionalProperties:
+                                    anyOf:
+                                      - type: integer
+                                      - type: string
+                                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                    x-kubernetes-int-or-string: true
+                                  description: |-
+                                    Limits describes the maximum amount of compute resources allowed.
+                                    More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+                                  type: object
+                                requests:
+                                  additionalProperties:
+                                    anyOf:
+                                      - type: integer
+                                      - type: string
+                                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                    x-kubernetes-int-or-string: true
+                                  description: |-
+                                    Requests describes the minimum amount of compute resources required.
+                                    If Requests is omitted for a container, it defaults to Limits if that is explicitly specified,
+                                    otherwise to an implementation-defined value. Requests cannot exceed Limits.
+                                    More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+                                  type: object
+                              type: object
                             service:
                               description: Service defines service configuration for
                                 dcgm-exporter
@@ -2868,10 +2929,10 @@ spec:
                                       description: |-
                                         Claims lists the names of resources, defined in spec.resourceClaims,
                                         that are used by this container.
-
+                                        
                                         This is an alpha field and requires enabling the
                                         DynamicResourceAllocation feature gate.
-
+                                        
                                         This field is immutable. It can only be set for containers.
                                       items:
                                         description: ResourceClaim references one entry
@@ -3073,7 +3134,7 @@ spec:
                                           description: |-
                                             type indicates which kind of seccomp profile will be applied.
                                             Valid options are:
-
+                                            
                                             Localhost - a profile defined in a file on the node should be used.
                                             RuntimeDefault - the container runtime default profile should be used.
                                             Unconfined - no profile should be applied.
@@ -3166,11 +3227,11 @@ spec:
                                     A special supplemental group that applies to all containers in a pod.
                                     Some volume types allow the Kubelet to change the ownership of that volume
                                     to be owned by the pod:
-
+                                    
                                     1. The owning GID will be the FSGroup
                                     2. The setgid bit is set (new files created in the volume will be owned by FSGroup)
                                     3. The permission bits are OR'd with rw-rw----
-
+                                    
                                     If unset, the Kubelet will not modify the ownership and permissions of any volume.
                                     Note that this field cannot be set when spec.os.name is windows.
                                   format: int64
@@ -3219,10 +3280,10 @@ spec:
                                     seLinuxChangePolicy defines how the container's SELinux label is applied to all volumes used by the Pod.
                                     It has no effect on nodes that do not support SELinux or to volumes does not support SELinux.
                                     Valid values are "MountOption" and "Recursive".
-
+                                    
                                     "Recursive" means relabeling of all files on all Pod volumes by the container runtime.
                                     This may be slow for large volumes, but allows mixing privileged and unprivileged Pods sharing the same volume on the same node.
-
+                                    
                                     "MountOption" mounts all eligible Pod volumes with `-o context` mount option.
                                     This requires all Pods that share the same volume to use the same SELinux label.
                                     It is not possible to share the same volume among privileged and unprivileged Pods.
@@ -3230,13 +3291,13 @@ spec:
                                     whose CSI driver announces SELinux support by setting spec.seLinuxMount: true in their
                                     CSIDriver instance. Other volumes are always re-labelled recursively.
                                     "MountOption" value is allowed only when SELinuxMount feature gate is enabled.
-
+                                    
                                     If not specified and SELinuxMount feature gate is enabled, "MountOption" is used.
                                     If not specified and SELinuxMount feature gate is disabled, "MountOption" is used for ReadWriteOncePod volumes
                                     and "Recursive" for all other volumes.
-
+                                    
                                     This field affects only Pods that have SELinux label set, either in PodSecurityContext or in SecurityContext of all containers.
-
+                                    
                                     All Pods that use the same volume should use the same seLinuxChangePolicy, otherwise some pods can get stuck in ContainerCreating state.
                                     Note that this field cannot be set when spec.os.name is windows.
                                   type: string
@@ -3282,7 +3343,7 @@ spec:
                                       description: |-
                                         type indicates which kind of seccomp profile will be applied.
                                         Valid options are:
-
+                                        
                                         Localhost - a profile defined in a file on the node should be used.
                                         RuntimeDefault - the container runtime default profile should be used.
                                         Unconfined - no profile should be applied.
@@ -3379,10 +3440,10 @@ spec:
                                   description: |-
                                     Claims lists the names of resources, defined in spec.resourceClaims,
                                     that are used by this container.
-
+                                    
                                     This is an alpha field and requires enabling the
                                     DynamicResourceAllocation feature gate.
-
+                                    
                                     This field is immutable. It can only be set for containers.
                                   items:
                                     description: ResourceClaim references one entry
@@ -4717,10 +4778,10 @@ spec:
                                       description: |-
                                         Claims lists the names of resources, defined in spec.resourceClaims,
                                         that are used by this container.
-
+                                        
                                         This is an alpha field and requires enabling the
                                         DynamicResourceAllocation feature gate.
-
+                                        
                                         This field is immutable. It can only be set for containers.
                                       items:
                                         description: ResourceClaim references one entry
@@ -4922,7 +4983,7 @@ spec:
                                           description: |-
                                             type indicates which kind of seccomp profile will be applied.
                                             Valid options are:
-
+                                            
                                             Localhost - a profile defined in a file on the node should be used.
                                             RuntimeDefault - the container runtime default profile should be used.
                                             Unconfined - no profile should be applied.
@@ -5107,10 +5168,10 @@ spec:
                                       description: |-
                                         Claims lists the names of resources, defined in spec.resourceClaims,
                                         that are used by this container.
-
+                                        
                                         This is an alpha field and requires enabling the
                                         DynamicResourceAllocation feature gate.
-
+                                        
                                         This field is immutable. It can only be set for containers.
                                       items:
                                         description: ResourceClaim references one entry
@@ -5312,7 +5373,7 @@ spec:
                                           description: |-
                                             type indicates which kind of seccomp profile will be applied.
                                             Valid options are:
-
+                                            
                                             Localhost - a profile defined in a file on the node should be used.
                                             RuntimeDefault - the container runtime default profile should be used.
                                             Unconfined - no profile should be applied.
@@ -5404,11 +5465,11 @@ spec:
                                     A special supplemental group that applies to all containers in a pod.
                                     Some volume types allow the Kubelet to change the ownership of that volume
                                     to be owned by the pod:
-
+                                    
                                     1. The owning GID will be the FSGroup
                                     2. The setgid bit is set (new files created in the volume will be owned by FSGroup)
                                     3. The permission bits are OR'd with rw-rw----
-
+                                    
                                     If unset, the Kubelet will not modify the ownership and permissions of any volume.
                                     Note that this field cannot be set when spec.os.name is windows.
                                   format: int64
@@ -5457,10 +5518,10 @@ spec:
                                     seLinuxChangePolicy defines how the container's SELinux label is applied to all volumes used by the Pod.
                                     It has no effect on nodes that do not support SELinux or to volumes does not support SELinux.
                                     Valid values are "MountOption" and "Recursive".
-
+                                    
                                     "Recursive" means relabeling of all files on all Pod volumes by the container runtime.
                                     This may be slow for large volumes, but allows mixing privileged and unprivileged Pods sharing the same volume on the same node.
-
+                                    
                                     "MountOption" mounts all eligible Pod volumes with `-o context` mount option.
                                     This requires all Pods that share the same volume to use the same SELinux label.
                                     It is not possible to share the same volume among privileged and unprivileged Pods.
@@ -5468,13 +5529,13 @@ spec:
                                     whose CSI driver announces SELinux support by setting spec.seLinuxMount: true in their
                                     CSIDriver instance. Other volumes are always re-labelled recursively.
                                     "MountOption" value is allowed only when SELinuxMount feature gate is enabled.
-
+                                    
                                     If not specified and SELinuxMount feature gate is enabled, "MountOption" is used.
                                     If not specified and SELinuxMount feature gate is disabled, "MountOption" is used for ReadWriteOncePod volumes
                                     and "Recursive" for all other volumes.
-
+                                    
                                     This field affects only Pods that have SELinux label set, either in PodSecurityContext or in SecurityContext of all containers.
-
+                                    
                                     All Pods that use the same volume should use the same seLinuxChangePolicy, otherwise some pods can get stuck in ContainerCreating state.
                                     Note that this field cannot be set when spec.os.name is windows.
                                   type: string
@@ -5520,7 +5581,7 @@ spec:
                                       description: |-
                                         type indicates which kind of seccomp profile will be applied.
                                         Valid options are:
-
+                                        
                                         Localhost - a profile defined in a file on the node should be used.
                                         RuntimeDefault - the container runtime default profile should be used.
                                         Unconfined - no profile should be applied.
@@ -5617,10 +5678,10 @@ spec:
                                   description: |-
                                     Claims lists the names of resources, defined in spec.resourceClaims,
                                     that are used by this container.
-
+                                    
                                     This is an alpha field and requires enabling the
                                     DynamicResourceAllocation feature gate.
-
+                                    
                                     This field is immutable. It can only be set for containers.
                                   items:
                                     description: ResourceClaim references one entry
@@ -6903,11 +6964,11 @@ spec:
                                 A special supplemental group that applies to all containers in a pod.
                                 Some volume types allow the Kubelet to change the ownership of that volume
                                 to be owned by the pod:
-
+                                
                                 1. The owning GID will be the FSGroup
                                 2. The setgid bit is set (new files created in the volume will be owned by FSGroup)
                                 3. The permission bits are OR'd with rw-rw----
-
+                                
                                 If unset, the Kubelet will not modify the ownership and permissions of any volume.
                                 Note that this field cannot be set when spec.os.name is windows.
                               format: int64
@@ -6956,10 +7017,10 @@ spec:
                                 seLinuxChangePolicy defines how the container's SELinux label is applied to all volumes used by the Pod.
                                 It has no effect on nodes that do not support SELinux or to volumes does not support SELinux.
                                 Valid values are "MountOption" and "Recursive".
-
+                                
                                 "Recursive" means relabeling of all files on all Pod volumes by the container runtime.
                                 This may be slow for large volumes, but allows mixing privileged and unprivileged Pods sharing the same volume on the same node.
-
+                                
                                 "MountOption" mounts all eligible Pod volumes with `-o context` mount option.
                                 This requires all Pods that share the same volume to use the same SELinux label.
                                 It is not possible to share the same volume among privileged and unprivileged Pods.
@@ -6967,13 +7028,13 @@ spec:
                                 whose CSI driver announces SELinux support by setting spec.seLinuxMount: true in their
                                 CSIDriver instance. Other volumes are always re-labelled recursively.
                                 "MountOption" value is allowed only when SELinuxMount feature gate is enabled.
-
+                                
                                 If not specified and SELinuxMount feature gate is enabled, "MountOption" is used.
                                 If not specified and SELinuxMount feature gate is disabled, "MountOption" is used for ReadWriteOncePod volumes
                                 and "Recursive" for all other volumes.
-
+                                
                                 This field affects only Pods that have SELinux label set, either in PodSecurityContext or in SecurityContext of all containers.
-
+                                
                                 All Pods that use the same volume should use the same seLinuxChangePolicy, otherwise some pods can get stuck in ContainerCreating state.
                                 Note that this field cannot be set when spec.os.name is windows.
                               type: string
@@ -7019,7 +7080,7 @@ spec:
                                   description: |-
                                     type indicates which kind of seccomp profile will be applied.
                                     Valid options are:
-
+                                    
                                     Localhost - a profile defined in a file on the node should be used.
                                     RuntimeDefault - the container runtime default profile should be used.
                                     Unconfined - no profile should be applied.
