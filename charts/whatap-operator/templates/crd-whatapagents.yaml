@@ -1484,6 +1484,16 @@ spec:
                                 CustomImageFullName allows specifying a full custom image name (including repository and tag)
                                 If not provided, the default image will be used
                               type: string
+                            devices:
+                              default: f
+                              description: |-
+                                Devices specifies which GPU entities to monitor.
+                                Possible values: "f" (flex, default), "g" (physical GPU only), "i" (MIG GPU Instance only)
+                              enum:
+                                - f
+                                - g
+                                - i
+                              type: string
                             enabled:
                               default: false
                               type: boolean
@@ -1710,6 +1720,12 @@ spec:
                                     type: string
                                 type: object
                               type: array
+                            remoteHostEngineInfo:
+                              description: |-
+                                RemoteHostEngineInfo specifies the remote DCGM host engine address in <HOST>:<PORT> format.
+                                When set, dcgm-exporter connects to a remote host engine instead of using the embedded one.
+                                Example: "localhost:5555"
+                              type: string
                             resources:
                               description: Resources defines the resource requirements
                                 (requests/limits) for the dcgm-exporter container
