@@ -1,0 +1,329 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.16.1
+  name: whatapstaticendpoints.monitoring.whatap.com
+spec:
+  group: monitoring.whatap.com
+  names:
+    kind: WhatapStaticEndpoint
+    listKind: WhatapStaticEndpointList
+    plural: whatapstaticendpoints
+    singular: whatapstaticendpoint
+  scope: Namespaced
+  versions:
+  - name: v2alpha1
+    schema:
+      openAPIV3Schema:
+        description: WhatapStaticEndpoint is the Schema for the whatapstaticendpoints
+          API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              WhatapStaticEndpointSpec defines the desired state of WhatapStaticEndpoint.
+              StaticEndpoints target fixed addresses (host:port) directly and do not
+              require the Kubernetes API to discover pods or services, so no selector
+              is needed.
+            properties:
+              endpoints:
+                description: Endpoints defines the static endpoints (address:port)
+                  to scrape metrics from
+                items:
+                  description: OpenAgentEndpoint defines an endpoint for the OpenAgent
+                    to scrape metrics from
+                  properties:
+                    addNodeLabel:
+                      default: false
+                      type: boolean
+                    address:
+                      description: Address is the address to scrape metrics from (for
+                        StaticEndpoints)
+                      type: string
+                    authorization:
+                      description: Authorization defines the Authorization header
+                        (e.g. Bearer token) sent with scrape requests
+                      properties:
+                        credentials:
+                          description: |-
+                            Credentials is the inline credential value. Prefer CredentialsEnv,
+                            CredentialsFile or CredentialsSecret to keep secrets out of the CR.
+                          type: string
+                        credentialsEnv:
+                          description: |-
+                            CredentialsEnv reads the credential from the named environment variable
+                            present in the OpenAgent container (e.g. "OPENAGENT_SCRAPE_TOKEN")
+                          type: string
+                        credentialsFile:
+                          description: CredentialsFile reads the credential from a
+                            file path inside the container
+                          type: string
+                        credentialsSecret:
+                          description: CredentialsSecret reads the credential from
+                            a Kubernetes Secret
+                          properties:
+                            key:
+                              description: Key within the secret
+                              type: string
+                            name:
+                              description: Name of the secret
+                              type: string
+                            namespace:
+                              description: Namespace of the secret (optional, defaults
+                                to agent's namespace)
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        type:
+                          description: Type is the Authorization scheme (default "Bearer")
+                          type: string
+                      type: object
+                    basicAuth:
+                      description: BasicAuth defines the HTTP Basic Auth configuration
+                        for the endpoint
+                      properties:
+                        password:
+                          description: Password configuration via Kubernetes Secret
+                          properties:
+                            key:
+                              description: Key within the secret
+                              type: string
+                            name:
+                              description: Name of the secret
+                              type: string
+                            namespace:
+                              description: Namespace of the secret (optional, defaults
+                                to agent's namespace)
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        username:
+                          description: Username configuration via Kubernetes Secret
+                          properties:
+                            key:
+                              description: Key within the secret
+                              type: string
+                            name:
+                              description: Name of the secret
+                              type: string
+                            namespace:
+                              description: Namespace of the secret (optional, defaults
+                                to agent's namespace)
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                      type: object
+                    interval:
+                      description: Interval is the scrape interval for this endpoint
+                      type: string
+                    metricRelabelConfigs:
+                      description: MetricRelabelConfigs defines the metric relabeling
+                        configurations for this endpoint
+                      items:
+                        description: MetricRelabelConfig defines a metric relabeling
+                          configuration
+                        properties:
+                          action:
+                            description: Action is the relabeling action to perform
+                            type: string
+                          modulus:
+                            description: Modulus is the modulus for hashmod action
+                            format: int64
+                            type: integer
+                          regex:
+                            description: Regex is the regular expression to match
+                              against the source labels
+                            type: string
+                          replacement:
+                            description: Replacement is the replacement value for
+                              the target label
+                            type: string
+                          separator:
+                            description: 'Separator is the string between concatenated
+                              source labels (default: ";")'
+                            type: string
+                          source_labels:
+                            description: SourceLabels is the list of source labels
+                              to use in the relabeling
+                            items:
+                              type: string
+                            type: array
+                          target_label:
+                            description: TargetLabel is the label to set in the relabeling
+                            type: string
+                        type: object
+                      type: array
+                    params:
+                      additionalProperties:
+                        items:
+                          type: string
+                        type: array
+                      description: Params defines HTTP URL parameters for the endpoint
+                        (similar to Prometheus params)
+                      type: object
+                    path:
+                      description: Path is the path to scrape metrics from
+                      type: string
+                    port:
+                      description: Port is the port to scrape metrics from (for PodMonitor/ServiceMonitor)
+                      type: string
+                    scheme:
+                      description: Scheme is the HTTP scheme to use for scraping (http
+                        or https)
+                      type: string
+                    tlsConfig:
+                      description: TLSConfig defines the TLS configuration for the
+                        endpoint
+                      properties:
+                        caFile:
+                          description: CA certificate file path (alternative to CASecret)
+                          type: string
+                        caSecret:
+                          description: CA certificate configuration via Kubernetes
+                            Secret
+                          properties:
+                            key:
+                              description: Key within the secret
+                              type: string
+                            name:
+                              description: Name of the secret
+                              type: string
+                            namespace:
+                              description: Namespace of the secret (optional, defaults
+                                to agent's namespace)
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        certFile:
+                          description: Client certificate file path (alternative to
+                            CertSecret)
+                          type: string
+                        certSecret:
+                          description: Client certificate configuration via Kubernetes
+                            Secret
+                          properties:
+                            key:
+                              description: Key within the secret
+                              type: string
+                            name:
+                              description: Name of the secret
+                              type: string
+                            namespace:
+                              description: Namespace of the secret (optional, defaults
+                                to agent's namespace)
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        insecureSkipVerify:
+                          description: InsecureSkipVerify disables target certificate
+                            validation
+                          type: boolean
+                        keyFile:
+                          description: Client private key file path (alternative to
+                            KeySecret)
+                          type: string
+                        keySecret:
+                          description: Client private key configuration via Kubernetes
+                            Secret
+                          properties:
+                            key:
+                              description: Key within the secret
+                              type: string
+                            name:
+                              description: Name of the secret
+                              type: string
+                            namespace:
+                              description: Namespace of the secret (optional, defaults
+                                to agent's namespace)
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        serverName:
+                          description: ServerName extension to indicate the name of
+                            the server
+                          type: string
+                      type: object
+                  type: object
+                type: array
+              jobLabel:
+                description: JobLabel is the label to use as the job name. If not
+                  specified, the CR name is used.
+                type: string
+              relabelConfigs:
+                description: RelabelConfigs defines the relabeling configurations
+                  for this target
+                items:
+                  description: MetricRelabelConfig defines a metric relabeling configuration
+                  properties:
+                    action:
+                      description: Action is the relabeling action to perform
+                      type: string
+                    modulus:
+                      description: Modulus is the modulus for hashmod action
+                      format: int64
+                      type: integer
+                    regex:
+                      description: Regex is the regular expression to match against
+                        the source labels
+                      type: string
+                    replacement:
+                      description: Replacement is the replacement value for the target
+                        label
+                      type: string
+                    separator:
+                      description: 'Separator is the string between concatenated source
+                        labels (default: ";")'
+                      type: string
+                    source_labels:
+                      description: SourceLabels is the list of source labels to use
+                        in the relabeling
+                      items:
+                        type: string
+                      type: array
+                    target_label:
+                      description: TargetLabel is the label to set in the relabeling
+                      type: string
+                  type: object
+                type: array
+            required:
+            - endpoints
+            type: object
+          status:
+            description: WhatapStaticEndpointStatus defines the observed state of
+              WhatapStaticEndpoint
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
