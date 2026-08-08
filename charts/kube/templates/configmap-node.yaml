@@ -19,7 +19,12 @@ data:
     EOL
 
     heapsize=$(echo "0.45 $WHATAP_MEM_LIMIT" | awk '{print int($1 * $2 / 1048576)}')
-    JAVA_OPTS="-Xms${heapsize}m -Xmx${heapsize}m"
+    # 초기 힙은 최대 힙의 1/4만 커밋한다 — Xms=Xmx 고정 선할당은 live heap(실측 44~57MB)의
+    # 3배가 넘는 RSS를 상시 점유해 OOMKilled 여유를 없앤다 (KAZAA-3046)
+    heapinit=$((heapsize / 4)); if [ "$heapinit" -lt 16 ]; then heapinit=16; fi
+    JAVA_OPTS="-Xms${heapinit}m -Xmx${heapsize}m"
+    JAVA_OPTS="$JAVA_OPTS -XX:MinHeapFreeRatio=15 -XX:MaxHeapFreeRatio=40 -XX:G1PeriodicGCInterval=900000"
+    JAVA_OPTS="$JAVA_OPTS -XX:MaxMetaspaceSize=96m -XX:ReservedCodeCacheSize=64m"
     JAVA_OPTS="$JAVA_OPTS -XX:+UseG1GC -XX:+UseStringDeduplication  -XX:+ExitOnOutOfMemoryError -XshowSettings:vm"
     JAVA_OPTS="$JAVA_OPTS -Dwhatap.home=/whatap_conf"
 
