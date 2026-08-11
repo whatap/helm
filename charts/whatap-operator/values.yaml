@@ -1,7 +1,7 @@
 namespace: ""
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 2.9.7
+  tag: 3.0.15
   pullPolicy: Always
 
 # Image pull secret for private registries
