@@ -1,7 +1,17 @@
 namespace: ""
+
+# Resources are managed by this Helm release by default. Disable a group only
+# when the same resources are provisioned and maintained outside this chart.
+managedResources:
+  serviceAccounts: true
+  rbac: true
+  agentConfigMaps: true
+  masterService: true
+
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 2.9.7
+  tag: 3.0.14
+  digest: ""
   pullPolicy: Always
 
 # Image pull secret for private registries
