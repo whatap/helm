@@ -15,6 +15,19 @@ nodeSelector: {}
 affinity: {}
 tolerations: []
 
+# RBAC granted to the operator itself.
+rbac:
+  operator:
+    # Non-resource URLs the operator ClusterRole holds.
+    #
+    # Kubernetes RBAC escalation prevention means the operator can only grant
+    # nonResourceURLs it holds itself, so this must be a superset of
+    # `spec.features.openAgent.nonResourceURLs` in the WhatapAgent CR.
+    #
+    # Default "*" preserves the previous behaviour. If the OpenAgent only scrapes
+    # "/metrics", narrowing this to ["/metrics"] is recommended.
+    nonResourceURLs: ["*"]
+
 credentials:
   create: false
   # The secret name is fixed to 'whatap-credentials'

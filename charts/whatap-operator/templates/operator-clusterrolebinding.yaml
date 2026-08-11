@@ -1,4 +1,3 @@
-{{- if not (lookup "rbac.authorization.k8s.io/v1" "ClusterRoleBinding" "" "whatap-operator") }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -11,4 +10,3 @@ subjects:
   - kind: ServiceAccount
     name: whatap-operator
     namespace: {{ .Release.Namespace }}
-{{- end }}

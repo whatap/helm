@@ -1,4 +1,9 @@
-{{- if not (lookup "rbac.authorization.k8s.io/v1" "ClusterRole" "" "whatap-operator") }}
+{{- $rbac := .Values.rbac | default dict -}}
+{{- $operatorRbac := $rbac.operator | default dict -}}
+{{- $nonResourceURLs := $operatorRbac.nonResourceURLs | default (list "*") -}}
+{{- if not (kindIs "slice" $nonResourceURLs) -}}
+{{- fail (printf "rbac.operator.nonResourceURLs must be a list of strings (got %s). Example: rbac.operator.nonResourceURLs: [\"/metrics\"]" (kindOf $nonResourceURLs)) -}}
+{{- end -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -17,6 +22,10 @@ rules:
     resources: ["*"]
     verbs: ["get", "list", "watch", "update", "patch","delete", "create"]
 
-  - nonResourceURLs: ["*"]
+  # Kubernetes RBAC escalation prevention: the operator can only grant
+  # nonResourceURLs it holds itself. This must therefore be a superset of
+  # `spec.features.openAgent.nonResourceURLs` in the WhatapAgent CR, otherwise
+  # the OpenAgent ClusterRole is rejected with "attempt to grant extra privileges".
+  # Narrow this to the exact paths you scrape (e.g. ["/metrics"]) to reduce scope.
+  - nonResourceURLs: {{ toJson $nonResourceURLs }}
     verbs: ["*"]
-{{- end }}
