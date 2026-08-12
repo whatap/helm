@@ -1,3 +1,5 @@
+{{- $managedResources := .Values.managedResources | default dict -}}
+{{- if or (not (hasKey $managedResources "rbac")) (get $managedResources "rbac") }}
 {{- $rbac := .Values.rbac | default dict -}}
 {{- $operatorRbac := $rbac.operator | default dict -}}
 {{- $nonResourceURLs := $operatorRbac.nonResourceURLs | default (list "*") -}}
@@ -29,3 +31,4 @@ rules:
   # Narrow this to the exact paths you scrape (e.g. ["/metrics"]) to reduce scope.
   - nonResourceURLs: {{ toJson $nonResourceURLs }}
     verbs: ["*"]
+{{- end }}

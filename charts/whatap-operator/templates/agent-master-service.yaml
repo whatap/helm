@@ -1,4 +1,5 @@
-{{- if not (lookup "v1" "Service" .Release.Namespace "whatap-master-agent") }}
+{{- $managedResources := .Values.managedResources | default dict -}}
+{{- if or (not (hasKey $managedResources "masterService")) (get $managedResources "masterService") }}
 apiVersion: v1
 kind: Service
 metadata:
