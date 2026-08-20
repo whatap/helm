@@ -70,7 +70,7 @@ values.yaml 예시:
 ```yaml
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 3.0.14
+  tag: 3.0.16
   digest: "" # 선택 사항. 설정 시 repository:tag@digest 형식으로 고정
   pullPolicy: Always
 
@@ -148,6 +148,12 @@ helm upgrade --install whatap-operator whatap/whatap-operator \
 
 이후 업그레이드에서는 `--take-ownership`이 필요하지 않습니다. `--take-ownership`은 기존 리소스가 동일한 Whatap 설치에 속한다는 것을 확인한 경우에만 사용하십시오. 다른 release나 외부 자동화가 관리하는 리소스라면 아래 `managedResources` 옵션으로 해당 그룹을 비활성화해야 합니다. 업그레이드 전에는 `helm get manifest`와 관련 리소스를 백업하십시오.
 
+### 1.9.9 RBAC 변경 안내
+
+1.9.9부터 operator, K8s Agent, OpenAgent의 기본 `nonResourceURLs`는 `["*"]`이며 verbs도 `["*"]`입니다. 이는 kube-apiserver의 모든 non-resource endpoint에 접근할 수 있는 넓은 권한입니다.
+
+OpenAgent는 `WhatapAgent` CR의 `spec.features.openAgent.nonResourceURLs`에 필요한 경로만 명시해 최소 권한으로 좁힐 수 있습니다. 예: `["/metrics", "/healthz"]`. K8s Agent 또는 operator RBAC를 별도 정책으로 관리하려면 `managedResources.rbac: false`를 설정하고 필요한 ClusterRole과 ClusterRoleBinding을 외부에서 모두 제공하십시오.
+
 ### 외부 관리 리소스 사용
 
 ServiceAccount, RBAC, agent 시작 스크립트 ConfigMap 또는 master Service를 Helm 외부에서 관리할 때만 해당 `managedResources` 값을 `false`로 설정합니다. 기본값은 모두 `true`이며, 일반 사용자는 변경하지 않습니다.
@@ -182,7 +188,7 @@ managedResources:
 
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 3.0.14
+  tag: 3.0.16
   digest: ""
   pullPolicy: Always
 
