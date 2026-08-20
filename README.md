@@ -19,6 +19,10 @@ helm repo add whatap https://whatap.github.io/helm/
 helm repo update
 ```
 
+### kube 1.13.2 RBAC 변경 안내
+
+1.13.2부터 K8s Agent와 OpenAgent ClusterRole의 기본 `nonResourceURLs`는 `["*"]`이며 verbs도 `["*"]`입니다. 이는 kube-apiserver의 모든 non-resource endpoint에 접근할 수 있는 넓은 권한입니다. 조직의 최소 권한 정책상 제한이 필요하면 설치 manifest의 해당 ClusterRole 규칙을 필요한 경로만 남기도록 별도 관리하십시오.
+
 2. values.yaml(설치에 필요한 기본 설정파일) 생성
 - 기본 values.yaml 구성
 

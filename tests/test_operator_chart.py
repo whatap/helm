@@ -60,6 +60,37 @@ class OperatorChartUpgradeSafetyTest(unittest.TestCase):
 
         self.assertEqual(set(), MANAGED_OBJECTS - rendered)
 
+    def test_default_rbac_allows_all_non_resource_urls(self):
+        documents = self.render()
+
+        for role_name in ("whatap-operator", "whatap"):
+            role = next(
+                document
+                for document in documents
+                if document["kind"] == "ClusterRole"
+                and document["metadata"]["name"] == role_name
+            )
+            non_resource_rules = [
+                rule for rule in role["rules"] if "nonResourceURLs" in rule
+            ]
+            self.assertEqual(1, len(non_resource_rules), role_name)
+            self.assertEqual(["*"], non_resource_rules[0]["nonResourceURLs"])
+
+    def test_crd_exposes_open_agent_non_resource_urls(self):
+        documents = self.render()
+        crd = next(
+            document
+            for document in documents
+            if document["kind"] == "CustomResourceDefinition"
+            and document["metadata"]["name"] == "whatapagents.monitoring.whatap.com"
+        )
+        properties = crd["spec"]["versions"][0]["schema"]["openAPIV3Schema"]["properties"]
+        field = properties["spec"]["properties"]["features"]["properties"]["openAgent"]["properties"]["nonResourceURLs"]
+
+        self.assertEqual("array", field["type"])
+        self.assertEqual("string", field["items"]["type"])
+        self.assertIn('Defaults to ["*"]', field["description"])
+
     def test_missing_managed_resources_map_defaults_to_managed(self):
         documents = self.render("--set-json", "managedResources=null")
         rendered = {
@@ -85,7 +116,7 @@ class OperatorChartUpgradeSafetyTest(unittest.TestCase):
 
     def test_image_digest_is_rendered_as_an_optional_value(self):
         documents = self.render(
-            "--set", "image.tag=3.0.14",
+            "--set", "image.tag=3.0.16",
             "--set", "image.digest=sha256:testdigest",
         )
         deployment = next(
@@ -97,17 +128,17 @@ class OperatorChartUpgradeSafetyTest(unittest.TestCase):
         image = deployment["spec"]["template"]["spec"]["containers"][0]["image"]
 
         self.assertEqual(
-            "public.ecr.aws/whatap/whatap-operator:3.0.14@sha256:testdigest",
+            "public.ecr.aws/whatap/whatap-operator:3.0.16@sha256:testdigest",
             image,
         )
 
-    def test_chart_defaults_to_operator_3_0_14(self):
+    def test_chart_defaults_to_operator_3_0_16(self):
         chart_metadata = yaml.safe_load((CHART / "Chart.yaml").read_text())
         values = yaml.safe_load((CHART / "values.yaml").read_text())
 
-        self.assertEqual("1.9.8", chart_metadata["version"])
-        self.assertEqual("3.0.14", chart_metadata["appVersion"])
-        self.assertEqual("3.0.14", values["image"]["tag"])
+        self.assertEqual("1.9.9", chart_metadata["version"])
+        self.assertEqual("3.0.16", chart_metadata["appVersion"])
+        self.assertEqual("3.0.16", values["image"]["tag"])
 
     def test_readme_documents_safe_upgrade_and_external_resources(self):
         readme = (CHART / "README.md").read_text()

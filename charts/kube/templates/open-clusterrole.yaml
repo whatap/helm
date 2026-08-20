@@ -7,7 +7,7 @@ rules:
 - apiGroups: ["*"]
   resources: ["pods", "services", "endpoints", "endpointslices", "namespaces","secrets"]
   verbs: ["get", "list", "watch"]
-- nonResourceURLs: [ "/metrics" ]
+- nonResourceURLs: [ "*" ]
   verbs: ["*"]
 - apiGroups:
   - ""
@@ -22,7 +22,7 @@ rules:
   verbs:
   - "*"
 - nonResourceURLs:
-  - "/metrics"
+  - "*"
   verbs:
   - "*"
 {{ end }}

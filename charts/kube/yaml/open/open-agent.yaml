@@ -38,7 +38,7 @@ rules:
   - apiGroups: ["*"]
     resources: ["pods", "services", "endpoints", "endpointslices", "namespaces", "secrets"]
     verbs: ["get", "list", "watch"]
-  - nonResourceURLs: ["/metrics"]
+  - nonResourceURLs: ["*"]
     verbs: ["*"]
   - apiGroups: [""]
     resources: ["pods/exec"]
@@ -46,7 +46,7 @@ rules:
   - apiGroups: [""]
     resources: ["configmaps"]
     verbs: ["*"]
-  - nonResourceURLs: ["/metrics"]
+  - nonResourceURLs: ["*"]
     verbs: ["*"]
 
 ---
