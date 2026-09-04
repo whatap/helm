@@ -116,7 +116,7 @@ class OperatorChartUpgradeSafetyTest(unittest.TestCase):
 
     def test_image_digest_is_rendered_as_an_optional_value(self):
         documents = self.render(
-            "--set", "image.tag=3.0.16",
+            "--set", "image.tag=3.0.19",
             "--set", "image.digest=sha256:testdigest",
         )
         deployment = next(
@@ -128,17 +128,17 @@ class OperatorChartUpgradeSafetyTest(unittest.TestCase):
         image = deployment["spec"]["template"]["spec"]["containers"][0]["image"]
 
         self.assertEqual(
-            "public.ecr.aws/whatap/whatap-operator:3.0.16@sha256:testdigest",
+            "public.ecr.aws/whatap/whatap-operator:3.0.19@sha256:testdigest",
             image,
         )
 
-    def test_chart_defaults_to_operator_3_0_16(self):
+    def test_chart_defaults_to_operator_3_0_19(self):
         chart_metadata = yaml.safe_load((CHART / "Chart.yaml").read_text())
         values = yaml.safe_load((CHART / "values.yaml").read_text())
 
-        self.assertEqual("1.9.9", chart_metadata["version"])
-        self.assertEqual("3.0.16", chart_metadata["appVersion"])
-        self.assertEqual("3.0.16", values["image"]["tag"])
+        self.assertEqual("1.9.10", chart_metadata["version"])
+        self.assertEqual("3.0.19", chart_metadata["appVersion"])
+        self.assertEqual("3.0.19", values["image"]["tag"])
 
     def test_readme_documents_safe_upgrade_and_external_resources(self):
         readme = (CHART / "README.md").read_text()
