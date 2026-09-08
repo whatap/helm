@@ -70,7 +70,7 @@ values.yaml 예시:
 ```yaml
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 3.0.16
+  tag: 3.0.20
   digest: "" # 선택 사항. 설정 시 repository:tag@digest 형식으로 고정
   pullPolicy: Always
 
@@ -176,6 +176,43 @@ helm uninstall whatap-operator -n whatap
 ## CRD
 차트는 `WhatapAgent` CRD를 포함하여 설치합니다. Helm이 CRD를 설치/관리하며, 오퍼레이터가 해당 리소스를 감시합니다.
 
+### 1.9.11: GPU pod-resources 호스트 경로 설정
+
+Operator `3.0.20`과 차트 `1.9.11`부터 기존 `WhatapAgent` CR의
+`spec.features.k8sAgent.gpuMonitoring.podResourcesPath`를 설정할 수 있습니다.
+이 값은 Helm values가 아닌 **WhatapAgent CR 설정**입니다. 이미지와 CRD를 함께 업그레이드해야 하며,
+`--reuse-values`로 이전 이미지 태그 또는 digest가 남지 않도록 명시합니다.
+
+```bash
+helm repo update
+helm upgrade whatap-operator whatap/whatap-operator \
+  --namespace whatap --version 1.9.11 --reuse-values \
+  --set-string image.tag=3.0.20 --set-string image.digest= \
+  --atomic --wait
+kubectl explain whatapagent.spec.features.k8sAgent.gpuMonitoring.podResourcesPath
+```
+
+위 release/namespace는 실제 설치 이름으로 바꾸십시오. private registry는 같은 버전의 이미지를 먼저 준비하고,
+digest 고정이 필요하면 빈 값 대신 **새 이미지의 digest**를 지정하십시오. 1.9.7 이하 설치는 위의 최초 마이그레이션 절차도 따릅니다.
+
+GPU 노드에서 `/repo.p/kubelet/pod-resources/kubelet.sock`이 존재하는 것을 확인한 경우,
+기존 CR의 설정에 아래 부분만 병합합니다(전체 설치용 CR이 아닙니다).
+
+```yaml
+spec:
+  features:
+    k8sAgent:
+      gpuMonitoring:
+        enabled: true
+        podResourcesPath: /repo.p/kubelet/pod-resources
+```
+
+- 소켓 파일이나 kubelet 루트가 아닌 **pod-resources 디렉터리의 절대 경로**를 지정합니다.
+- 미설정/빈 문자열이면 기존 `/var/lib/kubelet/pod-resources`를 사용합니다.
+- 호스트 볼륨만 바뀌며 exporter 내부 마운트는 `/var/lib/kubelet/pod-resources`(읽기 전용)로 유지됩니다.
+- 공통/GPU 전용 DaemonSet 모두 적용됩니다. 경로 변경은 해당 Pod의 롤링 업데이트를 유발하므로 노드별 경로와 권한을 먼저 확인하십시오.
+- 적용 후 CR 값, DaemonSet의 `pod-gpu-resources` hostPath, exporter 로그와 GPU/Pod 매핑 지표를 확인하십시오.
+
 ## 값 목록 요약
 현재 차트에서 사용하는 주요 값은 다음과 같습니다. (charts/whatap-operator/values.yaml 참조)
 ```yaml
@@ -188,7 +225,7 @@ managedResources:
 
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 3.0.16
+  tag: 3.0.20
   digest: ""
   pullPolicy: Always
 

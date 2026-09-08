@@ -10,7 +10,7 @@ managedResources:
 
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 3.0.19
+  tag: 3.0.20
   digest: ""
   pullPolicy: Always
 

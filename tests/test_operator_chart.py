@@ -132,13 +132,41 @@ class OperatorChartUpgradeSafetyTest(unittest.TestCase):
             image,
         )
 
-    def test_chart_defaults_to_operator_3_0_19(self):
+    def test_chart_defaults_to_operator_3_0_20(self):
         chart_metadata = yaml.safe_load((CHART / "Chart.yaml").read_text())
         values = yaml.safe_load((CHART / "values.yaml").read_text())
 
-        self.assertEqual("1.9.10", chart_metadata["version"])
-        self.assertEqual("3.0.19", chart_metadata["appVersion"])
-        self.assertEqual("3.0.19", values["image"]["tag"])
+        self.assertEqual("1.9.11", chart_metadata["version"])
+        self.assertEqual("3.0.20", chart_metadata["appVersion"])
+        self.assertEqual("3.0.20", values["image"]["tag"])
+
+    def test_crd_exposes_optional_gpu_pod_resources_path(self):
+        crd = next(
+            document
+            for document in self.render()
+            if document["kind"] == "CustomResourceDefinition"
+            and document["metadata"]["name"] == "whatapagents.monitoring.whatap.com"
+        )
+        version = next(version for version in crd["spec"]["versions"] if version["name"] == "v2alpha1")
+        properties = version["schema"]["openAPIV3Schema"]["properties"]
+        gpu = properties["spec"]["properties"]["features"]["properties"]["k8sAgent"]["properties"]["gpuMonitoring"]
+        self.assertIn("podResourcesPath", gpu["properties"])
+        field = gpu["properties"]["podResourcesPath"]
+        self.assertEqual("string", field["type"])
+        self.assertNotIn("podResourcesPath", gpu.get("required", []))
+        for valid in ("", "/var/lib/kubelet/pod-resources", "/repo.p/kubelet/pod-resources"):
+            self.assertRegex(valid, field["pattern"])
+        self.assertNotRegex("relative/pod-resources", field["pattern"])
+
+    def test_readme_documents_gpu_path_and_image_upgrade(self):
+        readme = (CHART / "README.md").read_text()
+        for required_text in (
+            "1.9.11", "3.0.20", "podResourcesPath",
+            "/repo.p/kubelet/pod-resources", "--set-string image.tag=3.0.20",
+            "--set-string image.digest=", "kubectl explain",
+        ):
+            with self.subTest(required_text=required_text):
+                self.assertIn(required_text, readme)
 
     def test_readme_documents_safe_upgrade_and_external_resources(self):
         readme = (CHART / "README.md").read_text()
