@@ -1767,6 +1767,14 @@ spec:
                               description: NodeSelector specifies the labels to select
                                 nodes for GPU monitoring agent
                               type: object
+                            podResourcesPath:
+                              description: |-
+                                PodResourcesPath overrides the host directory containing the kubelet pod-resources socket.
+                                Specify the directory, not the kubelet root or kubelet.sock file.
+                                If empty, /var/lib/kubelet/pod-resources is used. The exporter container mount remains unchanged.
+                                Example: /repo.p/kubelet/pod-resources
+                              pattern: ^(/.*)?$
+                              type: string
                             relabelConfigs:
                               description: RelabelConfigs defines the relabeling configurations
                                 for GPU target
