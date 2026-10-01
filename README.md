@@ -225,6 +225,14 @@ kubectl delete clusterrole whatap
 ## 추가 옵션 설정
 와탭 쿠버네티스 에이전트를 설정하기 위한 `values.yaml` 파일 설정 항목입니다.
 
+### DCGM ConfigMap 생성 제어·메트릭 추가/전체 대체
+
+- kube 차트 1.13.3 설정: [DCGM 설정 가이드](charts/kube/README.md).
+- whatap-operator 차트 1.9.12 설정: [Operator 차트 가이드](charts/whatap-operator/README.md).
+- 두 차트 모두 `dcgmExporter.configMap.enabled`, `customMetrics`, `extraMetrics`를 사용합니다.
+  kube 차트는 기존 `addon.gpu.enabled`도 true여야 ConfigMap과 exporter를 사용합니다.
+  기존 기본값과 기본 메트릭 목록은 변경하지 않습니다.
+
 ### 주요 설정 항목
 `values.yaml` 파일에서 사용자가 수정할 수 있는 주요 설정 항목 
 Whatap, 컨테이너 런타임 선택, 에이전트 배포를 위한 `daemonSet`,`deployment`에 대한 옵션 설명

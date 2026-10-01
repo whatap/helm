@@ -136,7 +136,7 @@ class OperatorChartUpgradeSafetyTest(unittest.TestCase):
         chart_metadata = yaml.safe_load((CHART / "Chart.yaml").read_text())
         values = yaml.safe_load((CHART / "values.yaml").read_text())
 
-        self.assertEqual("1.9.11", chart_metadata["version"])
+        self.assertEqual("1.9.12", chart_metadata["version"])
         self.assertEqual("3.0.20", chart_metadata["appVersion"])
         self.assertEqual("3.0.20", values["image"]["tag"])
 

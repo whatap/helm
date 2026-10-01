@@ -1,5 +1,14 @@
 namespace: ""
 
+# Controls only the DCGM ConfigMap, not GPU monitoring in the WhatapAgent CR.
+dcgmExporter:
+  configMap:
+    enabled: true
+    # Non-empty CSV replaces the defaults. Empty/whitespace uses the defaults.
+    customMetrics: ""
+    # CSV appended after customMetrics (or the defaults). Do not repeat fields.
+    extraMetrics: ""
+
 # Resources are managed by this Helm release by default. Disable a group only
 # when the same resources are provisioned and maintained outside this chart.
 managedResources:

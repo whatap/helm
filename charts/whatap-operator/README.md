@@ -173,6 +173,76 @@ managedResources:
 helm uninstall whatap-operator -n whatap
 ```
 
+## DCGM ConfigMap과 메트릭 설정 (차트 1.9.12)
+
+`dcgmExporter.configMap`으로 `dcgm-exporter-csv` ConfigMap의 생성 여부와
+`whatap-gpu.csv` 내용을 설정합니다. Operator 이미지나 WhatapAgent CRD 변경은 필요하지 않습니다.
+이 옵션을 생략하면 기존과 동일하게 ConfigMap을 생성하고 기본 메트릭 목록도 유지합니다.
+
+### GPU가 없는 클러스터에서 ConfigMap 생성하지 않기
+
+기존 Helm values 파일에 아래 부분을 추가합니다.
+
+```yaml
+dcgmExporter:
+  configMap:
+    enabled: false
+```
+
+이 값은 **ConfigMap 생성만** 제어합니다. GPU 노드를 자동으로 탐지하거나
+`WhatapAgent` CR의 `spec.features.k8sAgent.gpuMonitoring.enabled`를 변경하지 않습니다.
+GPU 수집을 사용하는 설치에서는 `enabled: true`를 유지하거나, 같은 네임스페이스에
+`dcgm-exporter-csv` / `whatap-gpu.csv`를 외부에서 제공해야 합니다.
+
+주의: 기존 release가 관리하던 ConfigMap을 `true`에서 `false`로 바꾸면 Helm upgrade가
+해당 ConfigMap을 **삭제할 수 있습니다**. GPU 수집 중에 단순히 false로 바꾸지 마십시오.
+외부 관리로 전환할 때에는 먼저 소유권 이전과 exporter의 참조를 확인해야 합니다.
+
+### 기본 메트릭을 유지하면서 추가하기
+
+```yaml
+dcgmExporter:
+  configMap:
+    extraMetrics: |
+      DCGM_FI_DEV_APP_SM_CLOCK, gauge, Application SM clock frequency (in MHz).
+      DCGM_FI_DEV_APP_MEM_CLOCK, gauge, Application memory clock frequency (in MHz).
+```
+
+기본 CSV 뒤에 지정한 행을 추가합니다. 한 줄은 `DCGM 필드명, 타입, 설명` 형식이며,
+이미 활성화된 필드를 다시 추가하지 마십시오. 필드 지원 여부는 exporter 버전과 GPU에 따라 다릅니다.
+
+### 기본 목록 전체를 교체하기
+
+```yaml
+dcgmExporter:
+  configMap:
+    customMetrics: |
+      DCGM_FI_DEV_GPU_UTIL, gauge, GPU utilization (in %).
+      DCGM_FI_DEV_FB_USED, gauge, Used framebuffer memory (in MiB).
+    extraMetrics: ""
+```
+
+이 예시는 두 메트릭만 남기는 최소 예시입니다. 제외한 기본 메트릭을 사용하는 GPU 화면과
+알림은 데이터가 나오지 않을 수 있습니다. 필요한 지표와 label을 확인한 후 사용하십시오.
+
+- `customMetrics` 미설정/빈 문자열/공백만 입력: 기존 기본 목록 사용.
+- `customMetrics`와 `extraMetrics`를 모두 설정: 사용자 목록 뒤에 추가 목록을 붙임.
+- 설정값은 Helm 템플릿으로 실행하지 않고 CSV 문자열 그대로 사용.
+- 기본 목록으로 복구: 두 문자열을 `""`로 비우고 다시 적용.
+- `enabled`는 따옴표 없는 `true`/`false`, 메트릭은 위처럼 YAML 블록 문자열 사용.
+
+### 적용 후 확인
+
+1. 실제 release 이름과 namespace를 확인하고 현재 values/manifest를 안전한 경로에 백업합니다.
+   values에는 인증정보가 포함될 수 있으므로 출력·공유하지 마십시오.
+2. 로컬 차트 또는 게시가 확인된 차트 버전으로 `helm template`을 먼저 실행해 ConfigMap을 확인합니다.
+   현재 운영 values는 유지하고 위 설정 부분만 병합해 Helm upgrade를 진행합니다.
+3. `dcgm-exporter-csv`의 `data.whatap-gpu.csv`가 의도한 목록인지 확인합니다.
+4. CSV는 `subPath`로 마운트되므로 ConfigMap 수정만으로 실행 중 exporter에 반영되지 않습니다.
+   작업 시간에 **dcgm-exporter 컨테이너가 있는 실제 DaemonSet**을 확인한 뒤 롤링 재시작하고
+   rollout 완료를 확인합니다. Operator Pod만 재시작하는 것으로 대체하지 마십시오.
+5. exporter 로그의 CSV/필드 오류, `/metrics`의 추가 지표, 와탭 화면의 기존·추가 지표를 확인합니다.
+
 ## CRD
 차트는 `WhatapAgent` CRD를 포함하여 설치합니다. Helm이 CRD를 설치/관리하며, 오퍼레이터가 해당 리소스를 감시합니다.
 

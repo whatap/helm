@@ -1,4 +1,6 @@
-{{ if .Values.addon.gpu.enabled }}
+{{- $dcgmExporter := .Values.dcgmExporter | default dict -}}
+{{- $configMap := $dcgmExporter.configMap | default dict -}}
+{{- if and .Values.addon.gpu.enabled (or (not (hasKey $configMap "enabled")) $configMap.enabled) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,6 +8,10 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   whatap-gpu.csv: |-
+{{- $customMetrics := $configMap.customMetrics | default "" | trim }}
+{{- if $customMetrics }}
+{{ $customMetrics | indent 4 }}
+{{- else }}
     # Static configuration information
     DCGM_FI_DRIVER_VERSION, label, Driver Version.                           # code 1
     DCGM_FI_NVML_VERSION,   label, NVML Version.                               # code 2
@@ -75,4 +81,8 @@ data:
 
     # P-State (GPU Power State)
     DCGM_FI_DEV_PSTATE,          gauge, GPU power state.
+{{- end }}
+{{- with $configMap.extraMetrics }}
+{{ . | trim | indent 4 }}
+{{- end }}
 {{ end }}

@@ -51,10 +51,10 @@ class KubeChartRbacTest(unittest.TestCase):
         assert_wildcard_non_resource_rules(self, roles["whatap"])
         assert_wildcard_non_resource_rules(self, roles["whatap-open-agent-role"])
 
-    def test_chart_version_is_1_13_2(self):
+    def test_chart_version_is_1_13_3(self):
         chart_metadata = yaml.safe_load((CHART / "Chart.yaml").read_text())
 
-        self.assertEqual("1.13.2", chart_metadata["version"])
+        self.assertEqual("1.13.3", chart_metadata["version"])
 
     def test_packaged_open_agent_manifest_allows_all_non_resource_urls(self):
         documents = [
