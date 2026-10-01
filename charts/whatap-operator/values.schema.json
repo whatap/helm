@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "dcgmExporter": {
+      "type": "object",
+      "properties": {
+        "configMap": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Create dcgm-exporter-csv. Does not disable GPU monitoring."
+            },
+            "customMetrics": {
+              "type": "string",
+              "description": "CSV replacing the default list. Blank uses the existing defaults."
+            },
+            "extraMetrics": {
+              "type": "string",
+              "description": "CSV appended after customMetrics or the default list."
+            }
+          }
+        }
+      }
+    }
+  }
+}
