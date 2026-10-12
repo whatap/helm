@@ -152,6 +152,35 @@ spec:
                                           - default
                                           - custom
                                         type: string
+                                      mountPath:
+                                        description: |-
+                                          MountPath overrides the directory where the custom config ConfigMap is
+                                          mounted inside the APM init container. Default: "/config-volume".
+                                          The referenced ConfigMap must contain a key "whatap.conf"; the init
+                                          container will copy "<mountPath>/whatap.conf" into the agent directory.
+                                        type: string
+                                      pluginConfigMapRef:
+                                        description: |-
+                                          PluginConfigMapRef references a ConfigMap whose entries are agent plugin files.
+                                          Each entry (key=filename, value=file content) is copied into
+                                          "$WHATAP_HOME/plugin/" by the APM init container (e.g. TraceHelperEnd.x).
+                                          This is independent of Mode: it can be combined with a custom whatap.conf or
+                                          used on its own. Plugin files are typically small text/script files; binary
+                                          plugins can be supplied via the ConfigMap's binaryData.
+                                        properties:
+                                          name:
+                                            type: string
+                                        required:
+                                          - name
+                                        type: object
+                                      volumeName:
+                                        description: |-
+                                          VolumeName overrides the volume name used by the APM init container to mount
+                                          the custom config ConfigMap into the target Pod. Default: "config-volume".
+                                          Set this to a unique value if your Pod already defines a volume named
+                                          "config-volume" (which would otherwise cause a name collision and lead to
+                                          "cp: cannot stat '/config-volume/whatap.conf'" in the init container).
+                                        type: string
                                     type: object
                                   customImageFullName:
                                     description: |-
@@ -1755,9 +1784,21 @@ spec:
                                     items:
                                       type: string
                                     type: array
+                                  sourceLabels:
+                                    description: |-
+                                      SourceLabelsCamel is the Prometheus Operator style key (sourceLabels).
+                                      Accepted as a fallback when source_labels is not set.
+                                    items:
+                                      type: string
+                                    type: array
                                   target_label:
                                     description: TargetLabel is the label to set in
                                       the relabeling
+                                    type: string
+                                  targetLabel:
+                                    description: |-
+                                      TargetLabelCamel is the Prometheus Operator style key (targetLabel).
+                                      Accepted as a fallback when target_label is not set.
                                     type: string
                                 type: object
                               type: array
@@ -1809,9 +1850,21 @@ spec:
                                     items:
                                       type: string
                                     type: array
+                                  sourceLabels:
+                                    description: |-
+                                      SourceLabelsCamel is the Prometheus Operator style key (sourceLabels).
+                                      Accepted as a fallback when source_labels is not set.
+                                    items:
+                                      type: string
+                                    type: array
                                   target_label:
                                     description: TargetLabel is the label to set in
                                       the relabeling
+                                    type: string
+                                  targetLabel:
+                                    description: |-
+                                      TargetLabelCamel is the Prometheus Operator style key (targetLabel).
+                                      Accepted as a fallback when target_label is not set.
                                     type: string
                                 type: object
                               type: array
@@ -6047,6 +6100,472 @@ spec:
                         - masterAgent
                         - nodeAgent
                       type: object
+                    kubeVirt:
+                      description: |-
+                        KubeVirt installs the server agent during a selected new VM's first boot.
+                        It does not modify existing VMs or their running instances.
+                      properties:
+                        enabled:
+                          default: false
+                          type: boolean
+                        targets:
+                          items:
+                            description: |-
+                              KubeVirtTargetSpec selects VM metadata, never virt-launcher Pod metadata.
+                              The VM must additionally carry monitoring.whatap.com/server-agent: "true".
+                            properties:
+                              agentVersion:
+                                default: 2.9.25
+                                description: |-
+                                  AgentVersion selects a published official Linux tar release for new VMs only.
+                                  Changing it does not upgrade agents in existing VMs.
+                                maxLength: 32
+                                pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
+                                type: string
+                              enabled:
+                                default: false
+                                type: boolean
+                              host:
+                                description: Host accepts collection server IPs/DNS
+                                  names, separated by '/'.
+                                minLength: 1
+                                type: string
+                              license:
+                                description: |-
+                                  License is a SERVER monitoring project key supplied directly.
+                                  It is visible to readers of this CR. Specify exactly one of License or LicenseSecretRef.
+                                type: string
+                              licenseSecretRef:
+                                description: |-
+                                  LicenseSecretRef alternatively reads the SERVER project key from a Secret in Namespace.
+                                  Optional Secret/key references are not supported. Never inherits the K8s/APM key.
+                                properties:
+                                  key:
+                                    description: The key of the secret to select from.  Must
+                                      be a valid secret key.
+                                    type: string
+                                  name:
+                                    default: ""
+                                    description: |-
+                                      Name of the referent.
+                                      This field is effectively required, but due to backwards compatibility is
+                                      allowed to be empty. Instances of this type with an empty value here are
+                                      almost certainly wrong.
+                                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                    type: string
+                                  optional:
+                                    description: Specify whether the Secret or its key
+                                      must be defined
+                                    type: boolean
+                                required:
+                                  - key
+                                type: object
+                                x-kubernetes-map-type: atomic
+                              name:
+                                minLength: 1
+                                type: string
+                              namespace:
+                                description: Namespace is exact and also scopes every
+                                  referenced Secret.
+                                minLength: 1
+                                type: string
+                              port:
+                                default: 6600
+                                format: int32
+                                maximum: 65535
+                                minimum: 1
+                                type: integer
+                              vmSelector:
+                                description: VMSelector matches the VirtualMachine's
+                                  top-level labels.
+                                properties:
+                                  matchExpressions:
+                                    description: matchExpressions is a list of label
+                                      selector requirements. The requirements are ANDed.
+                                    items:
+                                      description: |-
+                                        A label selector requirement is a selector that contains values, a key, and an operator that
+                                        relates the key and values.
+                                      properties:
+                                        key:
+                                          description: key is the label key that the
+                                            selector applies to.
+                                          type: string
+                                        operator:
+                                          description: |-
+                                            operator represents a key's relationship to a set of values.
+                                            Valid operators are In, NotIn, Exists and DoesNotExist.
+                                          type: string
+                                        values:
+                                          description: |-
+                                            values is an array of string values. If the operator is In or NotIn,
+                                            the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                            the values array must be empty. This array is replaced during a strategic
+                                            merge patch.
+                                          items:
+                                            type: string
+                                          type: array
+                                          x-kubernetes-list-type: atomic
+                                      required:
+                                        - key
+                                        - operator
+                                      type: object
+                                    type: array
+                                    x-kubernetes-list-type: atomic
+                                  matchLabels:
+                                    additionalProperties:
+                                      type: string
+                                    description: |-
+                                      matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                                      map is equivalent to an element of matchExpressions, whose key field is "key", the
+                                      operator is "In", and the values array contains only "value". The requirements are ANDed.
+                                    type: object
+                                type: object
+                                x-kubernetes-map-type: atomic
+                            required:
+                              - host
+                              - name
+                              - namespace
+                              - vmSelector
+                            type: object
+                          type: array
+                      type: object
+                    networkAgent:
+                      description: |-
+                        NetworkAgentSpec configures the standalone privileged eBPF collector.
+                        Privileged admission (including OpenShift SCC approval) must be granted externally.
+                      properties:
+                        credentialsSecretName:
+                          default: whatap-credentials
+                          type: string
+                        enabled:
+                          default: false
+                          type: boolean
+                        env:
+                          description: |-
+                            Env adds ordered container variables. Operator-managed identity, credentials
+                            and Go runtime variable names are reserved. Explicit logging fields override env.
+                          items:
+                            description: EnvVar represents an environment variable present
+                              in a Container.
+                            properties:
+                              name:
+                                description: Name of the environment variable. Must
+                                  be a C_IDENTIFIER.
+                                type: string
+                              value:
+                                description: |-
+                                  Variable references $(VAR_NAME) are expanded
+                                  using the previously defined environment variables in the container and
+                                  any service environment variables. If a variable cannot be resolved,
+                                  the reference in the input string will be unchanged. Double $$ are reduced
+                                  to a single $, which allows for escaping the $(VAR_NAME) syntax: i.e.
+                                  "$$(VAR_NAME)" will produce the string literal "$(VAR_NAME)".
+                                  Escaped references will never be expanded, regardless of whether the variable
+                                  exists or not.
+                                  Defaults to "".
+                                type: string
+                              valueFrom:
+                                description: Source for the environment variable's value.
+                                  Cannot be used if value is not empty.
+                                properties:
+                                  configMapKeyRef:
+                                    description: Selects a key of a ConfigMap.
+                                    properties:
+                                      key:
+                                        description: The key to select.
+                                        type: string
+                                      name:
+                                        default: ""
+                                        description: |-
+                                          Name of the referent.
+                                          This field is effectively required, but due to backwards compatibility is
+                                          allowed to be empty. Instances of this type with an empty value here are
+                                          almost certainly wrong.
+                                          More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        type: string
+                                      optional:
+                                        description: Specify whether the ConfigMap or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                      - key
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                  fieldRef:
+                                    description: |-
+                                      Selects a field of the pod: supports metadata.name, metadata.namespace, `metadata.labels['<KEY>']`, `metadata.annotations['<KEY>']`,
+                                      spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.
+                                    properties:
+                                      apiVersion:
+                                        description: Version of the schema the FieldPath
+                                          is written in terms of, defaults to "v1".
+                                        type: string
+                                      fieldPath:
+                                        description: Path of the field to select in
+                                          the specified API version.
+                                        type: string
+                                    required:
+                                      - fieldPath
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                  resourceFieldRef:
+                                    description: |-
+                                      Selects a resource of the container: only resources limits and requests
+                                      (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported.
+                                    properties:
+                                      containerName:
+                                        description: 'Container name: required for volumes,
+                                          optional for env vars'
+                                        type: string
+                                      divisor:
+                                        anyOf:
+                                          - type: integer
+                                          - type: string
+                                        description: Specifies the output format of
+                                          the exposed resources, defaults to "1"
+                                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                        x-kubernetes-int-or-string: true
+                                      resource:
+                                        description: 'Required: resource to select'
+                                        type: string
+                                    required:
+                                      - resource
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                  secretKeyRef:
+                                    description: Selects a key of a secret in the pod's
+                                      namespace
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        default: ""
+                                        description: |-
+                                          Name of the referent.
+                                          This field is effectively required, but due to backwards compatibility is
+                                          allowed to be empty. Instances of this type with an empty value here are
+                                          almost certainly wrong.
+                                          More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or its
+                                          key must be defined
+                                        type: boolean
+                                    required:
+                                      - key
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                type: object
+                            required:
+                              - name
+                            type: object
+                          type: array
+                        envFrom:
+                          description: |-
+                            EnvFrom adds ordered ConfigMap/Secret sources in the agent namespace.
+                            Explicit Env (including operator-managed variables) takes precedence.
+                          items:
+                            description: EnvFromSource represents the source of a set
+                              of ConfigMaps or Secrets
+                            properties:
+                              configMapRef:
+                                description: The ConfigMap to select from
+                                properties:
+                                  name:
+                                    default: ""
+                                    description: |-
+                                      Name of the referent.
+                                      This field is effectively required, but due to backwards compatibility is
+                                      allowed to be empty. Instances of this type with an empty value here are
+                                      almost certainly wrong.
+                                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                    type: string
+                                  optional:
+                                    description: Specify whether the ConfigMap must
+                                      be defined
+                                    type: boolean
+                                type: object
+                                x-kubernetes-map-type: atomic
+                              prefix:
+                                description: Optional text to prepend to the name of
+                                  each environment variable. Must be a C_IDENTIFIER.
+                                type: string
+                              secretRef:
+                                description: The Secret to select from
+                                properties:
+                                  name:
+                                    default: ""
+                                    description: |-
+                                      Name of the referent.
+                                      This field is effectively required, but due to backwards compatibility is
+                                      allowed to be empty. Instances of this type with an empty value here are
+                                      almost certainly wrong.
+                                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                    type: string
+                                  optional:
+                                    description: Specify whether the Secret must be
+                                      defined
+                                    type: boolean
+                                type: object
+                                x-kubernetes-map-type: atomic
+                            type: object
+                          type: array
+                        image:
+                          description: Image is an explicit image reference; there is
+                            no implicit latest image.
+                          type: string
+                        imagePullSecrets:
+                          items:
+                            description: |-
+                              LocalObjectReference contains enough information to let you locate the
+                              referenced object inside the same namespace.
+                            properties:
+                              name:
+                                default: ""
+                                description: |-
+                                  Name of the referent.
+                                  This field is effectively required, but due to backwards compatibility is
+                                  allowed to be empty. Instances of this type with an empty value here are
+                                  almost certainly wrong.
+                                  More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                type: string
+                            type: object
+                            x-kubernetes-map-type: atomic
+                          type: array
+                        logInterval:
+                          description: |-
+                            LogInterval is a nonnegative Go duration (for example 1m or 0s).
+                            Zero disables periodic summaries, not the final summary or fatal errors.
+                          type: string
+                        logLevel:
+                          description: |-
+                            LogLevel controls periodic operational summaries, never telemetry stdout.
+                            Fatal errors and final delivery summaries remain visible at every level.
+                          enum:
+                            - debug
+                            - info
+                            - warn
+                            - error
+                          type: string
+                        nodeSelector:
+                          additionalProperties:
+                            type: string
+                          type: object
+                        resources:
+                          description: ResourceRequirements describes the compute resource
+                            requirements.
+                          properties:
+                            claims:
+                              description: |-
+                                Claims lists the names of resources, defined in spec.resourceClaims,
+                                that are used by this container.
+
+                                This is an alpha field and requires enabling the
+                                DynamicResourceAllocation feature gate.
+
+                                This field is immutable. It can only be set for containers.
+                              items:
+                                description: ResourceClaim references one entry in PodSpec.ResourceClaims.
+                                properties:
+                                  name:
+                                    description: |-
+                                      Name must match the name of one entry in pod.spec.resourceClaims of
+                                      the Pod where this field is used. It makes that resource available
+                                      inside a container.
+                                    type: string
+                                  request:
+                                    description: |-
+                                      Request is the name chosen for a request in the referenced claim.
+                                      If empty, everything from the claim is made available, otherwise
+                                      only the result of this request.
+                                    type: string
+                                required:
+                                  - name
+                                type: object
+                              type: array
+                              x-kubernetes-list-map-keys:
+                                - name
+                              x-kubernetes-list-type: map
+                            limits:
+                              additionalProperties:
+                                anyOf:
+                                  - type: integer
+                                  - type: string
+                                pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                x-kubernetes-int-or-string: true
+                              description: |-
+                                Limits describes the maximum amount of compute resources allowed.
+                                More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+                              type: object
+                            requests:
+                              additionalProperties:
+                                anyOf:
+                                  - type: integer
+                                  - type: string
+                                pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                x-kubernetes-int-or-string: true
+                              description: |-
+                                Requests describes the minimum amount of compute resources required.
+                                If Requests is omitted for a container, it defaults to Limits if that is explicitly specified,
+                                otherwise to an implementation-defined value. Requests cannot exceed Limits.
+                                More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+                              type: object
+                          type: object
+                        serviceAccountName:
+                          description: ServiceAccountName reuses an externally managed
+                            account without SA/RBAC writes.
+                          type: string
+                        stdout:
+                          description: |-
+                            Stdout controls telemetry JSONL separately from operational logs.
+                            Omit to use the image default; explicit settings require a logging-capable image.
+                          enum:
+                            - auto
+                            - jsonl
+                            - none
+                          type: string
+                        tolerations:
+                          items:
+                            description: |-
+                              The pod this Toleration is attached to tolerates any taint that matches
+                              the triple <key,value,effect> using the matching operator <operator>.
+                            properties:
+                              effect:
+                                description: |-
+                                  Effect indicates the taint effect to match. Empty means match all taint effects.
+                                  When specified, allowed values are NoSchedule, PreferNoSchedule and NoExecute.
+                                type: string
+                              key:
+                                description: |-
+                                  Key is the taint key that the toleration applies to. Empty means match all taint keys.
+                                  If the key is empty, operator must be Exists; this combination means to match all values and all keys.
+                                type: string
+                              operator:
+                                description: |-
+                                  Operator represents a key's relationship to the value.
+                                  Valid operators are Exists and Equal. Defaults to Equal.
+                                  Exists is equivalent to wildcard for value, so that a pod can
+                                  tolerate all taints of a particular category.
+                                type: string
+                              tolerationSeconds:
+                                description: |-
+                                  TolerationSeconds represents the period of time the toleration (which must be
+                                  of effect NoExecute, otherwise this field is ignored) tolerates the taint. By default,
+                                  it is not set, which means tolerate the taint forever (do not evict). Zero and
+                                  negative values will be treated as 0 (evict immediately) by the system.
+                                format: int64
+                                type: integer
+                              value:
+                                description: |-
+                                  Value is the taint value the toleration matches to.
+                                  If the operator is Exists, the value should be empty, otherwise just a regular string.
+                                type: string
+                            type: object
+                          type: array
+                      type: object
                     openAgent:
                       description: OpenAgentSpec defines the openAgent enablement and
                         configuration
@@ -7448,6 +7967,48 @@ spec:
                                       description: Address is the address to scrape
                                         metrics from (for StaticEndpoints)
                                       type: string
+                                    authorization:
+                                      description: Authorization defines the Authorization
+                                        header (e.g. Bearer token) sent with scrape
+                                        requests
+                                      properties:
+                                        credentials:
+                                          description: |-
+                                            Credentials is the inline credential value. Prefer CredentialsEnv,
+                                            CredentialsFile or CredentialsSecret to keep secrets out of the CR.
+                                          type: string
+                                        credentialsEnv:
+                                          description: |-
+                                            CredentialsEnv reads the credential from the named environment variable
+                                            present in the OpenAgent container (e.g. "OPENAGENT_SCRAPE_TOKEN")
+                                          type: string
+                                        credentialsFile:
+                                          description: CredentialsFile reads the credential
+                                            from a file path inside the container
+                                          type: string
+                                        credentialsSecret:
+                                          description: CredentialsSecret reads the credential
+                                            from a Kubernetes Secret
+                                          properties:
+                                            key:
+                                              description: Key within the secret
+                                              type: string
+                                            name:
+                                              description: Name of the secret
+                                              type: string
+                                            namespace:
+                                              description: Namespace of the secret (optional,
+                                                defaults to agent's namespace)
+                                              type: string
+                                          required:
+                                            - key
+                                            - name
+                                          type: object
+                                        type:
+                                          description: Type is the Authorization scheme
+                                            (default "Bearer")
+                                          type: string
+                                      type: object
                                     basicAuth:
                                       description: BasicAuth defines the HTTP Basic
                                         Auth configuration for the endpoint
@@ -7527,9 +8088,21 @@ spec:
                                             items:
                                               type: string
                                             type: array
+                                          sourceLabels:
+                                            description: |-
+                                              SourceLabelsCamel is the Prometheus Operator style key (sourceLabels).
+                                              Accepted as a fallback when source_labels is not set.
+                                            items:
+                                              type: string
+                                            type: array
                                           target_label:
                                             description: TargetLabel is the label to
                                               set in the relabeling
+                                            type: string
+                                          targetLabel:
+                                            description: |-
+                                              TargetLabelCamel is the Prometheus Operator style key (targetLabel).
+                                              Accepted as a fallback when target_label is not set.
                                             type: string
                                         type: object
                                       type: array
@@ -7718,9 +8291,21 @@ spec:
                                       items:
                                         type: string
                                       type: array
+                                    sourceLabels:
+                                      description: |-
+                                        SourceLabelsCamel is the Prometheus Operator style key (sourceLabels).
+                                        Accepted as a fallback when source_labels is not set.
+                                      items:
+                                        type: string
+                                      type: array
                                     target_label:
                                       description: TargetLabel is the label to set in
                                         the relabeling
+                                      type: string
+                                    targetLabel:
+                                      description: |-
+                                        TargetLabelCamel is the Prometheus Operator style key (targetLabel).
+                                        Accepted as a fallback when target_label is not set.
                                       type: string
                                   type: object
                                 type: array

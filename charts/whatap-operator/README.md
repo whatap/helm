@@ -70,7 +70,7 @@ values.yaml 예시:
 ```yaml
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 3.0.20
+  tag: 3.0.24
   digest: "" # 선택 사항. 설정 시 repository:tag@digest 형식으로 고정
   pullPolicy: Always
 
@@ -246,6 +246,45 @@ dcgmExporter:
 ## CRD
 차트는 `WhatapAgent` CRD를 포함하여 설치합니다. Helm이 CRD를 설치/관리하며, 오퍼레이터가 해당 리소스를 감시합니다.
 
+### 1.9.13: Operator 3.0.24와 CRD 필드 추가
+
+차트 `1.9.13`의 기본 이미지는 Operator `3.0.24`입니다. **values와 템플릿 구조는 1.9.12와 같습니다.**
+바뀐 파일은 다음 세 가지뿐입니다.
+
+- `Chart.yaml`: 차트 버전과 `appVersion`
+- `values.yaml`: `image.tag` 기본값
+- `templates/crd-whatapagents.yaml`: 필드 추가만 있습니다. 기존 필드의 삭제나 변경은 없습니다.
+
+차트를 내려받아 직접 수정해 사용한다면 기존 수정분은 그대로 두고 위 이미지 태그와 CRD 파일만 반영하면 됩니다.
+
+CRD에 추가된 `WhatapAgent` 필드는 다음과 같습니다.
+
+- `spec.features.kubeVirt`: 라벨을 붙여 새로 만드는 KubeVirt VM에 첫 부팅 때 서버 에이전트를 자동 설치합니다.
+  동작 방식은 [whatap-operator 문서](https://github.com/whatap/whatap-operator/blob/master/docs/kubevirt-server-agent.md),
+  설정 예시는 [whatap-operator 예제](https://github.com/whatap/whatap-operator/blob/master/examples/kubevirt-server-agent.yaml)를 참고하십시오.
+- `spec.features.networkAgent`: 네트워크 수집기 DaemonSet 관리
+- Operator가 이미 지원하지만 1.9.12 이하 차트 CRD에 빠져 있던 필드
+  - `apm.instrumentation.targets[].config`의 `mountPath`, `pluginConfigMapRef`, `volumeName`
+  - `k8sAgent.gpuMonitoring`의 `relabelConfigs[]`, `metricRelabelConfigs[]`에 있는 `sourceLabels`, `targetLabel`
+  - `openAgent.targets[]`의 `relabelConfigs[]`, `endpoints[].metricRelabelConfigs[]`에 있는 `sourceLabels`, `targetLabel`
+  - `openAgent.targets[].endpoints[].authorization`
+
+새 기능은 CR에서 켜야 동작하며 기본값은 꺼져 있습니다. 기존 CR은 수정 없이 그대로 동작합니다.
+1.9.12 이하 CRD에서는 위 필드가 스키마에 없어 저장할 때 제거되었습니다. 이 필드를 쓰려면 CRD를 업그레이드한 뒤 CR을 다시 적용하십시오.
+
+```bash
+helm repo update
+helm upgrade whatap-operator whatap/whatap-operator \
+  --namespace whatap --version 1.9.13 --reuse-values \
+  --set-string image.tag=3.0.24 --set-string image.digest= \
+  --atomic --wait
+kubectl explain whatapagent.spec.features.kubeVirt
+```
+
+`--reuse-values`를 쓰면 이전 이미지 태그가 남으므로 위처럼 태그를 명시합니다. release/namespace는 실제 설치 이름으로 바꾸십시오.
+Operator 3.0.21~3.0.23의 APM 자동 계측 수정(Python custom 연결 환경변수·자동 로딩 경로 보존, Node.js `NODE_OPTIONS`/`NODE_PATH` 보존)도 함께 적용됩니다.
+이 수정은 새로 만들어지거나 재시작되는 Pod부터 반영됩니다.
+
 ### 1.9.11: GPU pod-resources 호스트 경로 설정
 
 Operator `3.0.20`과 차트 `1.9.11`부터 기존 `WhatapAgent` CR의
@@ -295,7 +334,7 @@ managedResources:
 
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 3.0.20
+  tag: 3.0.24
   digest: ""
   pullPolicy: Always
 

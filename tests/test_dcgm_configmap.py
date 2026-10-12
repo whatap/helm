@@ -184,7 +184,11 @@ class DcgmConfigMapTest(unittest.TestCase):
     def test_new_options_do_not_change_other_default_resources(self):
         for chart_name in CHARTS:
             with self.subTest(chart=chart_name):
-                baseline = self.documents(chart_name, chart_path=ROOT / BASELINE_ARCHIVES[chart_name])
+                # whatap-operator 1.9.13 intentionally changed its image tag and CRD after this
+                # DCGM baseline was published; release-to-release changes are pinned in
+                # test_operator_chart.test_changes_since_previous_release_are_image_and_additive_crd_only.
+                baseline_path = None if chart_name == "whatap-operator" else ROOT / BASELINE_ARCHIVES[chart_name]
+                baseline = self.documents(chart_name, chart_path=baseline_path)
                 actual = self.documents(chart_name, {
                     "customMetrics": CUSTOM_METRICS, "extraMetrics": EXTRA_METRICS,
                 })
