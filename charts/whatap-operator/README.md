@@ -271,6 +271,8 @@ CRD에 추가된 `WhatapAgent` 필드는 다음과 같습니다.
 
 새 기능은 CR에서 켜야 동작하며 기본값은 꺼져 있습니다. 기존 CR은 수정 없이 그대로 동작합니다.
 1.9.12 이하 CRD에서는 위 필드가 스키마에 없어 저장할 때 제거되었습니다. 이 필드를 쓰려면 CRD를 업그레이드한 뒤 CR을 다시 적용하십시오.
+`managedResources.rbac: false`로 RBAC를 직접 관리하는 경우, 새 기능을 켜지 않으면 추가 권한이 필요 없습니다. `kubeVirt`를 켤 때는
+Operator ServiceAccount에 Secret `create`, `get` 권한을 추가하십시오. VM 네임스페이스에 cloud-init Secret을 만들고 읽기 때문입니다.
 
 ```bash
 helm repo update
