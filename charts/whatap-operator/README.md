@@ -70,7 +70,7 @@ values.yaml 예시:
 ```yaml
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 3.0.24
+  tag: 3.0.25
   digest: "" # 선택 사항. 설정 시 repository:tag@digest 형식으로 고정
   pullPolicy: Always
 
@@ -246,6 +246,37 @@ dcgmExporter:
 ## CRD
 차트는 `WhatapAgent` CRD를 포함하여 설치합니다. Helm이 CRD를 설치/관리하며, 오퍼레이터가 해당 리소스를 감시합니다.
 
+### 1.9.14: Operator 3.0.25와 `agentVersion` 기본값 변경
+
+차트 `1.9.14`의 기본 이미지는 Operator `3.0.25`입니다. **values와 템플릿 구조는 1.9.12와 같습니다.**
+바뀐 파일은 다음 세 가지뿐입니다.
+
+- `Chart.yaml`: 차트 버전과 `appVersion`
+- `values.yaml`: `image.tag` 기본값
+- `templates/crd-whatapagents.yaml`: `spec.features.kubeVirt.targets[].agentVersion`의 `default: 2.9.25`를 지우고 설명을 바꿨습니다. 다른 필드는 바뀌지 않았습니다.
+
+Operator 3.0.25에서 바뀐 KubeVirt 동작은 다음과 같습니다.
+
+- VM을 지우면 그 VM용 cloud-init Secret(`whatap-kv-*`)을 Operator가 5~10분 안에 지웁니다. 3.0.24 이하에서 남은 Secret도 함께 정리됩니다.
+- `agentVersion`을 생략하면 VM을 만들 때 Operator 기본 버전(3.0.25 기준 2.9.25)을 씁니다. Operator를 올리면 생략한 대상은 새 기본 버전을 따릅니다.
+  1.9.13 CRD로 만든 CR에는 `agentVersion: 2.9.25`가 저장돼 있습니다. Operator 기본 버전을 따르게 하려면 `kubectl edit whatapagent whatap`으로 해당 줄을 지우십시오.
+
+`managedResources.rbac: false`로 RBAC를 직접 관리한다면 Operator ServiceAccount에 아래 권한을 추가하십시오.
+Secret `list` 권한이 없으면 `kubeVirt`를 쓰지 않아도 정리 점검 실패 로그가 1시간에 한 번 남습니다. 다른 동작에는 영향이 없습니다.
+
+- Secret: `create`, `get`, `patch`, `list`, `delete`
+- `kubevirt.io`의 `virtualmachines`, `virtualmachineinstances`: `list`
+
+```bash
+helm repo update
+helm upgrade whatap-operator whatap/whatap-operator \
+  --namespace whatap --version 1.9.14 --reuse-values \
+  --set-string image.tag=3.0.25 --set-string image.digest= \
+  --atomic --wait
+```
+
+`--reuse-values`를 쓰면 이전 이미지 태그가 남으므로 위처럼 태그를 명시합니다. release/namespace는 실제 설치 이름으로 바꾸십시오.
+
 ### 1.9.13: Operator 3.0.24와 CRD 필드 추가
 
 차트 `1.9.13`의 기본 이미지는 Operator `3.0.24`입니다. **values와 템플릿 구조는 1.9.12와 같습니다.**
@@ -336,7 +367,7 @@ managedResources:
 
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 3.0.24
+  tag: 3.0.25
   digest: ""
   pullPolicy: Always
 

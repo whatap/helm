@@ -6115,10 +6115,12 @@ spec:
                               The VM must additionally carry monitoring.whatap.com/server-agent: "true".
                             properties:
                               agentVersion:
-                                default: 2.9.25
                                 description: |-
                                   AgentVersion selects a published official Linux tar release for new VMs only.
-                                  Changing it does not upgrade agents in existing VMs.
+                                  Changing it does not upgrade agents in existing VMs. When omitted, the
+                                  operator's built-in default is used at VM creation, so an operator upgrade
+                                  moves omitted targets to its new default. There is deliberately no schema
+                                  default: it would be written into the CR and pin the version forever.
                                 maxLength: 32
                                 pattern: ^[0-9]+\.[0-9]+\.[0-9]+$
                                 type: string
