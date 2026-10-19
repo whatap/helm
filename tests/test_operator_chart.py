@@ -47,7 +47,18 @@ TEMPLATES_1_9_12 = {
     "operator-clusterrolebinding.yaml", "operator-deployment.yaml", "operator-serviceaccount.yaml",
     "secret-whatap-credentials.yaml",
 }
-PREVIOUS_RELEASE_ARCHIVE = "whatap-operator-1.9.12.tgz"
+PREVIOUS_RELEASE_ARCHIVE = "whatap-operator-1.9.13.tgz"
+KUBEVIRT_TARGET_PATH = (
+    "spec", "versions", 0, "schema", "openAPIV3Schema", "properties", "spec", "properties", "features",
+    "properties", "kubeVirt", "properties", "targets", "items", "properties",
+)
+
+
+def kubevirt_agent_version(crd):
+    node = crd
+    for key in KUBEVIRT_TARGET_PATH:
+        node = node[key]
+    return node["agentVersion"]
 
 
 class OperatorChartUpgradeSafetyTest(unittest.TestCase):
@@ -150,13 +161,13 @@ class OperatorChartUpgradeSafetyTest(unittest.TestCase):
             image,
         )
 
-    def test_chart_defaults_to_operator_3_0_24(self):
+    def test_chart_defaults_to_operator_3_0_25(self):
         chart_metadata = yaml.safe_load((CHART / "Chart.yaml").read_text())
         values = yaml.safe_load((CHART / "values.yaml").read_text())
 
-        self.assertEqual("1.9.13", chart_metadata["version"])
-        self.assertEqual("3.0.24", chart_metadata["appVersion"])
-        self.assertEqual("3.0.24", values["image"]["tag"])
+        self.assertEqual("1.9.14", chart_metadata["version"])
+        self.assertEqual("3.0.25", chart_metadata["appVersion"])
+        self.assertEqual("3.0.25", values["image"]["tag"])
 
     def test_values_and_template_structure_are_unchanged_since_1_9_12(self):
         # Users who patch the chart re-apply their edits on every upgrade. Changing this
@@ -203,7 +214,7 @@ class OperatorChartUpgradeSafetyTest(unittest.TestCase):
         old_deployment = previous[("Deployment", "whatap-operator")]
         new_deployment = current[("Deployment", "whatap-operator")]
         self.assertEqual(
-            "public.ecr.aws/whatap/whatap-operator:3.0.24",
+            "public.ecr.aws/whatap/whatap-operator:3.0.25",
             new_deployment["spec"]["template"]["spec"]["containers"][0]["image"],
         )
         new_deployment["spec"]["template"]["spec"]["containers"][0]["image"] = (
@@ -212,6 +223,14 @@ class OperatorChartUpgradeSafetyTest(unittest.TestCase):
         self.assertEqual(old_deployment, new_deployment)
 
         crd_key = ("CustomResourceDefinition", "whatapagents.monitoring.whatap.com")
+        # 1.9.14 deliberately drops the agentVersion schema default (and rewrites its
+        # description): a default is persisted into every CR and would pin omitted
+        # targets to 2.9.25 across operator upgrades. Any other CRD change must be additive.
+        old_agent_version = kubevirt_agent_version(previous[crd_key])
+        new_agent_version = kubevirt_agent_version(current[crd_key])
+        self.assertEqual("2.9.25", old_agent_version.pop("default"))
+        self.assertNotIn("default", new_agent_version)
+        old_agent_version["description"] = new_agent_version["description"]
         self.assertTrue(is_additive(previous[crd_key], current[crd_key]), "CRD changes must only add fields")
 
     def test_crd_exposes_kubevirt_and_network_agent_disabled_by_default(self):
@@ -231,13 +250,24 @@ class OperatorChartUpgradeSafetyTest(unittest.TestCase):
         for field in ("license", "licenseSecretRef", "port", "enabled"):
             self.assertIn(field, target["properties"])
         agent_version = target["properties"]["agentVersion"]
-        self.assertEqual("2.9.25", agent_version["default"])
+        # Omitted means "the operator's built-in default", resolved at VM creation.
+        self.assertNotIn("default", agent_version)
         self.assertEqual(32, agent_version["maxLength"])
         self.assertRegex("2.9.25", agent_version["pattern"])
         for invalid in ("latest", "v2.9.25", "2.9"):
             self.assertNotRegex(invalid, agent_version["pattern"])
 
         self.assertIs(False, features["networkAgent"]["properties"]["enabled"]["default"])
+
+    def test_readme_documents_1_9_14_upgrade(self):
+        readme = (CHART / "README.md").read_text()
+        for required_text in (
+            "1.9.14", "3.0.25", "--set-string image.tag=3.0.25", "agentVersion: 2.9.25",
+            "kubectl edit whatapagent whatap", "virtualmachineinstances",
+            "values와 템플릿 구조는 1.9.12와 같습니다",
+        ):
+            with self.subTest(required_text=required_text):
+                self.assertIn(required_text, readme)
 
     def test_readme_documents_1_9_13_upgrade(self):
         readme = (CHART / "README.md").read_text()
