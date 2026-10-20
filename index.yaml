@@ -83,6 +83,15 @@ entries:
     version: 1.11.1
   whatap-operator:
   - apiVersion: v2
+    appVersion: 3.0.26
+    created: "2026-10-20T11:31:31.583616+09:00"
+    description: A Helm chart for deploying the WhaTap Operator
+    digest: a7de20560ff1c96ee56196a97ed5a892761a9615a7dc639506d2da2850e054b9
+    name: whatap-operator
+    urls:
+    - https://whatap.github.io/helm/whatap-operator-1.9.15.tgz
+    version: 1.9.15
+  - apiVersion: v2
     appVersion: 3.0.25
     created: "2026-10-19T12:26:07.155223+09:00"
     description: A Helm chart for deploying the WhaTap Operator
@@ -460,4 +469,4 @@ entries:
     urls:
     - https://whatap.github.io/helm/whatap-operator-1.6.0.tgz
     version: 1.6.0
-generated: "2026-10-19T12:26:07.153414+09:00"
+generated: "2026-10-20T11:31:31.581447+09:00"

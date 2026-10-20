@@ -70,7 +70,7 @@ values.yaml 예시:
 ```yaml
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 3.0.25
+  tag: 3.0.26
   digest: "" # 선택 사항. 설정 시 repository:tag@digest 형식으로 고정
   pullPolicy: Always
 
@@ -246,6 +246,38 @@ dcgmExporter:
 ## CRD
 차트는 `WhatapAgent` CRD를 포함하여 설치합니다. Helm이 CRD를 설치/관리하며, 오퍼레이터가 해당 리소스를 감시합니다.
 
+### 1.9.15: Operator 3.0.26과 APM 자동 주입 진단
+
+차트 `1.9.15`의 기본 이미지는 Operator `3.0.26`입니다. **values와 템플릿 구조는 1.9.12와 같고, CRD는 1.9.14와 같습니다.**
+바뀐 파일은 `Chart.yaml`(차트 버전과 `appVersion`)과 `values.yaml`(`image.tag` 기본값)뿐입니다.
+
+Operator 3.0.26은 kube-apiserver가 APM 자동 주입 웹훅을 호출하지 못하는 상황을 기록합니다. 이때 Pod는 APM 없이 생성되고, 오류는 kube-apiserver 로그에만 남았습니다.
+
+- Operator가 5분마다 dry-run으로 웹훅 호출을 점검합니다. 연속 2회 실패하면 kube-apiserver가 돌려준 오류(예: 프록시가 TLS를 가로채 생긴 x509 오류)를 WhatapAgent 이벤트 `APMInjectionWebhookUnreachable`과 Operator 로그에 남깁니다. 복구되면 `APMInjectionWebhookRecovered` 이벤트를 남깁니다.
+- APM 대상인데 웹훅을 거치지 않고 생성된 Pod에는 `APMInjectionMissing` 경고 이벤트를 남깁니다. 원인을 고친 뒤 해당 Pod를 재시작해야 APM이 주입됩니다.
+- Operator가 만드는 MutatingWebhookConfiguration `whatap-webhook`에 점검용 항목 `apm-probe.monitoring.whatap.com`이 추가됩니다. `monitoring.whatap.com/apm-webhook-probe` 라벨이 있는 Pod에만 적용되므로 애플리케이션 Pod에는 영향이 없습니다.
+
+```bash
+kubectl describe whatapagent whatap
+kubectl get events -A --field-selector reason=APMInjectionMissing
+```
+
+`managedResources.rbac: false`로 RBAC를 직접 관리한다면 Operator ServiceAccount에 아래 권한을 추가하십시오.
+Pod `create` 권한이 없으면 웹훅 호출 점검만 건너뛰고 로그를 남깁니다.
+
+- Pod: `create` (dry-run 점검)
+- Namespace: `get`, `list`, `watch`
+
+```bash
+helm repo update
+helm upgrade whatap-operator whatap/whatap-operator \
+  --namespace whatap --version 1.9.15 --reuse-values \
+  --set-string image.tag=3.0.26 --set-string image.digest= \
+  --atomic --wait
+```
+
+`--reuse-values`를 쓰면 이전 이미지 태그가 남으므로 위처럼 태그를 명시합니다. release/namespace는 실제 설치 이름으로 바꾸십시오.
+
 ### 1.9.14: Operator 3.0.25와 `agentVersion` 기본값 변경
 
 차트 `1.9.14`의 기본 이미지는 Operator `3.0.25`입니다. **values와 템플릿 구조는 1.9.12와 같습니다.**
@@ -367,7 +399,7 @@ managedResources:
 
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 3.0.25
+  tag: 3.0.26
   digest: ""
   pullPolicy: Always
 
