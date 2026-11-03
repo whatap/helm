@@ -70,7 +70,7 @@ values.yaml 예시:
 ```yaml
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 3.0.26
+  tag: 3.0.27
   digest: "" # 선택 사항. 설정 시 repository:tag@digest 형식으로 고정
   pullPolicy: Always
 
@@ -246,6 +246,37 @@ dcgmExporter:
 ## CRD
 차트는 `WhatapAgent` CRD를 포함하여 설치합니다. Helm이 CRD를 설치/관리하며, 오퍼레이터가 해당 리소스를 감시합니다.
 
+### 1.9.16: Operator 3.0.27과 Pod annotation으로 APM ConfigMap 지정
+
+차트 `1.9.16`의 기본 이미지는 Operator `3.0.27`입니다. **values와 템플릿 구조는 1.9.12와 같고, CRD는 1.9.15와 같습니다.**
+바뀐 파일은 `Chart.yaml`(차트 버전과 `appVersion`)과 `values.yaml`(`image.tag` 기본값)뿐입니다.
+
+Operator 3.0.27부터는 `WhatapAgent` CR을 고치지 않고, Pod annotation `whatap.io/apm-configmap`으로 그 Pod가 쓸 APM 설정(`whatap.conf`) ConfigMap을 지정할 수 있습니다.
+
+```yaml
+spec:
+  template:
+    metadata:
+      annotations:
+        whatap.io/apm-configmap: service-config
+```
+
+- ConfigMap은 Pod와 같은 Namespace에 있어야 하고 `data.whatap.conf`를 포함해야 합니다. Pod의 `whatap.conf`는 이 ConfigMap의 내용으로 만들어집니다.
+- instrumentation과 target이 활성화되어 있고 Namespace·Pod selector가 일치하는 Pod에만 적용됩니다. annotation만으로 자동 주입이 켜지지는 않습니다.
+- 비어 있지 않은 annotation은 그 Pod에서 CR의 `configMapRef`보다 우선합니다. annotation이 없거나 빈 문자열이면 기존 CR 설정을 그대로 쓰며, CR 자체는 바뀌지 않습니다.
+- ConfigMap이 없으면 Pod가 `ContainerCreating`에서 멈추고, `whatap.conf` key가 없으면 initContainer의 복사가 실패해 Pod가 시작되지 않습니다. 배포 전에 ConfigMap을 먼저 만드십시오.
+- annotation 추가·변경은 새로 만들어지는 Pod부터 적용되므로 기존 Pod는 rollout restart로 다시 만들어야 합니다.
+
+```bash
+helm repo update
+helm upgrade whatap-operator whatap/whatap-operator \
+  --namespace whatap --version 1.9.16 --reuse-values \
+  --set-string image.tag=3.0.27 --set-string image.digest= \
+  --atomic --wait
+```
+
+`--reuse-values`를 쓰면 이전 이미지 태그가 남으므로 위처럼 태그를 명시합니다. release/namespace는 실제 설치 이름으로 바꾸십시오.
+
 ### 1.9.15: Operator 3.0.26과 APM 자동 주입 진단
 
 차트 `1.9.15`의 기본 이미지는 Operator `3.0.26`입니다. **values와 템플릿 구조는 1.9.12와 같고, CRD는 1.9.14와 같습니다.**
@@ -399,7 +430,7 @@ managedResources:
 
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 3.0.26
+  tag: 3.0.27
   digest: ""
   pullPolicy: Always
 
