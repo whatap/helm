@@ -47,7 +47,7 @@ TEMPLATES_1_9_12 = {
     "operator-clusterrolebinding.yaml", "operator-deployment.yaml", "operator-serviceaccount.yaml",
     "secret-whatap-credentials.yaml",
 }
-PREVIOUS_RELEASE_ARCHIVE = "whatap-operator-1.9.15.tgz"
+PREVIOUS_RELEASE_ARCHIVE = "whatap-operator-1.9.16.tgz"
 
 
 class OperatorChartUpgradeSafetyTest(unittest.TestCase):
@@ -150,13 +150,13 @@ class OperatorChartUpgradeSafetyTest(unittest.TestCase):
             image,
         )
 
-    def test_chart_defaults_to_operator_3_0_27(self):
+    def test_chart_defaults_to_operator_3_0_29(self):
         chart_metadata = yaml.safe_load((CHART / "Chart.yaml").read_text())
         values = yaml.safe_load((CHART / "values.yaml").read_text())
 
-        self.assertEqual("1.9.16", chart_metadata["version"])
-        self.assertEqual("3.0.27", chart_metadata["appVersion"])
-        self.assertEqual("3.0.27", values["image"]["tag"])
+        self.assertEqual("1.9.17", chart_metadata["version"])
+        self.assertEqual("3.0.29", chart_metadata["appVersion"])
+        self.assertEqual("3.0.29", values["image"]["tag"])
 
     def test_values_and_template_structure_are_unchanged_since_1_9_12(self):
         # Users who patch the chart re-apply their edits on every upgrade. Changing this
@@ -201,7 +201,7 @@ class OperatorChartUpgradeSafetyTest(unittest.TestCase):
         old_deployment = previous[("Deployment", "whatap-operator")]
         new_deployment = current[("Deployment", "whatap-operator")]
         self.assertEqual(
-            "public.ecr.aws/whatap/whatap-operator:3.0.27",
+            "public.ecr.aws/whatap/whatap-operator:3.0.29",
             new_deployment["spec"]["template"]["spec"]["containers"][0]["image"],
         )
         new_deployment["spec"]["template"]["spec"]["containers"][0]["image"] = (
@@ -235,6 +235,31 @@ class OperatorChartUpgradeSafetyTest(unittest.TestCase):
             self.assertNotRegex(invalid, agent_version["pattern"])
 
         self.assertIs(False, features["networkAgent"]["properties"]["enabled"]["default"])
+
+    def test_crd_exposes_optional_node_agent_update_strategy(self):
+        crd = next(
+            document
+            for document in self.render()
+            if document["kind"] == "CustomResourceDefinition"
+            and document["metadata"]["name"] == "whatapagents.monitoring.whatap.com"
+        )
+        version = next(version for version in crd["spec"]["versions"] if version["name"] == "v2alpha1")
+        node_agent = (version["schema"]["openAPIV3Schema"]["properties"]["spec"]["properties"]["features"]
+                      ["properties"]["k8sAgent"]["properties"]["nodeAgent"])
+        strategy = node_agent["properties"]["updateStrategy"]
+        self.assertNotIn("updateStrategy", node_agent.get("required", []))
+        rolling = strategy["properties"]["rollingUpdate"]["properties"]
+        self.assertIs(True, rolling["maxUnavailable"]["x-kubernetes-int-or-string"])
+        self.assertIn("maxSurge is ignored", strategy["description"])
+
+    def test_readme_documents_1_9_17_upgrade(self):
+        readme = (CHART / "README.md").read_text()
+        for required_text in (
+            "1.9.17", "3.0.29", "--set-string image.tag=3.0.29", "values와 템플릿 구조는 1.9.12와 같습니다",
+            "nodeAgent.updateStrategy", "maxUnavailable: \"10%\"", "maxSurge",
+        ):
+            with self.subTest(required_text=required_text):
+                self.assertIn(required_text, readme)
 
     def test_readme_documents_1_9_16_upgrade(self):
         readme = (CHART / "README.md").read_text()
