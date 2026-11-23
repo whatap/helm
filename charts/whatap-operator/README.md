@@ -70,7 +70,7 @@ values.yaml 예시:
 ```yaml
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 3.0.27
+  tag: 3.0.29
   digest: "" # 선택 사항. 설정 시 repository:tag@digest 형식으로 고정
   pullPolicy: Always
 
@@ -245,6 +245,37 @@ dcgmExporter:
 
 ## CRD
 차트는 `WhatapAgent` CRD를 포함하여 설치합니다. Helm이 CRD를 설치/관리하며, 오퍼레이터가 해당 리소스를 감시합니다.
+
+### 1.9.17: Operator 3.0.29, 보안 업데이트와 Node Agent 업데이트 전략
+
+차트 `1.9.17`의 기본 이미지는 Operator `3.0.29`입니다. **values와 템플릿 구조는 1.9.12와 같습니다.** CRD에는 `spec.features.k8sAgent.nodeAgent.updateStrategy` 필드만 추가되었고 기존 필드는 바뀌지 않았습니다.
+
+- Operator 3.0.29는 Go 1.26.11과 보안 패치된 라이브러리(x/net, grpc, OpenTelemetry 등)로 빌드했고, 이미지의 Alpine 패키지를 최신 보안 패치로 올렸습니다.
+- Operator 3.0.28부터 Node Agent DaemonSet의 업데이트 방식을 CR에서 지정할 수 있습니다. 지정하지 않으면 이전처럼 노드 1개씩(`maxUnavailable: 1`) 업데이트합니다.
+
+```yaml
+spec:
+  features:
+    k8sAgent:
+      nodeAgent:
+        updateStrategy:
+          type: RollingUpdate
+          rollingUpdate:
+            maxUnavailable: "10%"
+```
+
+- `rollingUpdate.maxSurge`는 무시합니다. Node Agent는 호스트 네트워크를 사용하므로 새 Pod를 먼저 띄우면 기존 Pod와 충돌합니다. `maxUnavailable: 0`은 1로 처리합니다.
+- CRD는 차트 템플릿에 포함되어 있어 `helm upgrade` 때 함께 갱신됩니다.
+
+```bash
+helm repo update
+helm upgrade whatap-operator whatap/whatap-operator \
+  --namespace whatap --version 1.9.17 --reuse-values \
+  --set-string image.tag=3.0.29 --set-string image.digest= \
+  --atomic --wait
+```
+
+`--reuse-values`를 쓰면 이전 이미지 태그가 남으므로 위처럼 태그를 명시합니다. release/namespace는 실제 설치 이름으로 바꾸십시오.
 
 ### 1.9.16: Operator 3.0.27과 Pod annotation으로 APM ConfigMap 지정
 
@@ -430,7 +461,7 @@ managedResources:
 
 image:
   repository: public.ecr.aws/whatap/whatap-operator
-  tag: 3.0.27
+  tag: 3.0.29
   digest: ""
   pullPolicy: Always
 
